@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-from ai.graph.graph import resolution_agent
+from ai.graph.nodes import resolution_agent
 
 
 def test_resolution_agent_returns_structured_resolution():
@@ -23,7 +23,7 @@ def test_resolution_agent_returns_structured_resolution():
     )()
 
     with patch(
-        "ai.graph.graph.generate_solution",
+        "ai.graph.nodes.resolution.generate_solution",
         return_value=(mock_result, False),
     ) as mock_generate:
         result = resolution_agent(
@@ -84,7 +84,7 @@ def test_resolution_agent_consumes_diagnosis_and_root_cause():
     )()
 
     with patch(
-        "ai.graph.graph.generate_solution",
+        "ai.graph.nodes.resolution.generate_solution",
         return_value=(mock_result, False),
     ) as mock_generate:
         resolution_agent(
@@ -139,7 +139,7 @@ def test_resolution_agent_preserves_resolution_evidence():
     )()
 
     with patch(
-        "ai.graph.graph.generate_solution",
+        "ai.graph.nodes.resolution.generate_solution",
         return_value=(mock_result, False),
     ):
         result = resolution_agent(
@@ -177,7 +177,7 @@ def test_resolution_agent_preserves_confidence():
     )()
 
     with patch(
-        "ai.graph.graph.generate_solution",
+        "ai.graph.nodes.resolution.generate_solution",
         return_value=(mock_result, False),
     ):
         result = resolution_agent(
@@ -214,7 +214,7 @@ def test_resolution_agent_requires_human_when_requested():
     )()
 
     with patch(
-        "ai.graph.graph.generate_solution",
+        "ai.graph.nodes.resolution.generate_solution",
         return_value=(mock_result, False),
     ):
         result = resolution_agent(
@@ -257,7 +257,7 @@ def test_resolution_agent_handles_fallback():
     )()
 
     with patch(
-        "ai.graph.graph.generate_solution",
+        "ai.graph.nodes.resolution.generate_solution",
         return_value=(mock_result, True),
     ):
         result = resolution_agent(
@@ -294,7 +294,7 @@ def test_resolution_agent_preserves_previous_fallback():
     )()
 
     with patch(
-        "ai.graph.graph.generate_solution",
+        "ai.graph.nodes.resolution.generate_solution",
         return_value=(mock_result, False),
     ):
         result = resolution_agent(

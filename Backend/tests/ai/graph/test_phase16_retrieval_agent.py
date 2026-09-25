@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch
-from ai.graph.graph import retrieval_agent
+from ai.graph.nodes import retrieval_agent
 
 
 def base_state():
@@ -50,19 +50,19 @@ def test_retrieval_agent_hybrid_success():
 
     with (
         patch(
-            "ai.graph.graph.search_knowledge_base",
+            "ai.graph.nodes.retrieval.search_knowledge_base",
             return_value=documents,
         ),
         patch(
-            "ai.graph.graph.search_previous_tickets",
+            "ai.graph.nodes.retrieval.search_previous_tickets",
             return_value=[],
         ),
         patch(
-            "ai.graph.graph.rerank_documents",
+            "ai.graph.nodes.retrieval.rerank_documents",
             side_effect=identity_rerank,
         ),
         patch(
-            "ai.graph.graph.RETRIEVAL_STRATEGY",
+            "ai.graph.nodes.retrieval.RETRIEVAL_STRATEGY",
             "hybrid",
         ),
     ):
@@ -105,19 +105,19 @@ def test_retrieval_agent_empty_query():
 def test_retrieval_agent_zero_results():
     with (
         patch(
-            "ai.graph.graph.search_knowledge_base",
+            "ai.graph.nodes.retrieval.search_knowledge_base",
             return_value=[],
         ),
         patch(
-            "ai.graph.graph.search_previous_tickets",
+            "ai.graph.nodes.retrieval.search_previous_tickets",
             return_value=[],
         ),
         patch(
-            "ai.graph.graph.rerank_documents",
+            "ai.graph.nodes.retrieval.rerank_documents",
             side_effect=identity_rerank,
         ),
         patch(
-            "ai.graph.graph.RETRIEVAL_STRATEGY",
+            "ai.graph.nodes.retrieval.RETRIEVAL_STRATEGY",
             "hybrid",
         ),
     ):
@@ -146,19 +146,19 @@ def test_retrieval_agent_missing_document_is_skipped():
 
     with (
         patch(
-            "ai.graph.graph.search_knowledge_base",
+            "ai.graph.nodes.retrieval.search_knowledge_base",
             return_value=[],
         ),
         patch(
-            "ai.graph.graph.search_previous_tickets",
+            "ai.graph.nodes.retrieval.search_previous_tickets",
             return_value=[],
         ),
         patch(
-            "ai.graph.graph.rerank_documents",
+            "ai.graph.nodes.retrieval.rerank_documents",
             side_effect=identity_rerank,
         ),
         patch(
-            "ai.graph.graph.RETRIEVAL_STRATEGY",
+            "ai.graph.nodes.retrieval.RETRIEVAL_STRATEGY",
             "hybrid",
         ),
     ):
@@ -180,11 +180,11 @@ def test_retrieval_agent_failure_sets_fallback():
 
     with (
         patch(
-            "ai.graph.graph.search_knowledge_base",
+            "ai.graph.nodes.retrieval.search_knowledge_base",
             side_effect=failing_search,
         ),
         patch(
-            "ai.graph.graph.RETRIEVAL_STRATEGY",
+            "ai.graph.nodes.retrieval.RETRIEVAL_STRATEGY",
             "hybrid",
         ),
     ):
@@ -208,7 +208,7 @@ def test_retrieval_agent_failure_sets_fallback():
 
 def test_retrieval_agent_unsupported_strategy_fails_safely():
     with patch(
-        "ai.graph.graph.RETRIEVAL_STRATEGY",
+        "ai.graph.nodes.retrieval.RETRIEVAL_STRATEGY",
         "unsupported",
     ):
         result = retrieval_agent(base_state())
@@ -244,19 +244,19 @@ def test_retrieval_metadata_contains_score_statistics():
 
     with (
         patch(
-            "ai.graph.graph.search_knowledge_base",
+            "ai.graph.nodes.retrieval.search_knowledge_base",
             return_value=documents,
         ),
         patch(
-            "ai.graph.graph.search_previous_tickets",
+            "ai.graph.nodes.retrieval.search_previous_tickets",
             return_value=[],
         ),
         patch(
-            "ai.graph.graph.rerank_documents",
+            "ai.graph.nodes.retrieval.rerank_documents",
             side_effect=identity_rerank,
         ),
         patch(
-            "ai.graph.graph.RETRIEVAL_STRATEGY",
+            "ai.graph.nodes.retrieval.RETRIEVAL_STRATEGY",
             "hybrid",
         ),
     ):
@@ -291,19 +291,19 @@ def test_retrieval_agent_preserves_existing_fallback_on_success():
 
     with (
         patch(
-            "ai.graph.graph.search_knowledge_base",
+            "ai.graph.nodes.retrieval.search_knowledge_base",
             return_value=documents,
         ),
         patch(
-            "ai.graph.graph.search_previous_tickets",
+            "ai.graph.nodes.retrieval.search_previous_tickets",
             return_value=[],
         ),
         patch(
-            "ai.graph.graph.rerank_documents",
+            "ai.graph.nodes.retrieval.rerank_documents",
             side_effect=identity_rerank,
         ),
         patch(
-            "ai.graph.graph.RETRIEVAL_STRATEGY",
+            "ai.graph.nodes.retrieval.RETRIEVAL_STRATEGY",
             "hybrid",
         ),
     ):
@@ -319,27 +319,27 @@ def test_retrieval_agent_preserves_existing_fallback_on_success():
 def test_retrieval_agent_metadata_contains_runtime_dimensions():
     with (
         patch(
-            "ai.graph.graph.search_knowledge_base",
+            "ai.graph.nodes.retrieval.search_knowledge_base",
             return_value=[],
         ),
         patch(
-            "ai.graph.graph.search_previous_tickets",
+            "ai.graph.nodes.retrieval.search_previous_tickets",
             return_value=[],
         ),
         patch(
-            "ai.graph.graph.rerank_documents",
+            "ai.graph.nodes.retrieval.rerank_documents",
             side_effect=identity_rerank,
         ),
         patch(
-            "ai.graph.graph.RETRIEVAL_STRATEGY",
+            "ai.graph.nodes.retrieval.RETRIEVAL_STRATEGY",
             "hybrid",
         ),
         patch(
-            "ai.graph.graph.RETRIEVAL_TOP_K",
+            "ai.graph.nodes.retrieval.RETRIEVAL_TOP_K",
             5,
         ),
         patch(
-            "ai.graph.graph.RETRIEVAL_CANDIDATE_K",
+            "ai.graph.nodes.retrieval.RETRIEVAL_CANDIDATE_K",
             20,
         ),
     ):

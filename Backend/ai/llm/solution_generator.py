@@ -9,7 +9,7 @@ LLM reliability responsibilities are delegated to LLMGateway.
 
 from __future__ import annotations
 
-from typing import Tuple
+from typing import Tuple,Any
 
 from app.config import settings
 from app.core.logger import logger
@@ -133,7 +133,7 @@ def generate_solution(
     diagnosis: str = "",
     root_cause: str = "",
     classification: str = "",
-    conversation_history: str = "",
+    conversation_history: Any = "",
     prompt_version: int = DEFAULT_PROMPT_VERSION,
 ) -> Tuple[ResolutionResult, bool]:
     """
@@ -194,9 +194,34 @@ def generate_solution(
         f"{classification.strip() or 'Not available'}\n"
     )
 
+    def _format_conversation_history(history: Any) -> str:
+        if not history:
+            return "No previous conversation available."
+
+        if isinstance(history, str):
+            return history.strip() or "No previous conversation available."
+
+        if isinstance(history, (list, tuple)):
+            entries: list[str] = []
+            for entry in history:
+                if isinstance(entry, str):
+                    if entry.strip():
+                        entries.append(entry.strip())
+                    continue
+
+                if isinstance(entry, dict):
+                    role = entry.get("role", "unknown")
+                    content = entry.get("content", "")
+                    if content:
+                        entries.append(f"{str(role).capitalize()}: {content}")
+
+            return "\n".join(entries) or "No previous conversation available."
+
+        return str(history).strip() or "No previous conversation available."
+
     history_section = (
         "### Conversation History\n"
-        f"{conversation_history.strip() or 'No previous conversation available.'}\n"
+        f"{_format_conversation_history(conversation_history)}\n"
     )
 
     user_prompt = (

@@ -33,6 +33,7 @@ class ResolveXState(TypedDict, total=False):
     reclassification_used: bool
     reclassification_error: str | None
     classification_metadata: dict[str, Any]
+
     # ------------------------------------------------------------------
     # Retrieval
     # ------------------------------------------------------------------
@@ -76,7 +77,8 @@ class ResolveXState(TypedDict, total=False):
     verification_complete: bool
     verification_policy_compliant: bool
     verification_resolution_correct: bool
-    verification_result: dict
+    verification_result: dict[str, Any]
+
     # ------------------------------------------------------------------
     # Decision
     # ------------------------------------------------------------------
@@ -94,9 +96,48 @@ class ResolveXState(TypedDict, total=False):
     warnings: list[str]
 
     # ------------------------------------------------------------------
+    # Agent Memory
+    # ------------------------------------------------------------------
+
+    # Short-term conversational context for the current ticket.
+    conversation_history: list[dict[str, Any]]
+
+    # Historical tickets/resolutions retrieved from the ticket system.
+    previous_tickets: list[dict[str, Any]]
+
+    # ------------------------------------------------------------------
+    # Tooling
+    # ------------------------------------------------------------------
+
+    # Structured record of tools used during graph execution.
+    tool_calls: list[dict[str, Any]]
+
+    # ------------------------------------------------------------------
     # Observability / persistence hooks
     # ------------------------------------------------------------------
 
     request_id: str | None
     graph_run_id: str | None
     metadata: dict[str, Any]
+
+    # ------------------------------------------------------------------
+    # Model / Prompt / Latency Tracking
+    # ------------------------------------------------------------------
+
+    model_versions: dict[str, str]
+    prompt_versions: dict[str, str]
+    latency: dict[str, float]
+
+    # ------------------------------------------------------------------
+    # Decision Policy / RL
+    # ------------------------------------------------------------------
+
+    # Deterministic feature snapshot used by the future policy layer.
+    policy_features: dict[str, float]
+
+    # Proposed policy action.
+    # Not used for production routing yet.
+    policy_action: str
+
+    # Additional policy metadata.
+    policy_metadata: dict[str, Any]

@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-from ai.graph.graph import diagnosis_agent, resolution_agent
+from ai.graph.nodes import diagnosis_agent, resolution_agent
 from ai.llm.schemas import DiagnosisResult
 
 
@@ -44,7 +44,7 @@ def test_diagnosis_to_resolution_handoff():
     }
 
     with patch(
-        "ai.graph.graph.generate_diagnosis",
+        "ai.graph.nodes.diagnosis.generate_diagnosis",
         return_value=(diagnosis_result, False),
     ):
         diagnosis_output = diagnosis_agent(state)
@@ -64,19 +64,36 @@ def test_diagnosis_to_resolution_handoff():
     ]
 
     with patch(
-        "ai.graph.graph.generate_solution",
+        "ai.graph.nodes.resolution.generate_solution",
         return_value=(resolution_result, False),
     ) as mock_generate:
         resolution_output = resolution_agent(state)
 
     mock_generate.assert_called_once_with(
-        ticket_text="Unable to login to email",
-        context="Users must use valid credentials.",
-        diagnosis="Email authentication failure",
-        root_cause="Invalid credentials",
-        classification="authentication",
-        conversation_history="",
-    )
+    ticket_text="Unable to login to email",
+    context="Users must use valid credentials.",
+    diagnosis="Email authentication failure",
+    root_cause="Invalid credentials",
+    classification="authentication",
+    conversation_history=[
+        {
+            "role": "user",
+            "content": "Unable to login to email",
+            "metadata": {
+                "ticket_id": 301,
+            },
+        },
+        {
+            "role": "assistant",
+            "content": "Email authentication failure",
+            "metadata": {
+                "ticket_id": 301,
+                "root_cause": "Invalid credentials",
+                "confidence": 0.88,
+            },
+        },
+    ],
+)
 
     assert resolution_output["resolution_steps"] == [
         "Verify the account credentials.",

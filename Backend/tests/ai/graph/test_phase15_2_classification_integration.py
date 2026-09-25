@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-from ai.graph.graph import ticket_analyzer
+from ai.graph.nodes import ticket_analyzer
 
 
 def test_ticket_analyzer_uses_classification_agent():
@@ -17,7 +17,7 @@ def test_ticket_analyzer_uses_classification_agent():
     }
 
     with patch(
-        "ai.graph.graph.run_classification_agent",
+        "ai.graph.nodes.ticket_analyzer.run_classification_agent",
         return_value={
             "category": "hardware",
             "confidence": 0.97,
@@ -55,7 +55,7 @@ def test_ticket_analyzer_propagates_classification_fallback():
     }
 
     with patch(
-        "ai.graph.graph.run_classification_agent",
+        "ai.graph.nodes.ticket_analyzer.run_classification_agent",
         return_value={
             "category": "software",
             "confidence": 0.50,
@@ -97,7 +97,7 @@ def test_ticket_analyzer_handles_classification_agent_failure():
     }
 
     with patch(
-        "ai.graph.graph.run_classification_agent",
+        "ai.graph.nodes.ticket_analyzer.run_classification_agent",
         side_effect=RuntimeError(
             "classification agent unavailable"
         ),

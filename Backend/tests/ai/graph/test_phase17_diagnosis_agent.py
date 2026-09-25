@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-from ai.graph.graph import diagnosis_agent
+from ai.graph.nodes import diagnosis_agent
 from ai.llm.schemas import DiagnosisResult
 
 
@@ -21,7 +21,7 @@ def test_diagnosis_agent_populates_structured_state():
     )
 
     with patch(
-        "ai.graph.graph.generate_diagnosis",
+        "ai.graph.nodes.diagnosis.generate_diagnosis",
         return_value=(mock_result, False),
     ) as mock_generate:
 
@@ -117,7 +117,7 @@ def test_diagnosis_agent_handles_fallback():
     )
 
     with patch(
-        "ai.graph.graph.generate_diagnosis",
+        "ai.graph.nodes.diagnosis.generate_diagnosis",
         return_value=(mock_result, True),
     ):
 
@@ -148,7 +148,7 @@ def test_diagnosis_agent_preserves_existing_fallback():
     )
 
     with patch(
-        "ai.graph.graph.generate_diagnosis",
+        "ai.graph.nodes.diagnosis.generate_diagnosis",
         return_value=(mock_result, False),
     ):
 

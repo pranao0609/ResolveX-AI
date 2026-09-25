@@ -68,18 +68,19 @@ def test_graph_executes_basic_workflow():
     )
 
     assert result["decision"] in {
-    "auto_resolve",
-    "ask_clarification",
-    "human_review",
-    "escalate",
-}
+        "auto_resolve",
+        "ask_clarification",
+        "human_review",
+        "escalate",
+    }
     if result["decision"] == "ask_clarification":
         assert result["requires_human"] is False
     else:
         assert result["requires_human"] is True
 
+
 def test_ticket_analyzer_classifies_ticket():
-    from ai.graph.graph import ticket_analyzer
+    from ai.graph.nodes import ticket_analyzer
 
     state = {
         "ticket_id": 1,
@@ -92,8 +93,9 @@ def test_ticket_analyzer_classifies_ticket():
     assert result["category"] == "software"
     assert result["category_confidence"] > 0
 
+
 def test_ticket_analyzer_cleans_ticket_text():
-    from ai.graph.graph import ticket_analyzer
+    from ai.graph.nodes import ticket_analyzer
 
     state = {
         "ticket_id": 2,
@@ -105,11 +107,16 @@ def test_ticket_analyzer_cleans_ticket_text():
     assert result["cleaned_ticket"] == "vpn is not working"
     assert result["category"] == "network"
 
+
 def test_ticket_analyzer_processes_attachments(monkeypatch):
-    from ai.graph import graph
+    import importlib
+
+    ticket_analyzer_module = importlib.import_module(
+        "ai.graph.nodes.ticket_analyzer"
+    )
 
     monkeypatch.setattr(
-        graph,
+        ticket_analyzer_module,
         "parse_attachments",
         lambda paths: "error screenshot: connection timeout",
     )
@@ -120,11 +127,12 @@ def test_ticket_analyzer_processes_attachments(monkeypatch):
         "attachment_paths": ["error.txt"],
     }
 
-    result = graph.ticket_analyzer(state)
+    result = ticket_analyzer_module.ticket_analyzer(state)
 
     assert "[Attachments]" in result["cleaned_ticket"]
     assert "connection timeout" in result["cleaned_ticket"]
     assert result["category"] == "network"
+
 
 def test_graph_ticket_analyzer_populates_state():
     from ai.graph.graph import resolvex_graph
@@ -140,8 +148,9 @@ def test_graph_ticket_analyzer_populates_state():
     assert result["category"] == "network"
     assert result["category_confidence"] > 0
 
+
 def test_retrieval_agent_handles_empty_query():
-    from ai.graph.graph import retrieval_agent
+    from ai.graph.nodes import retrieval_agent
 
     state = {
         "ticket_id": 1,
@@ -154,8 +163,9 @@ def test_retrieval_agent_handles_empty_query():
     assert result["retrieved_documents"] == []
     assert result["retrieval_metadata"]["result_count"] == 0
 
+
 def test_retrieval_agent_returns_documents():
-    from ai.graph.graph import retrieval_agent
+    from ai.graph.nodes import retrieval_agent
 
     state = {
         "ticket_id": 2,
@@ -175,8 +185,9 @@ def test_retrieval_agent_returns_documents():
 
     assert result["retrieval_metadata"]["strategy"]
 
+
 def test_retrieval_agent_document_structure():
-    from ai.graph.graph import retrieval_agent
+    from ai.graph.nodes import retrieval_agent
 
     state = {
         "ticket_id": 3,
@@ -191,8 +202,9 @@ def test_retrieval_agent_document_structure():
         assert "retriever" in document
         assert "content" in document
 
+
 def test_retrieval_agent_metadata_matches_documents():
-    from ai.graph.graph import retrieval_agent
+    from ai.graph.nodes import retrieval_agent
 
     state = {
         "ticket_id": 4,
@@ -210,6 +222,7 @@ def test_retrieval_agent_metadata_matches_documents():
         document["index_id"]
         for document in documents
     ]
+
 
 def test_graph_retrieval_agent_populates_state():
     from ai.graph.graph import resolvex_graph

@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-from ai.graph.graph import verification_agent
+from ai.graph.nodes import verification_agent
 
 
 def test_verification_agent_passes_supported_resolution():
@@ -36,7 +36,7 @@ def test_verification_agent_passes_supported_resolution():
     )()
 
     with patch(
-        "ai.graph.graph.verify_resolution",
+        "ai.graph.nodes.verification.verify_resolution",
         return_value=(mock_result, False),
     ):
         result = verification_agent(
@@ -113,7 +113,7 @@ def test_verification_agent_rejects_unsupported_resolution():
     )()
 
     with patch(
-        "ai.graph.graph.verify_resolution",
+        "ai.graph.nodes.verification.verify_resolution",
         return_value=(mock_result, False),
     ):
         result = verification_agent(
@@ -182,7 +182,7 @@ def test_verification_agent_fallback_fails_closed():
     )()
 
     with patch(
-        "ai.graph.graph.verify_resolution",
+        "ai.graph.nodes.verification.verify_resolution",
         return_value=(mock_result, True),
     ):
         result = verification_agent(
@@ -249,7 +249,7 @@ def test_verification_agent_preserves_previous_fallback():
     )()
 
     with patch(
-        "ai.graph.graph.verify_resolution",
+        "ai.graph.nodes.verification.verify_resolution",
         return_value=(mock_result, False),
     ):
         result = verification_agent(

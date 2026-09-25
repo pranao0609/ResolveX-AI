@@ -1,10 +1,11 @@
 from unittest.mock import patch
 
-from ai.graph.graph import (
+from ai.graph.nodes import (
     diagnosis_agent,
     resolution_agent,
 )
 from ai.llm.schemas import DiagnosisResult
+
 
 def test_diagnosis_agent_populates_state():
     mock_result = DiagnosisResult(
@@ -18,7 +19,7 @@ def test_diagnosis_agent_populates_state():
     )
 
     with patch(
-        "ai.graph.graph.generate_diagnosis",
+        "ai.graph.nodes.diagnosis.generate_diagnosis",
         return_value=(mock_result, False),
     ):
         result = diagnosis_agent(
@@ -76,7 +77,7 @@ def test_diagnosis_agent_handles_fallback():
     )
 
     with patch(
-        "ai.graph.graph.generate_diagnosis",
+        "ai.graph.nodes.diagnosis.generate_diagnosis",
         return_value=(mock_result, True),
     ):
         result = diagnosis_agent(
@@ -109,7 +110,7 @@ def test_resolution_agent_populates_state():
     )()
 
     with patch(
-        "ai.graph.graph.generate_solution",
+        "ai.graph.nodes.resolution.generate_solution",
         return_value=(mock_result, False),
     ):
         result = resolution_agent(
@@ -156,7 +157,7 @@ def test_resolution_agent_handles_fallback():
     )()
 
     with patch(
-        "ai.graph.graph.generate_solution",
+        "ai.graph.nodes.resolution.generate_solution",
         return_value=(mock_result, True),
     ):
         result = resolution_agent(
@@ -188,7 +189,7 @@ def test_resolution_agent_preserves_previous_fallback():
     )()
 
     with patch(
-        "ai.graph.graph.generate_solution",
+        "ai.graph.nodes.resolution.generate_solution",
         return_value=(mock_result, False),
     ):
         result = resolution_agent(

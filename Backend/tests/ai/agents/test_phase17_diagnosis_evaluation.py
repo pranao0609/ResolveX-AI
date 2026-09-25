@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-from ai.graph.graph import diagnosis_agent
+from ai.graph.nodes import diagnosis_agent
 from ai.llm.schemas import DiagnosisResult
 
 
@@ -16,7 +16,7 @@ def test_diagnosis_agent_returns_structured_diagnosis():
     )
 
     with patch(
-        "ai.graph.graph.generate_diagnosis",
+        "ai.graph.nodes.diagnosis.generate_diagnosis",
         return_value=(mock_result, False),
     ):
         result = diagnosis_agent(
@@ -62,7 +62,7 @@ def test_diagnosis_separates_problem_from_root_cause():
     )
 
     with patch(
-        "ai.graph.graph.generate_diagnosis",
+        "ai.graph.nodes.diagnosis.generate_diagnosis",
         return_value=(mock_result, False),
     ):
         result = diagnosis_agent(
@@ -106,7 +106,7 @@ def test_diagnosis_preserves_supporting_evidence():
     )
 
     with patch(
-        "ai.graph.graph.generate_diagnosis",
+        "ai.graph.nodes.diagnosis.generate_diagnosis",
         return_value=(mock_result, False),
     ):
         result = diagnosis_agent(
@@ -140,7 +140,7 @@ def test_diagnosis_preserves_missing_information():
     )
 
     with patch(
-        "ai.graph.graph.generate_diagnosis",
+        "ai.graph.nodes.diagnosis.generate_diagnosis",
         return_value=(mock_result, False),
     ):
         result = diagnosis_agent(
@@ -177,7 +177,7 @@ def test_diagnosis_confidence_is_preserved():
     )
 
     with patch(
-        "ai.graph.graph.generate_diagnosis",
+        "ai.graph.nodes.diagnosis.generate_diagnosis",
         return_value=(mock_result, False),
     ):
         result = diagnosis_agent(
@@ -212,7 +212,7 @@ def test_diagnosis_fallback_is_marked():
     )
 
     with patch(
-        "ai.graph.graph.generate_diagnosis",
+        "ai.graph.nodes.diagnosis.generate_diagnosis",
         return_value=(mock_result, True),
     ):
         result = diagnosis_agent(
@@ -240,7 +240,7 @@ def test_diagnosis_preserves_previous_fallback():
     )
 
     with patch(
-        "ai.graph.graph.generate_diagnosis",
+        "ai.graph.nodes.diagnosis.generate_diagnosis",
         return_value=(mock_result, False),
     ):
         result = diagnosis_agent(
