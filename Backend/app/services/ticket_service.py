@@ -30,20 +30,53 @@ class TicketService:
         image: Optional[UploadFile] = None,
     ) -> Ticket:
         """
-        Persist a new ticket.
-        `image` is accepted for future use but no file processing is performed.
+        Validate inputs & attachments, then persist a new ticket.
         """
-        logger.info(f"Creating ticket: '{title}' category='{category}'")
+        from app.core.constants import ALLOWED_EXTENSIONS, CATEGORIES
+        from app.core.exceptions import ResolveXException
+        from app.config import settings
 
-        # image is intentionally not processed — placeholder for future storage hook
-        image_filename = image.filename if image and image.filename else None
+        # Input validation
+        clean_cat = category.strip().lower() if category else ""
+        if clean_cat not in CATEGORIES:
+            raise ResolveXException(status_code=400, detail=f"Invalid category '{category}'. Allowed: {', '.join(CATEGORIES)}")
+
+        if not (3 <= len(title.strip()) <= 255):
+            raise ResolveXException(status_code=400, detail="Title length must be between 3 and 255 characters.")
+
+        if not (10 <= len(description.strip()) <= 10000):
+            raise ResolveXException(status_code=400, detail="Description length must be between 10 and 10,000 characters.")
+
+        saved_path = None
+        if image and image.filename:
+            ext = os.path.splitext(image.filename)[1].lower()
+            if ext not in ALLOWED_EXTENSIONS:
+                raise ResolveXException(
+                    status_code=400,
+                    detail=f"Unsupported file type '{ext}'. Allowed extensions: {', '.join(sorted(ALLOWED_EXTENSIONS))}"
+                )
+
+            contents = await image.read()
+            if len(contents) == 0:
+                raise ResolveXException(status_code=400, detail="Uploaded attachment file is empty.")
+            if len(contents) > settings.MAX_FILE_SIZE_MB * 1024 * 1024:
+                raise ResolveXException(
+                    status_code=400,
+                    detail=f"Attachment file size ({len(contents) / (1024*1024):.2f}MB) exceeds maximum limit of {settings.MAX_FILE_SIZE_MB}MB."
+                )
+
+            # Reset file pointer or write using file_manager
+            image.file.seek(0)
+            saved_path = await self.file_manager.save(image)
+
+        logger.info(f"Creating ticket: '{title}' category='{clean_cat}' attachment='{saved_path}'")
 
         ticket = Ticket(
-            title=title,
-            description=description,
+            title=title.strip(),
+            description=description.strip(),
             submitted_by=submitted_by,
-            category=category,
-            attachment_paths=image_filename,   # store filename only
+            category=clean_cat,
+            attachment_paths=saved_path,
             status="open",
         )
         created = self.repo.create(ticket)

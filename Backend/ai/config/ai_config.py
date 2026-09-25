@@ -1,36 +1,48 @@
 """
-ai_config.py — AI-specific configuration constants and model settings.
-Centralises all hyperparameters for the AI pipeline.
+ai_config.py — Bridge module re-exporting centralized settings for AI components.
+All values derive from app.config.settings (single source of truth).
 """
 
+from app.config import settings
+
 # ── Embedding ─────────────────────────────────────────────────────────────────
-EMBEDDING_MODEL_NAME = "all-MiniLM-L6-v2"
-EMBEDDING_DIMENSION = 384
+EMBEDDING_MODEL_NAME = settings.EMBEDDING_MODEL_NAME
+EMBEDDING_DIMENSION = settings.EMBEDDING_DIMENSION
 
 # ── FAISS ─────────────────────────────────────────────────────────────────────
+FAISS_INDEX_PATH = settings.FAISS_INDEX_PATH
+FAISS_DOCSTORE_PATH = settings.FAISS_DOCSTORE_PATH
+FAISS_TOP_K = settings.FAISS_TOP_K
+FAISS_SCORE_THRESHOLD = settings.FAISS_SCORE_THRESHOLD
 
-EMBEDDING_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
-EMBEDDING_DIMENSION = 384
+# -- Hybrid Retrieval --
+RETRIEVAL_STRATEGY = settings.RETRIEVAL_STRATEGY
+BM25_WEIGHT = settings.BM25_WEIGHT
+DENSE_WEIGHT = settings.DENSE_WEIGHT
+RETRIEVAL_TOP_K = settings.RETRIEVAL_TOP_K
+RETRIEVAL_CANDIDATE_K = settings.RETRIEVAL_CANDIDATE_K
+# ── RAG Chunking ──────────────────────────────────────────────────────────────
 
-FAISS_INDEX_PATH = "data/faiss/index.faiss"
-FAISS_DOCSTORE_PATH = "data/faiss/docstore.json"
+RAG_CHUNK_SIZE = settings.RAG_CHUNK_SIZE
 
-FAISS_TOP_K = 5
-FAISS_SCORE_THRESHOLD = 0.35
+RAG_CHUNK_OVERLAP = settings.RAG_CHUNK_OVERLAP
+
+RAG_MIN_CHUNK_SIZE = settings.RAG_MIN_CHUNK_SIZE
 # ── Groq LLM ─────────────────────────────────────────────────────────────────
-GROQ_MODEL = "llama-3.3-70b-versatile"
-GROQ_MAX_TOKENS = 1024
-GROQ_TEMPERATURE = 0.3
+GROQ_MODEL = settings.GROQ_MODEL
+GROQ_MAX_TOKENS = settings.GROQ_MAX_TOKENS
+GROQ_TEMPERATURE = settings.GROQ_TEMPERATURE
 
 # ── Classification ────────────────────────────────────────────────────────────
 SUPPORTED_CATEGORIES = ["billing", "technical", "account", "feature_request", "bug_report", "other"]
-CLASSIFICATION_CONFIDENCE_THRESHOLD = 0.6
+CLASSIFICATION_CONFIDENCE_THRESHOLD = settings.CLASSIFICATION_CONFIDENCE_THRESHOLD
 
-# ── Confidence weights (must sum to 1.0) ─────────────────────────────────────
-CONFIDENCE_WEIGHT_SIMILARITY = 0.4
-CONFIDENCE_WEIGHT_LLM_SCORE = 0.3
-CONFIDENCE_WEIGHT_CLASSIFICATION = 0.3
+# ── Confidence weights ───────────────────────────────────────────────────────
+CONFIDENCE_WEIGHT_SIMILARITY = settings.CONFIDENCE_WEIGHT_SIMILARITY
+CONFIDENCE_WEIGHT_LLM_SCORE = settings.CONFIDENCE_WEIGHT_LLM_SCORE
+CONFIDENCE_WEIGHT_CLASSIFICATION = settings.CONFIDENCE_WEIGHT_CLASSIFICATION
 
 # ── OCR ───────────────────────────────────────────────────────────────────────
 OCR_LANGUAGE = "eng"
 OCR_ENABLED = True
+

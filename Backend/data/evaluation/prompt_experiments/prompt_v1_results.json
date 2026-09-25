@@ -1,0 +1,666 @@
+[
+  {
+    "case_id": "gen_001",
+    "prompt_version": 1,
+    "ticket": "I cannot log in because I never receive the password reset email.",
+    "relevant_documents": [
+      "kb:4"
+    ],
+    "expected_answer": "The issue is related to password reset email delivery. Verify that the user's email address is correct, check spam or junk folders, confirm that the password reset service is functioning, and retry the password reset request. If the email still does not arrive, escalate the issue for further investigation.",
+    "required_evidence": [
+      "Password Reset Email Delivery"
+    ],
+    "generated_answer": "Diagnosis:\nUser is unable to log in due to not receiving the password reset email.\n\nRoot Cause:\nEmail delivery problem – the reset message is likely being filtered or blocked.\n\nResolution Steps:\n1. Step 1: Instruct the user to check their spam/junk folder for the password reset email.\n2. Step 2: Ask the user to whitelist the sender address noreply@resolvex.ai in their email client.\n3. Step 3: Resend the password reset link from the system.\n4. Step 4: Confirm with the user that the email is received and they can proceed to reset the password.\n\nEvidence:\n- Check spam folder, whitelist noreply@resolvex.ai, resend.\n- Check email delivery, resend reset link.",
+    "retrieved_documents": [
+      {
+        "document_id": "kb:36",
+        "title": "User Cannot Reset Password",
+        "category": "access_permission",
+        "content": "Check email delivery, resend reset link.",
+        "score": 1.0,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:4",
+        "title": "Password Reset Email Delivery",
+        "category": "access_permission",
+        "content": "Check spam folder, whitelist noreply@resolvex.ai, resend.",
+        "score": 0.9559003455240072,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:105",
+        "title": "User Cannot Access Email",
+        "category": "access_permission",
+        "content": "Verify login credentials, reset password.",
+        "score": 0.9177115706940485,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:73",
+        "title": "User Cannot Access Email",
+        "category": "access_permission",
+        "content": "Check credentials, reset password.",
+        "score": 0.8426990126272533,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:38",
+        "title": "Login Loop Issue",
+        "category": "access_permission",
+        "content": "Clear cookies, reset password, check session settings.",
+        "score": 0.5815414315307292,
+        "retriever": "hybrid"
+      }
+    ],
+    "category": "software",
+    "confidence": 0.964,
+    "fallback_used": false,
+    "retrieval_strategy": "hybrid",
+    "metrics": {
+      "faithfulness": 0.38896081938097876,
+      "answer_relevance": 0.6991188526153564,
+      "context_relevance": 0.7139987945556641,
+      "answer_correctness": 0.7373804450035095,
+      "evidence_support": 1.0
+    }
+  },
+  {
+    "case_id": "gen_002",
+    "prompt_version": 1,
+    "ticket": "The email client is not synchronizing new messages.",
+    "relevant_documents": [
+      "kb:5"
+    ],
+    "expected_answer": "The issue is related to email client synchronization. Verify the network connection, confirm the email account configuration and credentials, restart the email client, and trigger a manual synchronization. If synchronization continues to fail, escalate for further investigation.",
+    "required_evidence": [
+      "Email Client Not Syncing"
+    ],
+    "generated_answer": "Diagnosis:\nEmail client is not synchronizing new messages\n\nRoot Cause:\nLikely connectivity problem or misconfigured email account preventing sync\n\nResolution Steps:\n1. Step 1: Verify that the device has an active internet connection\n2. Step 2: Refresh the inbox to force a sync attempt\n3. Step 3: If the issue persists, reconfigure the email account settings in the client\n\nEvidence:\n- Check internet connection, refresh inbox, reconfigure email account.",
+    "retrieved_documents": [
+      {
+        "document_id": "kb:5",
+        "title": "Email Client Not Syncing",
+        "category": "software",
+        "content": "Check internet connection, refresh inbox, reconfigure email account.",
+        "score": 1.0,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:135",
+        "title": "Email Delivery Failure",
+        "category": "software",
+        "content": "Check SMTP server, verify email config.",
+        "score": 0.4792870060438397,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:84",
+        "title": "Data Sync Issue",
+        "category": "software",
+        "content": "Check connectivity, re-sync data, restart service.",
+        "score": 0.4400622041689912,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:4",
+        "title": "Password Reset Email Delivery",
+        "category": "access_permission",
+        "content": "Check spam folder, whitelist noreply@resolvex.ai, resend.",
+        "score": 0.314726379476289,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:73",
+        "title": "User Cannot Access Email",
+        "category": "access_permission",
+        "content": "Check credentials, reset password.",
+        "score": 0.3134244356746991,
+        "retriever": "hybrid"
+      }
+    ],
+    "category": "software",
+    "confidence": 0.958,
+    "fallback_used": false,
+    "retrieval_strategy": "hybrid",
+    "metrics": {
+      "faithfulness": 0.4771363139152527,
+      "answer_relevance": 0.8033592104911804,
+      "context_relevance": 0.48419395089149475,
+      "answer_correctness": 0.7280710935592651,
+      "evidence_support": 1.0
+    }
+  },
+  {
+    "case_id": "gen_003",
+    "prompt_version": 1,
+    "ticket": "My laptop battery is not charging even though the charger is connected.",
+    "relevant_documents": [
+      "kb:17"
+    ],
+    "expected_answer": "The issue is related to the battery not charging. Check that the charger and power connection are secure, inspect the charging adapter and cable for damage, and restart the system. If the battery still does not charge, the battery or charging hardware may require further diagnosis or replacement.",
+    "required_evidence": [
+      "Battery Not Charging"
+    ],
+    "generated_answer": "Diagnosis:\nLaptop battery not charging\n\nRoot Cause:\nFaulty charger or charging port preventing power delivery to the battery\n\nResolution Steps:\n1. Step 1: Verify that the charger is properly connected and the indicator light (if any) shows it is functioning.\n2. Step 2: Test the charger with another compatible device or try a known-good charger on the laptop to rule out charger failure.\n3. Step 3: Inspect the laptop's charging port for debris, damage, or loose connections and clean or reseat as needed.\n4. Step 4: If the charger and port appear functional, consider replacing the battery as a potential cause.\n\nEvidence:\n- Check charger, replace battery, inspect charging port.",
+    "retrieved_documents": [
+      {
+        "document_id": "kb:17",
+        "title": "Battery Not Charging",
+        "category": "hardware",
+        "content": "Check charger, replace battery, inspect charging port.",
+        "score": 1.0,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:60",
+        "title": "Billing Discrepancy",
+        "category": "other",
+        "content": "Check invoice, verify charges.",
+        "score": 0.2131371173164858,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:32",
+        "title": "Router Not Responding",
+        "category": "network",
+        "content": "Restart router, reset settings, check power supply.",
+        "score": 0.1893547690031844,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:19",
+        "title": "USB Device Not Recognized",
+        "category": "hardware",
+        "content": "Reconnect device, update drivers, try different port.",
+        "score": 0.13937084884572776,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:15",
+        "title": "Mouse Not Detected",
+        "category": "hardware",
+        "content": "Reconnect mouse, change USB port, update drivers.",
+        "score": 0.13372042675629883,
+        "retriever": "hybrid"
+      }
+    ],
+    "category": "software",
+    "confidence": 0.895,
+    "fallback_used": false,
+    "retrieval_strategy": "hybrid",
+    "metrics": {
+      "faithfulness": 0.40125639902220833,
+      "answer_relevance": 0.7185815572738647,
+      "context_relevance": 0.5623112916946411,
+      "answer_correctness": 0.7211817502975464,
+      "evidence_support": 1.0
+    }
+  },
+  {
+    "case_id": "gen_004",
+    "prompt_version": 1,
+    "ticket": "I cannot connect to the company VPN. It keeps disconnecting.",
+    "relevant_documents": [
+      "kb:31"
+    ],
+    "expected_answer": "The issue is related to VPN connectivity. Verify the network connection, confirm the VPN credentials and configuration, reconnect to the VPN, and restart the VPN client if necessary. If the VPN continues disconnecting, investigate the VPN configuration or escalate the issue.",
+    "required_evidence": [
+      "VPN Disconnecting"
+    ],
+    "generated_answer": "Diagnosis:\nVPN connection repeatedly disconnects\n\nRoot Cause:\nUnstable internet connection or outdated VPN client causing disconnections\n\nResolution Steps:\n1. Step 1: Verify internet stability by testing other network services or running a speed test\n2. Step 2: Update the VPN client to the latest version available\n\nEvidence:\n- VPN Disconnecting: Check internet stability, update VPN client.",
+    "retrieved_documents": [
+      {
+        "document_id": "kb:31",
+        "title": "VPN Disconnecting",
+        "category": "network",
+        "content": "Check internet stability, update VPN client.",
+        "score": 1.0,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:102",
+        "title": "VPN Authentication Error",
+        "category": "network",
+        "content": "Verify credentials, reset VPN profile.",
+        "score": 0.8438904852153003,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:34",
+        "title": "Network Authentication Failure",
+        "category": "network",
+        "content": "Verify credentials, reconnect network.",
+        "score": 0.2755136265139628,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:67",
+        "title": "Cannot Connect to Server",
+        "category": "network",
+        "content": "Check network connectivity, restart server.",
+        "score": 0.18430233742943897,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:97",
+        "title": "Router Firmware Issue",
+        "category": "network",
+        "content": "Update firmware, restart router.",
+        "score": 0.18321157098897517,
+        "retriever": "hybrid"
+      }
+    ],
+    "category": "network",
+    "confidence": 0.967,
+    "fallback_used": false,
+    "retrieval_strategy": "hybrid",
+    "metrics": {
+      "faithfulness": 0.6482794880867004,
+      "answer_relevance": 0.6087409257888794,
+      "context_relevance": 0.6580220460891724,
+      "answer_correctness": 0.6002033948898315,
+      "evidence_support": 1.0
+    }
+  },
+  {
+    "case_id": "gen_005",
+    "prompt_version": 1,
+    "ticket": "I am getting an access denied message when trying to open the application.",
+    "relevant_documents": [
+      "kb:35"
+    ],
+    "expected_answer": "The issue is related to application access permissions. Verify that the user has the required application role or permissions and that the account is active. If the required permissions are missing, update the user's access or escalate the request to the appropriate administrator.",
+    "required_evidence": [
+      "Access Denied to Application"
+    ],
+    "generated_answer": "Diagnosis:\nAccess denied error when opening the application\n\nRoot Cause:\nUser lacks the required role permissions or access rights for the application\n\nResolution Steps:\n1. Step 1: Verify the user's assigned role and permissions for the application.\n2. Step 2: If permissions are insufficient, grant the appropriate access rights to the user.\n\nEvidence:\n- Access Denied to Application: Check role permissions, grant access rights.",
+    "retrieved_documents": [
+      {
+        "document_id": "kb:35",
+        "title": "Access Denied to Application",
+        "category": "access_permission",
+        "content": "Check role permissions, grant access rights.",
+        "score": 1.0,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:108",
+        "title": "Invalid Credentials Error",
+        "category": "access_permission",
+        "content": "Reset password, verify username.",
+        "score": 0.710646966182921,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:43",
+        "title": "Access Revoked Error",
+        "category": "access_permission",
+        "content": "Reassign permissions, verify user status.",
+        "score": 0.49857006416447763,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:12",
+        "title": "Application Login Timeout",
+        "category": "software",
+        "content": "Check server response, restart app, verify credentials.",
+        "score": 0.4180190627351826,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:8",
+        "title": "File Not Opening in Application",
+        "category": "software",
+        "content": "Verify file format, update software, reinstall application.",
+        "score": 0.3787763789005707,
+        "retriever": "hybrid"
+      }
+    ],
+    "category": "access_permission",
+    "confidence": 0.961,
+    "fallback_used": false,
+    "retrieval_strategy": "hybrid",
+    "metrics": {
+      "faithfulness": 0.48444697856903074,
+      "answer_relevance": 0.727005124092102,
+      "context_relevance": 0.6108897924423218,
+      "answer_correctness": 0.5609220862388611,
+      "evidence_support": 1.0
+    }
+  },
+  {
+    "case_id": "gen_006",
+    "prompt_version": 1,
+    "ticket": "My account has been locked after several unsuccessful login attempts.",
+    "relevant_documents": [
+      "kb:45",
+      "kb:109"
+    ],
+    "expected_answer": "The account may be locked because of multiple failed login attempts. Verify the user's identity and account status, follow the account unlock procedure, and reset the password if necessary. If repeated failed attempts continue or unauthorized activity is suspected, escalate the incident for security investigation.",
+    "required_evidence": [
+      "Multiple Failed Login Attempts",
+      "User Locked Out of System"
+    ],
+    "generated_answer": "Diagnosis:\nUser account locked after multiple failed login attempts\n\nRoot Cause:\nSecurity lock triggered by several consecutive unsuccessful login attempts\n\nResolution Steps:\n1. Step 1: Verify the user's identity according to standard verification procedures\n2. Step 2: Unlock the user account in the admin console or account management system\n3. Step 3: Enforce a password reset for the user and provide a temporary password or password reset link\n4. Step 4: Notify the user that the account has been unlocked and the password has been reset\n\nEvidence:\n- Multiple Failed Login Attempts: Lock account, notify user, enforce password reset.",
+    "retrieved_documents": [
+      {
+        "document_id": "kb:45",
+        "title": "Multiple Failed Login Attempts",
+        "category": "security",
+        "content": "Lock account, notify user, enforce password reset.",
+        "score": 1.0,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:117",
+        "title": "Account Brute Force Attempt",
+        "category": "security",
+        "content": "Lock account, enable MFA.",
+        "score": 0.9739669138154371,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:53",
+        "title": "Account Hijacking Suspected",
+        "category": "security",
+        "content": "Reset password, enable MFA.",
+        "score": 0.6653682244884218,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:109",
+        "title": "User Locked Out of System",
+        "category": "access_permission",
+        "content": "Unlock account, reset password.",
+        "score": 0.6488243085836582,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:38",
+        "title": "Login Loop Issue",
+        "category": "access_permission",
+        "content": "Clear cookies, reset password, check session settings.",
+        "score": 0.3955669297937297,
+        "retriever": "hybrid"
+      }
+    ],
+    "category": "access_permission",
+    "confidence": 0.97,
+    "fallback_used": false,
+    "retrieval_strategy": "hybrid",
+    "metrics": {
+      "faithfulness": 0.6170308947563171,
+      "answer_relevance": 0.7598090171813965,
+      "context_relevance": 0.5206156969070435,
+      "answer_correctness": 0.8465790748596191,
+      "evidence_support": 1.0
+    }
+  },
+  {
+    "case_id": "gen_007",
+    "prompt_version": 1,
+    "ticket": "The application crashes immediately when I try to start it.",
+    "relevant_documents": [
+      "kb:78"
+    ],
+    "expected_answer": "The issue is related to an application crash during startup. Restart the system, verify that the application is compatible with the current environment, check for available software updates, and retry launching the application. If the application continues to crash on startup, collect the relevant error information and escalate the issue.",
+    "required_evidence": [
+      "Crash on Startup"
+    ],
+    "generated_answer": "Diagnosis:\nApplication crashes immediately on startup\n\nRoot Cause:\nPotential corrupted installation or outdated dependencies causing a startup failure\n\nResolution Steps:\n1. Step 1: Check the application logs for error messages related to startup.\n2. Step 2: Reinstall the application to replace any corrupted files.\n3. Step 3: Update the application's dependencies to the latest compatible versions.\n\nEvidence:\n- Crash on Startup – Check logs, reinstall app, update dependencies.",
+    "retrieved_documents": [
+      {
+        "document_id": "kb:78",
+        "title": "Crash on Startup",
+        "category": "software",
+        "content": "Check logs, reinstall app, update dependencies.",
+        "score": 1.0,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:7",
+        "title": "Application Freezing Frequently",
+        "category": "software",
+        "content": "Clear cache, update software, check system resources.",
+        "score": 0.63186930154263,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:77",
+        "title": "Application Not Responding",
+        "category": "soft  ware",
+        "content": "Force close app, restart system, update software.",
+        "score": 0.615785615113501,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:3",
+        "title": "iOS App Crash Troubleshooting",
+        "category": "software",
+        "content": "Update to the latest app version and clear cache.",
+        "score": 0.6014424631891298,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:83",
+        "title": "Background Process Failure",
+        "category": "software",
+        "content": "Restart service, check logs, verify config.",
+        "score": 0.508595467074347,
+        "retriever": "hybrid"
+      }
+    ],
+    "category": "software",
+    "confidence": 0.916,
+    "fallback_used": false,
+    "retrieval_strategy": "hybrid",
+    "metrics": {
+      "faithfulness": 0.44876656361988615,
+      "answer_relevance": 0.6749509572982788,
+      "context_relevance": 0.5316073894500732,
+      "answer_correctness": 0.6630245447158813,
+      "evidence_support": 1.0
+    }
+  },
+  {
+    "case_id": "gen_008",
+    "prompt_version": 1,
+    "ticket": "I cannot access the shared drive from my computer.",
+    "relevant_documents": [
+      "kb:100"
+    ],
+    "expected_answer": "The issue is related to access to the shared drive. Verify network connectivity, confirm that the shared drive is available, and check that the user has the required permissions. Reconnect to the shared drive after correcting any connectivity or permission issue. If access remains unavailable, escalate for further investigation.",
+    "required_evidence": [
+      "Cannot Access Shared Drive"
+    ],
+    "generated_answer": "Diagnosis:\nUser cannot access the shared drive from their computer\n\nRoot Cause:\nInsufficient network permissions or the drive is not properly connected\n\nResolution Steps:\n1. Step 1: Verify that the user has the correct network permissions to access the shared drive\n2. Step 2: Reconnect or remap the shared drive on the computer\n\nEvidence:\n- Cannot Access Shared Drive - Check network permissions, reconnect drive.",
+    "retrieved_documents": [
+      {
+        "document_id": "kb:100",
+        "title": "Cannot Access Shared Drive",
+        "category": "network",
+        "content": "Check network permissions, reconnect drive.",
+        "score": 1.0,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:85",
+        "title": "External Hard Drive Not Showing",
+        "category": "hardware",
+        "content": "Check connection, update drivers, assign drive letter.",
+        "score": 0.28332566884181265,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:138",
+        "title": "User Cannot Download Files",
+        "category": "access_permission",
+        "content": "Check permissions, verify network.",
+        "score": 0.1704597743552707,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:41",
+        "title": "Unable to Access Dashboard",
+        "category": "access_permission",
+        "content": "Check permissions, verify login status.",
+        "score": 0.0993971048686552,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:43",
+        "title": "Access Revoked Error",
+        "category": "access_permission",
+        "content": "Reassign permissions, verify user status.",
+        "score": 0.09246415649607236,
+        "retriever": "hybrid"
+      }
+    ],
+    "category": "access_permission",
+    "confidence": 0.967,
+    "fallback_used": false,
+    "retrieval_strategy": "hybrid",
+    "metrics": {
+      "faithfulness": 0.6602494716644287,
+      "answer_relevance": 0.7172415256500244,
+      "context_relevance": 0.6408132910728455,
+      "answer_correctness": 0.8408102989196777,
+      "evidence_support": 1.0
+    }
+  },
+  {
+    "case_id": "gen_009",
+    "prompt_version": 1,
+    "ticket": "The application keeps timing out when I use it.",
+    "relevant_documents": [
+      "kb:140"
+    ],
+    "expected_answer": "The issue is related to an application timeout. Verify network connectivity, check whether the application service is available, retry the operation, and review any relevant timeout or configuration settings. If the timeout persists, collect the error details and escalate for further investigation.",
+    "required_evidence": [
+      "Application Timeout Error"
+    ],
+    "generated_answer": "Diagnosis:\nApplication experiences timeout during use\n\nRoot Cause:\nServer load causing the application to exceed its configured timeout limit\n\nResolution Steps:\n1. Step 1: Increase the application timeout setting in the configuration.\n2. Step 2: Monitor and assess server load; reduce load or allocate additional resources if necessary.\n\nEvidence:\n- Application Timeout Error – Increase timeout, check server load.",
+    "retrieved_documents": [
+      {
+        "document_id": "kb:140",
+        "title": "Application Timeout Error",
+        "category": "software",
+        "content": "Increase timeout, check server load.",
+        "score": 1.0,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:12",
+        "title": "Application Login Timeout",
+        "category": "software",
+        "content": "Check server response, restart app, verify credentials.",
+        "score": 0.9022265976573505,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:7",
+        "title": "Application Freezing Frequently",
+        "category": "software",
+        "content": "Clear cache, update software, check system resources.",
+        "score": 0.8632756302284469,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:77",
+        "title": "Application Not Responding",
+        "category": "soft  ware",
+        "content": "Force close app, restart system, update software.",
+        "score": 0.5060134667878154,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:75",
+        "title": "Application Update Loop",
+        "category": "software",
+        "content": "Clear update cache, restart app, reinstall latest version.",
+        "score": 0.3047537613090937,
+        "retriever": "hybrid"
+      }
+    ],
+    "category": "software",
+    "confidence": 0.895,
+    "fallback_used": false,
+    "retrieval_strategy": "hybrid",
+    "metrics": {
+      "faithfulness": 0.4878105577081442,
+      "answer_relevance": 0.5218314528465271,
+      "context_relevance": 0.5789811015129089,
+      "answer_correctness": 0.6183880567550659,
+      "evidence_support": 1.0
+    }
+  },
+  {
+    "case_id": "gen_010",
+    "prompt_version": 1,
+    "ticket": "I received an alert that someone may have accessed my account without authorization.",
+    "relevant_documents": [
+      "kb:53",
+      "kb:124"
+    ],
+    "expected_answer": "The alert may indicate suspicious or unauthorized account activity. Verify the user's recent login activity and account status, change the account password, invalidate suspicious sessions or tokens if applicable, and escalate the incident for security investigation. Do not ignore the alert if unauthorized activity cannot be ruled out.",
+    "required_evidence": [
+      "Account Hijacking Suspected",
+      "Suspicious Login Location"
+    ],
+    "generated_answer": "Diagnosis:\nUser received an alert indicating possible unauthorized access to their account.\n\nRoot Cause:\nPotential unauthorized access attempt triggering an alert.\n\nResolution Steps:\n1. Step 1: Block the user account to prevent further access.\n2. Step 2: Review authentication and activity logs for suspicious activity.\n3. Step 3: Reset the user's password.\n4. Step 4: Enable multi-factor authentication (MFA) for the account.\n\nEvidence:\n- Unauthorized Access Alert: Block user, review logs.\n- Account Hijacking Suspected: Reset password, enable MFA.",
+    "retrieved_documents": [
+      {
+        "document_id": "kb:139",
+        "title": "Unauthorized Access Alert",
+        "category": "security",
+        "content": "Block user, review logs.",
+        "score": 1.0,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:124",
+        "title": "Suspicious Login Location",
+        "category": "security",
+        "content": "Verify user, reset credentials.",
+        "score": 0.5800093729101833,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:53",
+        "title": "Account Hijacking Suspected",
+        "category": "security",
+        "content": "Reset password, enable MFA.",
+        "score": 0.5320129515665273,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:69",
+        "title": "Security Alert Notification",
+        "category": "security",
+        "content": "Investigate logs, take corrective action.",
+        "score": 0.46624987556696956,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:120",
+        "title": "Unauthorized Database Access",
+        "category": "security",
+        "content": "Restrict DB access, review logs.",
+        "score": 0.4291865101305412,
+        "retriever": "hybrid"
+      }
+    ],
+    "category": "software",
+    "confidence": 0.919,
+    "fallback_used": false,
+    "retrieval_strategy": "hybrid",
+    "metrics": {
+      "faithfulness": 0.39109611697494984,
+      "answer_relevance": 0.7094155550003052,
+      "context_relevance": 0.5586917400360107,
+      "answer_correctness": 0.7783660888671875,
+      "evidence_support": 1.0
+    }
+  }
+]

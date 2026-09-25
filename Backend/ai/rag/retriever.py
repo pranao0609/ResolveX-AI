@@ -1,16 +1,74 @@
 """
 retriever.py — RAG retrieval layer.
 
-Uses FAISS vector store to find similar KB entries / past tickets
-and returns structured retrieval results.
+Uses FAISS vector store to find similar RAG chunks and returns
+structured retrieval results.
+
+FAISS index N must always correspond to DocumentStore
+metadata entry N.
 """
 
-from typing import List, Dict, Optional
+from typing import Dict, List, Optional
+
 import numpy as np
+
 from app.core.logger import logger
-from ai.rag.vector_store import get_vector_store
+from ai.config.ai_config import (
+    FAISS_SCORE_THRESHOLD,
+    FAISS_TOP_K,
+)
+from ai.embedding.embedding_model import generate_embedding
 from ai.rag.doc_store import get_doc_store
-from ai.config.ai_config import FAISS_TOP_K, FAISS_SCORE_THRESHOLD
+from ai.rag.models import ChunkMetadata
+from ai.rag.vector_store import get_vector_store
+
+
+def register_chunk(
+    metadata: ChunkMetadata,
+) -> int:
+    """
+    Register chunk metadata in the persistent document store.
+
+    Returns:
+        FAISS-compatible index ID.
+
+    The returned index corresponds to the position that the caller
+    must use when adding the chunk's embedding to FAISS.
+    """
+
+    store = get_doc_store()
+
+    index_id = store.add_chunk(metadata)
+
+    logger.debug(
+        "Registered RAG chunk index=%s chunk_id=%s "
+        "document_id=%s",
+        index_id,
+        metadata.chunk_id,
+        metadata.document_id,
+    )
+
+    return index_id
+
+
+def register_chunks(
+    metadata_list: List[ChunkMetadata],
+) -> List[int]:
+    """Register multiple chunk metadata records."""
+
+    if not metadata_list:
+        return []
+
+    store = get_doc_store()
+
+    index_ids = store.add_chunks(metadata_list)
+
+    logger.debug(
+        "Registered %d RAG chunks",
+        len(index_ids),
+    )
+
+    return index_ids
 
 
 def register_document(
@@ -22,90 +80,153 @@ def register_document(
     extra_metadata: Optional[Dict] = None,
 ) -> int:
     """
-    Register a document in the persistent doc store and return its index ID.
+    Legacy document registration API.
 
-    This ID must align with the FAISS vector insertion order.
+    Kept temporarily for compatibility with the existing pipeline.
+
+    New RAG ingestion should use register_chunk().
     """
+
     store = get_doc_store()
-    index_id = store.add_document(
-        source=source,
-        title=title,
-        category=category,
-        content=content,
-        doc_id=doc_id,
-        extra_metadata=extra_metadata,
-    )
+
+    index_id = len(store.documents)
+
+    document = {
+        "index_id": index_id,
+        "doc_id": doc_id,
+        "source": source,
+        "title": title,
+        "category": category,
+        "content": content,
+    }
+
+    if extra_metadata:
+        document.update(extra_metadata)
+
+    store.documents.append(document)
+
     return index_id
 
 
 def save_doc_store() -> None:
     """Persist the document store to disk."""
+
     get_doc_store().save()
 
 
 def validate_store_alignment() -> bool:
     """
-    Ensure FAISS vector count matches doc store count.
+    Ensure FAISS vector count matches document-store count.
     """
+
     vector_store = get_vector_store()
     doc_store = get_doc_store()
 
     if vector_store.total_vectors != doc_store.total_documents:
         logger.warning(
-            f"FAISS/doc store mismatch: vectors={vector_store.total_vectors}, "
-            f"docs={doc_store.total_documents}"
+            "FAISS/doc store mismatch: vectors=%s, docs=%s",
+            vector_store.total_vectors,
+            doc_store.total_documents,
         )
+
         return False
 
     logger.info(
-        f"FAISS/doc store aligned: {vector_store.total_vectors} vectors, "
-        f"{doc_store.total_documents} docs"
+        "FAISS/doc store aligned: vectors=%s, docs=%s",
+        vector_store.total_vectors,
+        doc_store.total_documents,
     )
+
     return True
 
 
+def _embed_query(
+    query: str | np.ndarray,
+) -> np.ndarray:
+    """
+    Convert a natural-language query into an embedding.
+
+    Supports:
+        - str: generate the embedding internally
+        - np.ndarray: use an already-generated embedding
+    """
+
+    if isinstance(query, str):
+        query = query.strip()
+
+        if not query:
+            raise ValueError("Query must not be empty")
+
+        embedding = generate_embedding(query)
+
+    elif isinstance(query, np.ndarray):
+        embedding = query
+
+    else:
+        raise TypeError(
+            "Query must be either a string or a numpy.ndarray"
+        )
+
+    embedding = np.asarray(
+        embedding,
+        dtype=np.float32,
+    )
+
+    if embedding.ndim != 1:
+        raise ValueError(
+            f"Query embedding must be 1D, got shape={embedding.shape}"
+        )
+
+    if not np.isfinite(embedding).all():
+        raise ValueError(
+            "Query embedding contains NaN or infinite values"
+        )
+
+    return embedding
+
+
 def retrieve_context(
-    query_embedding: np.ndarray,
+    query: str | np.ndarray,
     top_k: int = FAISS_TOP_K,
     score_threshold: float = FAISS_SCORE_THRESHOLD,
 ) -> List[Dict]:
     """
-    Retrieve the top-k most relevant documents for a query embedding.
+    Retrieve the top-k most relevant chunks for a natural-language query.
 
-    Args:
-        query_embedding: Dense vector from the embedding model (shape: 384,)
-        top_k: Number of results to retrieve
-        score_threshold: Minimum similarity score required
+    The query is converted into an embedding before FAISS search.
 
     Returns:
-        List of structured retrieval results:
-        [
-            {
-                "index_id": 0,
-                "doc_id": 123,
-                "source": "kb",
-                "title": "...",
-                "category": "...",
-                "content": "...",
-                "score": 0.82
-            }
-        ]
+        Structured metadata associated with each FAISS vector.
     """
+
     vector_store = get_vector_store()
     doc_store = get_doc_store()
 
     if vector_store.total_vectors == 0:
-        logger.warning("FAISS index is empty — no context retrieved")
+        logger.warning(
+            "FAISS index is empty — no context retrieved"
+        )
         return []
 
     if not validate_store_alignment():
-        logger.warning("Skipping retrieval due to FAISS/doc store mismatch")
+        logger.warning(
+            "Skipping retrieval due to FAISS/doc store mismatch"
+        )
         return []
 
     try:
-        scores, indices = vector_store.search(query_embedding, top_k=top_k)
+        query_embedding = _embed_query(query)
+
+        scores, indices = vector_store.search(
+            query_embedding,
+            top_k=top_k,
+        )
+
     except Exception as exc:
-        logger.error(f"Vector search failed: {exc}")
+        logger.error(
+            "Vector search failed: %s",
+            exc,
+        )
         return []
 
     results: List[Dict] = []
@@ -115,19 +236,35 @@ def retrieve_context(
             continue
 
         if float(score) < score_threshold:
-            logger.debug(f"Rejected doc idx={idx} score={score:.4f} below threshold={score_threshold}")
+            logger.debug(
+                "Rejected chunk idx=%s score=%.4f "
+                "below threshold=%.4f",
+                idx,
+                score,
+                score_threshold,
+            )
             continue
 
-        doc = doc_store.get_document(int(idx))
-        if not doc:
+        metadata = doc_store.get_document(
+            int(idx)
+        )
+
+        if not metadata:
             continue
 
         result = {
-            **doc,
+            **metadata,
             "score": float(score),
         }
+
         results.append(result)
 
-        logger.debug(f"Retrieved doc idx={idx} score={score:.4f} title={doc.get('title', '')}")
+        logger.debug(
+            "Retrieved chunk idx=%s score=%.4f "
+            "chunk_id=%s",
+            idx,
+            score,
+            metadata.get("chunk_id", ""),
+        )
 
     return results

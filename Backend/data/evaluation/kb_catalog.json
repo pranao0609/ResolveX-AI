@@ -1,0 +1,1010 @@
+[
+  {
+    "document_id": "kb:1",
+    "title": "Resolving 500 Login Errors",
+    "category": "software",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:2",
+    "title": "Invoice Re-delivery Process",
+    "category": "other",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:3",
+    "title": "iOS App Crash Troubleshooting",
+    "category": "software",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:4",
+    "title": "Password Reset Email Delivery",
+    "category": "access_permission",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:5",
+    "title": "Email Client Not Syncing",
+    "category": "software",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:6",
+    "title": "Software Update Failed",
+    "category": "software",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:7",
+    "title": "Application Freezing Frequently",
+    "category": "software",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:8",
+    "title": "File Not Opening in Application",
+    "category": "software",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:9",
+    "title": "Error While Saving File",
+    "category": "software",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:10",
+    "title": "Plugin Not Working",
+    "category": "software",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:11",
+    "title": "Version Compatibility Issue",
+    "category": "software",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:12",
+    "title": "Application Login Timeout",
+    "category": "software",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:13",
+    "title": "Auto-Save Not Working",
+    "category": "software",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:14",
+    "title": "Corrupted File Error",
+    "category": "software",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:15",
+    "title": "Mouse Not Detected",
+    "category": "hardware",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:16",
+    "title": "System Random Shutdown",
+    "category": "hardware",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:17",
+    "title": "Battery Not Charging",
+    "category": "hardware",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:18",
+    "title": "Hard Disk Not Detected",
+    "category": "hardware",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:19",
+    "title": "USB Device Not Recognized",
+    "category": "hardware",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:20",
+    "title": "Fan Noise Issue",
+    "category": "hardware",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:21",
+    "title": "RAM Failure Issue",
+    "category": "hardware",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:22",
+    "title": "Bluetooth Not Working",
+    "category": "hardware",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:23",
+    "title": "Touchpad Not Responding",
+    "category": "hardware",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:24",
+    "title": "Camera Not Detected",
+    "category": "hardware",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:25",
+    "title": "LAN Cable Not Working",
+    "category": "network",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:26",
+    "title": "IP Address Conflict",
+    "category": "network",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:27",
+    "title": "Network Dropping Frequently",
+    "category": "network",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:28",
+    "title": "Unable to Access Website",
+    "category": "network",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:29",
+    "title": "Packet Loss Issue",
+    "category": "network",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:30",
+    "title": "Port Not Accessible",
+    "category": "network",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:31",
+    "title": "VPN Disconnecting",
+    "category": "network",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:32",
+    "title": "Router Not Responding",
+    "category": "network",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:33",
+    "title": "Proxy Server Error",
+    "category": "network",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:34",
+    "title": "Network Authentication Failure",
+    "category": "network",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:35",
+    "title": "Access Denied to Application",
+    "category": "access_permission",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:36",
+    "title": "User Cannot Reset Password",
+    "category": "access_permission",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:37",
+    "title": "Account Expired",
+    "category": "access_permission",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:38",
+    "title": "Login Loop Issue",
+    "category": "access_permission",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:39",
+    "title": "Two-Factor Authentication Failure",
+    "category": "access_permission",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:40",
+    "title": "User Role Misconfigured",
+    "category": "access_permission",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:41",
+    "title": "Unable to Access Dashboard",
+    "category": "access_permission",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:42",
+    "title": "Session Expired Frequently",
+    "category": "access_permission",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:43",
+    "title": "Access Revoked Error",
+    "category": "access_permission",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:44",
+    "title": "User Not Found in System",
+    "category": "access_permission",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:45",
+    "title": "Multiple Failed Login Attempts",
+    "category": "security",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:46",
+    "title": "System Vulnerability Detected",
+    "category": "security",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:47",
+    "title": "Unauthorized File Access",
+    "category": "security",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:48",
+    "title": "Security Certificate Expired",
+    "category": "security",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:49",
+    "title": "Brute Force Attack Detected",
+    "category": "security",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:50",
+    "title": "Data Breach Alert",
+    "category": "security",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:51",
+    "title": "Firewall Misconfiguration",
+    "category": "security",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:52",
+    "title": "Suspicious File Download",
+    "category": "security",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:53",
+    "title": "Account Hijacking Suspected",
+    "category": "security",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:54",
+    "title": "Encryption Failure Issue",
+    "category": "security",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:55",
+    "title": "Request for Account Upgrade",
+    "category": "other",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:56",
+    "title": "Service Downtime Inquiry",
+    "category": "other",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:57",
+    "title": "Feature Not Available",
+    "category": "other",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:58",
+    "title": "Training Request",
+    "category": "other",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:59",
+    "title": "User Feedback Submission",
+    "category": "other",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:60",
+    "title": "Billing Discrepancy",
+    "category": "other",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:61",
+    "title": "Refund Request",
+    "category": "other",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:62",
+    "title": "Service Activation Delay",
+    "category": "other",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:63",
+    "title": "Documentation Request",
+    "category": "other",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:64",
+    "title": "General Help Request",
+    "category": "other",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:65",
+    "title": "API Response Error",
+    "category": "software",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:66",
+    "title": "Disk Space Full",
+    "category": "hardware",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:67",
+    "title": "Cannot Connect to Server",
+    "category": "network",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:68",
+    "title": "User Cannot Upload Files",
+    "category": "access_permission",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:69",
+    "title": "Security Alert Notification",
+    "category": "security",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:70",
+    "title": "Payment Gateway Timeout",
+    "category": "software",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:71",
+    "title": "External Device Not Working",
+    "category": "hardware",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:72",
+    "title": "Remote Desktop Not Connecting",
+    "category": "network",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:73",
+    "title": "User Cannot Access Email",
+    "category": "access_permission",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:74",
+    "title": "Unauthorized API Access",
+    "category": "security",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:75",
+    "title": "Application Update Loop",
+    "category": "software",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:76",
+    "title": "Error Code 404 in App",
+    "category": "software    ",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:77",
+    "title": "Application Not Responding",
+    "category": "soft  ware",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:78",
+    "title": "Crash on Startup",
+    "category": "  software",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:79",
+    "title": "Settings Not Saving",
+    "category": "software",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:80",
+    "title": "Software License Expired",
+    "category": "software",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:81",
+    "title": "API Integration Failure",
+    "category": "software",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:82",
+    "title": "File Upload Error",
+    "category": "software",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:83",
+    "title": "Background Process Failure",
+    "category": "software",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:84",
+    "title": "Data Sync Issue",
+    "category": "software",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:85",
+    "title": "External Hard Drive Not Showing",
+    "category": "hardware",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:86",
+    "title": "Speaker Not Working",
+    "category": "hardware",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:87",
+    "title": "System Boot Failure",
+    "category": "hardware",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:88",
+    "title": "USB Port Not Working",
+    "category": "hardware",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:89",
+    "title": "Screen Flickering Issue",
+    "category": "hardware",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:90",
+    "title": "Battery Draining Fast",
+    "category": "hardware",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:91",
+    "title": "System Freezing Randomly",
+    "category": "hardware",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:92",
+    "title": "Network Card Failure",
+    "category": "hardware",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:93",
+    "title": "Power Supply Failure",
+    "category": "hardware",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:94",
+    "title": "Headphones Not Detected",
+    "category": "hardware",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:95",
+    "title": "Unable to Ping Server",
+    "category": "network",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:96",
+    "title": "High Latency Issue",
+    "category": "network",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:97",
+    "title": "Router Firmware Issue",
+    "category": "network",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:98",
+    "title": "WiFi Signal Weak",
+    "category": "network",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:99",
+    "title": "Network Adapter Disabled",
+    "category": "network",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:100",
+    "title": "Cannot Access Shared Drive",
+    "category": "network",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:101",
+    "title": "Firewall Blocking Connection",
+    "category": "network",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:102",
+    "title": "VPN Authentication Error",
+    "category": "network",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:103",
+    "title": "Network Loop Detected",
+    "category": "network",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:104",
+    "title": "Gateway Not Reachable",
+    "category": "network",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:105",
+    "title": "User Cannot Access Email",
+    "category": "access_permission",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:106",
+    "title": "Account Disabled",
+    "category": "access_permission",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:107",
+    "title": "Access Token Expired",
+    "category": "access_permission",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:108",
+    "title": "Invalid Credentials Error",
+    "category": "access_permission",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:109",
+    "title": "User Locked Out of System",
+    "category": "access_permission",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:110",
+    "title": "Missing Role Permissions",
+    "category": "access_permission",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:111",
+    "title": "Login Redirect Loop",
+    "category": "access_permission",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:112",
+    "title": "Unauthorized API Access",
+    "category": "access_permission",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:113",
+    "title": "User Session Timeout",
+    "category": "access_permission",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:114",
+    "title": "Multi-User Access Conflict",
+    "category": "access_permission",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:115",
+    "title": "Malicious Script Detected",
+    "category": "security",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:116",
+    "title": "Suspicious Network Activity",
+    "category": "security",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:117",
+    "title": "Account Brute Force Attempt",
+    "category": "security",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:118",
+    "title": "Data Leak Suspected",
+    "category": "security",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:119",
+    "title": "Expired Security Token",
+    "category": "security",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:120",
+    "title": "Unauthorized Database Access",
+    "category": "security",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:121",
+    "title": "SSL Handshake Failure",
+    "category": "security",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:122",
+    "title": "Security Patch Missing",
+    "category": "security",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:123",
+    "title": "Phishing Attempt Detected",
+    "category": "security",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:124",
+    "title": "Suspicious Login Location",
+    "category": "security",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:125",
+    "title": "Service Request Delay",
+    "category": "other",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:126",
+    "title": "Request for Data Export",
+    "category": "other",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:127",
+    "title": "Subscription Upgrade Query",
+    "category": "other",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:128",
+    "title": "User Complaint Handling",
+    "category": "other",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:129",
+    "title": "Training Material Request",
+    "category": "other",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:130",
+    "title": "System Usage Inquiry",
+    "category": "other",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:131",
+    "title": "Billing Cycle Clarification",
+    "category": "other",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:132",
+    "title": "Account Deletion Request",
+    "category": "other",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:133",
+    "title": "Support Escalation Request",
+    "category": "other",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:134",
+    "title": "Product Demo Request",
+    "category": "other",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:135",
+    "title": "Email Delivery Failure",
+    "category": "software",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:136",
+    "title": "Disk Read Error",
+    "category": "hardware",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:137",
+    "title": "Server Not Reachable",
+    "category": "network",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:138",
+    "title": "User Cannot Download Files",
+    "category": "access_permission",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:139",
+    "title": "Unauthorized Access Alert",
+    "category": "security",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:140",
+    "title": "Application Timeout Error",
+    "category": "software",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:141",
+    "title": "Peripheral Device Failure",
+    "category": "hardware",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:142",
+    "title": "Network Bandwidth Limit Exceeded",
+    "category": "network",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:143",
+    "title": "Access Denied for API",
+    "category": "access_permission",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:144",
+    "title": "Security Breach Attempt",
+    "category": "security",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  }
+]

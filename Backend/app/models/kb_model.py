@@ -18,7 +18,11 @@ class KnowledgeBaseEntry(Base):
     title = Column(String(255), nullable=False)
     content = Column(Text, nullable=False)       # the solution/article body
     category = Column(String(100), nullable=True)
-    source = Column(String(100), default="ticket")  # "ticket" | "article" | "manual"
+    source = Column(
+    String(100),
+    nullable=False,
+    default="knowledge_base",
+)  # "ticket" | "article" | "manual"
     relevance_score = Column(Float, nullable=True)   # cached similarity score
 
     # FAISS vector reference

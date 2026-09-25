@@ -1,0 +1,61 @@
+{
+  "experiment": "ResolveX Phase 11 Prompt Version Comparison",
+  "prompt_versions": [
+    1,
+    2,
+    3
+  ],
+  "cases_per_version": 10,
+  "total_evaluations": 30,
+  "metric_definition": "Semantic generation metrics computed using the Phase 9 evaluation subsystem.",
+  "summaries": [
+    {
+      "prompt_version": 1,
+      "total_cases": 10,
+      "successful_cases": 10,
+      "error_cases": 0,
+      "metrics": {
+        "faithfulness": 0.5005033603697898,
+        "answer_relevance": 0.6940054178237915,
+        "context_relevance": 0.5860125094652175,
+        "answer_correctness": 0.7094926834106445,
+        "evidence_support": 1.0
+      },
+      "pipeline_confidence": 0.9412,
+      "fallback_count": 0,
+      "fallback_rate": 0.0
+    },
+    {
+      "prompt_version": 2,
+      "total_cases": 10,
+      "successful_cases": 10,
+      "error_cases": 0,
+      "metrics": {
+        "faithfulness": 0.5550817598233976,
+        "answer_relevance": 0.675886607170105,
+        "context_relevance": 0.6031173527240753,
+        "answer_correctness": 0.7435965716838837,
+        "evidence_support": 1.0
+      },
+      "pipeline_confidence": 0.9040000000000001,
+      "fallback_count": 0,
+      "fallback_rate": 0.0
+    },
+    {
+      "prompt_version": 3,
+      "total_cases": 10,
+      "successful_cases": 10,
+      "error_cases": 0,
+      "metrics": {
+        "faithfulness": 0.4301393528331426,
+        "answer_relevance": 0.7217252254486084,
+        "context_relevance": 0.6120713204145432,
+        "answer_correctness": 0.7415905714035034,
+        "evidence_support": 1.0
+      },
+      "pipeline_confidence": 0.9187,
+      "fallback_count": 0,
+      "fallback_rate": 0.0
+    }
+  ]
+}

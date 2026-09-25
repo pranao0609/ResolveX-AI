@@ -1,6 +1,4 @@
-"""
-constants.py — Application-wide constants for ResolveX-AI.
-"""
+from app.config import settings
 
 # ── Ticket Status constants ───────────────────────────────────────────────────
 STATUS_OPEN = "open"
@@ -15,9 +13,9 @@ PRIORITY_MEDIUM = "medium"
 PRIORITY_HIGH = "high"
 PRIORITY_CRITICAL = "critical"
 
-# ── Confidence thresholds ─────────────────────────────────────────────────────
-CONFIDENCE_HIGH = 0.70   # auto-resolve threshold
-CONFIDENCE_LOW = 0.50    # escalate to HITL threshold
+# ── Confidence thresholds (sourced from central Settings) ──────────────────────
+CONFIDENCE_HIGH = settings.AUTO_RESOLVE_THRESHOLD   # auto-resolve threshold (default 0.75)
+CONFIDENCE_LOW = settings.HITL_THRESHOLD            # escalate to HITL threshold (default 0.50)
 
 # ── Ticket categories ─────────────────────────────────────────────────────────
 CATEGORIES = [

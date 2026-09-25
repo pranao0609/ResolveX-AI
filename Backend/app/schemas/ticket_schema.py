@@ -2,27 +2,46 @@
 ticket_schema.py — Pydantic schemas for ticket request/response contracts.
 """
 
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, field_validator
 from typing import Optional, List
 from datetime import datetime
+from app.core.constants import CATEGORIES
 
 
 class TicketCreate(BaseModel):
     """Payload for creating a new ticket (POST /tickets)."""
     title: str = Field(..., min_length=3, max_length=255, example="Application crashes on login")
-    description: str = Field(..., min_length=10, example="The app throws a 500 error whenever I try to log in.")
-    submitted_by: Optional[str] = Field(None, example="user@company.com")
-    category: str = Field(..., example="technical")
-    image: Optional[str] = Field(None, example="screenshot.png")   # filename only; no processing done
+    description: str = Field(..., min_length=10, max_length=10000, example="The app throws a 500 error whenever I try to log in.")
+    submitted_by: Optional[str] = Field(None, max_length=255, example="user@company.com")
+    category: str = Field(..., example="software")
+    image: Optional[str] = Field(None, max_length=255, example="screenshot.png")   # filename only; no processing done
+
+    @field_validator("category")
+    @classmethod
+    def validate_category(cls, value: str) -> str:
+        clean_cat = value.strip().lower()
+        if clean_cat not in CATEGORIES:
+            raise ValueError(f"Invalid category '{value}'. Allowed categories: {', '.join(CATEGORIES)}")
+        return clean_cat
 
 
 class TicketUpdate(BaseModel):
     """Payload for partial ticket updates."""
-    title: Optional[str] = None
-    description: Optional[str] = None
-    status: Optional[str] = None
-    assigned_to: Optional[str] = None
+    title: Optional[str] = Field(None, min_length=3, max_length=255)
+    description: Optional[str] = Field(None, min_length=10, max_length=10000)
+    status: Optional[str] = Field(None, max_length=50)
+    assigned_to: Optional[str] = Field(None, max_length=255)
     category: Optional[str] = None
+
+    @field_validator("category")
+    @classmethod
+    def validate_category(cls, value: Optional[str]) -> Optional[str]:
+        if value is None:
+            return None
+        clean_cat = value.strip().lower()
+        if clean_cat not in CATEGORIES:
+            raise ValueError(f"Invalid category '{value}'. Allowed categories: {', '.join(CATEGORIES)}")
+        return clean_cat
 
 
 class TicketResponse(BaseModel):

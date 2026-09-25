@@ -112,7 +112,65 @@ class VectorStore:
     def total_vectors(self) -> int:
         return self.index.ntotal if self.index else 0
 
+    def rollback_to(self, vector_count: int) -> None:
+        """
+        Roll back the FAISS index to the specified number of vectors.
 
+        This is used to restore index consistency when a coordinated
+        RAG indexing operation fails after vectors have been added.
+        """
+
+        if self.index is None:
+            return
+
+        if vector_count < 0:
+            raise ValueError("vector_count cannot be negative")
+
+        current_count = self.index.ntotal
+
+        if vector_count > current_count:
+            raise ValueError(
+                f"Cannot rollback to {vector_count}; "
+                f"current index contains {current_count} vectors"
+            )
+
+        if vector_count == current_count:
+            return
+
+        if vector_count == 0:
+            self.index = self._create_index()
+            logger.info("FAISS index rolled back to 0 vectors")
+            return
+
+        if not hasattr(self.index, "reconstruct_n"):
+            raise RuntimeError(
+                "FAISS index does not support vector reconstruction"
+            )
+
+        existing_vectors = self.index.reconstruct_n(
+            0,
+            vector_count,
+        )
+
+        self.index = self._create_index()
+
+        if self.index is None:
+            raise RuntimeError(
+                "FAISS index unavailable while restoring previous state"
+            )
+
+        self.index.add(
+            np.asarray(
+                existing_vectors,
+                dtype=np.float32,
+            )
+        )
+
+        logger.info(
+            "FAISS index rolled back from %d to %d vectors",
+            current_count,
+            vector_count,
+        )
 _vector_store: Optional[VectorStore] = None
 
 

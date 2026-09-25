@@ -29,3 +29,19 @@ class StorageException(ResolveXException):
 class ValidationException(ResolveXException):
     def __init__(self, detail: str = "Validation error"):
         super().__init__(status_code=422, detail=detail)
+
+
+class VectorIndexException(ResolveXException):
+    def __init__(self, detail: str = "FAISS vector index error"):
+        super().__init__(status_code=500, detail=detail)
+
+
+class RetrievalException(ResolveXException):
+    def __init__(self, detail: str = "RAG context retrieval failure"):
+        super().__init__(status_code=500, detail=detail)
+
+
+class LLMServiceException(ResolveXException):
+    def __init__(self, detail: str = "LLM resolution service failure"):
+        super().__init__(status_code=500, detail=detail)
+

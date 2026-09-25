@@ -1,0 +1,656 @@
+[
+  {
+    "case_id": "gen_001",
+    "ticket": "I cannot log in because I never receive the password reset email.",
+    "relevant_documents": [
+      "kb:4"
+    ],
+    "expected_answer": "The issue is related to password reset email delivery. Verify that the user's email address is correct, check spam or junk folders, confirm that the password reset service is functioning, and retry the password reset request. If the email still does not arrive, escalate the issue for further investigation.",
+    "required_evidence": [
+      "Password Reset Email Delivery"
+    ],
+    "generated_answer": "**Ticket Summary**  \nThe user is unable to log in because the password‑reset email never arrives.\n\n**Goal**  \nGet the user a working password‑reset link (or an alternative way to regain access) and ensure future reset emails are delivered reliably.\n\n---\n\n## Step‑by‑Step Resolution\n\n| Step | Action | Why / Reference |\n|------|--------|-----------------|\n| **1. Verify the user’s login identifier** | Ask the user to confirm the exact email address (or username) they are using for the account. | If the address is mistyped the reset will be sent to the wrong mailbox. |\n| **2. Check the user’s inbox for the reset email** | Instruct the user to: <br>• Look in the **Inbox**, **Spam/Junk**, **Promotions** (or any other filtered folders). <br>• Search for “Password Reset” or the sender **noreply@resolvex.ai**. | The **Password Reset Email Delivery** KB entry notes that reset messages often land in spam or other folders. |\n| **3. Whitelist the sender** | Ask the user to add **noreply@resolvex.ai** to their contacts or safe‑sender list. | Whitelisting prevents future messages from being filtered, per the same KB article. |\n| **4. Resend the password‑reset link** | From the admin console (or ask the user to use the “Forgot password?” link again) trigger a **new** reset email. | The **User Cannot Reset Password** article recommends “resend reset link” after checking delivery. |\n| **5. Confirm delivery** | Once the new email is sent, have the user verify receipt (including spam folder). If it arrives, instruct them to click the link and set a new password. | This completes the reset flow. |\n| **6. If the email still does not arrive** | • Verify that the user’s email server is not blocking messages from **noreply@resolvex.ai** (e.g., firewall, corporate email filter). <br>• Ask the user to provide an alternate email address on file so we can send the reset there. <br>• As a last resort, manually generate a temporary password for the account and deliver it via a secure channel (e.g., encrypted email or phone verification). | When delivery fails after steps 1‑5, the issue is typically on the recipient’s side (spam filters, domain block). |\n| **7. Test login** | After the password is reset, have the user log in with the new credentials. If they encounter a **login loop**, advise them to **clear browser cookies/cache** (see *Login Loop Issue* KB) and try again. |\n| **8. Document the outcome** | Record the steps taken, the final resolution (email received, password reset, or alternative method used), and any changes made to the user’s account. | Keeps the ticket audit trail complete. |\n\n---\n\n## Sample Communication to the User\n\n> **Subject:** Password‑Reset Assistance – Action Required  \n>   \n> Hi *[User Name]*,  \n>   \n> I’m sorry you’re not receiving the password‑reset email. Please follow these steps:  \n>   \n> 1. Confirm the exact email address associated with your ResolveX account.  \n> 2. Check all folders (Inbox, Spam/Junk, Promotions) for a message from **noreply@resolvex.ai**.  \n> 3. Add **noreply@resolvex.ai** to your contacts or safe‑sender list.  \n> 4. Click the “Forgot password?” link again to request a new reset email.  \n>   \n> If you still don’t see the email, let me know so we can verify that your email server isn’t blocking our messages or arrange an alternate delivery method.  \n>   \n> Once you receive the email, click the link inside and set a new password. If you encounter any further issues (e.g., a login loop), please clear your browser cookies/cache and try again.  \n>   \n> Thank you,  \n> *[Your Name]* – ResolveX Support  \n\n---\n\n### Quick Reference to Knowledge‑Base Articles\n\n- **User Cannot Reset Password** – “Check email delivery, resend reset link.”  \n- **Password Reset Email Delivery** – “Check spam folder, whitelist noreply@resolvex.ai, resend.”  \n- **Login Loop Issue** – “Clear cookies, reset password, check session settings.”  \n\nFollowing the steps above should restore the user’s access and prevent future delivery problems. If any step fails, escalate to the Email‑Delivery team with the user’s",
+    "retrieved_documents": [
+      {
+        "document_id": "kb:36",
+        "title": "User Cannot Reset Password",
+        "category": "access_permission",
+        "content": "Check email delivery, resend reset link.",
+        "score": 1.0,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:4",
+        "title": "Password Reset Email Delivery",
+        "category": "access_permission",
+        "content": "Check spam folder, whitelist noreply@resolvex.ai, resend.",
+        "score": 0.9559003455240072,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:105",
+        "title": "User Cannot Access Email",
+        "category": "access_permission",
+        "content": "Verify login credentials, reset password.",
+        "score": 0.9177115706940485,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:73",
+        "title": "User Cannot Access Email",
+        "category": "access_permission",
+        "content": "Check credentials, reset password.",
+        "score": 0.8426990126272533,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:38",
+        "title": "Login Loop Issue",
+        "category": "access_permission",
+        "content": "Clear cookies, reset password, check session settings.",
+        "score": 0.5815414315307292,
+        "retriever": "hybrid"
+      }
+    ],
+    "category": "software",
+    "confidence": 0.964,
+    "fallback_used": false,
+    "retrieval_strategy": "hybrid",
+    "metrics": {
+      "faithfulness": 0.325640908209607,
+      "answer_relevance": 0.669387936592102,
+      "context_relevance": 0.5126726031303406,
+      "answer_correctness": 0.6979310512542725,
+      "evidence_support": 1.0
+    }
+  },
+  {
+    "case_id": "gen_002",
+    "ticket": "The email client is not synchronizing new messages.",
+    "relevant_documents": [
+      "kb:5"
+    ],
+    "expected_answer": "The issue is related to email client synchronization. Verify the network connection, confirm the email account configuration and credentials, restart the email client, and trigger a manual synchronization. If synchronization continues to fail, escalate for further investigation.",
+    "required_evidence": [
+      "Email Client Not Syncing"
+    ],
+    "generated_answer": "**Ticket Summary**  \n*Issue:* The user reports that the email client is not synchronizing new messages.\n\n**Relevant Knowledge‑Base Article**  \n- **Email Client Not Syncing** – “Check internet connection, refresh inbox, reconfigure email account.”  \n\nBelow is a step‑by‑step troubleshooting flow that expands on those three core checks and adds a few common follow‑up actions. Follow the steps in order; stop when the issue is resolved and document the outcome.\n\n---\n\n## Step‑by‑Step Resolution\n\n| # | Action | Why it matters | How to perform |\n|---|--------|----------------|----------------|\n| **1** | **Verify Internet Connectivity** | The client cannot pull new mail without a working network connection. | • Open a web browser on the same machine and load a known site (e.g., https://www.google.com). <br>• If the site fails, run `ping 8.8.8.8` or `tracert` to isolate the network problem. <br>• Resolve any Wi‑Fi/Ethernet issues before proceeding. |\n| **2** | **Confirm Server Reachability** | Even with internet, the mail server may be blocked or down. | • From a command prompt, `telnet <mail‑server> 143` (IMAP) or `telnet <mail‑server> 993` (IMAPS) / `25`/`587` for SMTP if needed. <br>• A successful connection shows the server is reachable. |\n| **3** | **Refresh / Manually Sync the Inbox** | A simple sync request can kick‑start the process if the client is idle. | • In the client UI, click **Refresh**, **Sync**, or press the appropriate shortcut (e.g., `F5`). <br>• Observe if new messages appear. |\n| **4** | **Check Sync Settings** | Disabled or mis‑configured sync intervals stop new mail from appearing. | • Open **Account Settings → Synchronization**. <br>• Ensure “Sync mail automatically” is enabled and the interval is reasonable (e.g., ≤ 5 min). |\n| **5** | **Review Account Credentials** | Expired or changed passwords prevent the client from authenticating. | • Re‑enter the username/password in the account configuration. <br>• If unsure, perform a **Password Reset** (see KB “User Cannot Access Email”) and update the client. |\n| **6** | **Re‑configure the Email Account** *(Core KB step)* | Corrupt or outdated account data can block sync. | • Remove the problematic account from the client. <br>• Add it again using the correct server settings (IMAP/POP/SMTP, ports, SSL/TLS). <br>• Verify the settings against the organization’s documentation. |\n| **7** | **Clear Local Cache / Re‑index** | Cached data may be stuck, especially in Outlook, Thunderbird, etc. | • For Outlook: `File → Options → Advanced → Outlook Data File Settings → Compact`. <br>• For other clients, locate the cache folder and delete/refresh it (e.g., `~/.thunderbird/*.default/ImapMail`). |\n| **8** | **Restart the Email Client & System** | A fresh process clears transient errors. | • Close the client completely, ensure no background processes remain, then relaunch. <br>• If the issue persists, reboot the workstation. |\n| **9** | **Check for Service Outages** | The mail service itself may be down. | • Consult the internal status page or contact the mail‑server admin. <br>• If an outage is confirmed, inform the user and set an ETA. |\n| **10** | **Escalate if Unresolved** | After all diagnostics, the problem may be server‑side or a corrupted profile. | • Gather logs (client sync logs, event viewer entries). <br>• Open a higher‑tier ticket with the mail‑server team, attaching the logs and a summary of steps taken. |\n\n---\n\n## Quick “First‑Pass” Checklist (for rapid response)\n\n1. **Internet OK?** – Yes → continue.  \n2. **Manual Refresh works?** – No → proceed.  \n3. **Re‑configure account** (remove & add back).",
+    "retrieved_documents": [
+      {
+        "document_id": "kb:5",
+        "title": "Email Client Not Syncing",
+        "category": "software",
+        "content": "Check internet connection, refresh inbox, reconfigure email account.",
+        "score": 1.0,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:135",
+        "title": "Email Delivery Failure",
+        "category": "software",
+        "content": "Check SMTP server, verify email config.",
+        "score": 0.4792870060438397,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:84",
+        "title": "Data Sync Issue",
+        "category": "software",
+        "content": "Check connectivity, re-sync data, restart service.",
+        "score": 0.4400622041689912,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:4",
+        "title": "Password Reset Email Delivery",
+        "category": "access_permission",
+        "content": "Check spam folder, whitelist noreply@resolvex.ai, resend.",
+        "score": 0.314726379476289,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:73",
+        "title": "User Cannot Access Email",
+        "category": "access_permission",
+        "content": "Check credentials, reset password.",
+        "score": 0.3134244356746991,
+        "retriever": "hybrid"
+      }
+    ],
+    "category": "software",
+    "confidence": 0.964,
+    "fallback_used": false,
+    "retrieval_strategy": "hybrid",
+    "metrics": {
+      "faithfulness": 0.31678436769217977,
+      "answer_relevance": 0.7028381824493408,
+      "context_relevance": 0.5346713662147522,
+      "answer_correctness": 0.6892792582511902,
+      "evidence_support": 1.0
+    }
+  },
+  {
+    "case_id": "gen_003",
+    "ticket": "My laptop battery is not charging even though the charger is connected.",
+    "relevant_documents": [
+      "kb:17"
+    ],
+    "expected_answer": "The issue is related to the battery not charging. Check that the charger and power connection are secure, inspect the charging adapter and cable for damage, and restart the system. If the battery still does not charge, the battery or charging hardware may require further diagnosis or replacement.",
+    "required_evidence": [
+      "Battery Not Charging"
+    ],
+    "generated_answer": "**Ticket Summary**  \n- **Issue:** Laptop battery will not charge while the charger is plugged in.  \n- **Device:** Laptop (make/model not specified).  \n\n**Relevant Knowledge‑Base Article**  \n- **Battery Not Charging** – “Check charger, replace battery, inspect charging port.”  \n\n---\n\n## Step‑by‑Step Resolution\n\n| Step | Action | Details / How‑to |\n|------|--------|------------------|\n| 1 | **Verify the charger is functioning** | • Ensure the power outlet is live (plug a lamp or phone charger into the same outlet). <br>• Inspect the charger’s brick and cable for visible damage (frayed wires, bent connector). <br>• If the charger has an LED indicator, confirm it lights when plugged in. |\n| 2 | **Confirm proper connection** | • Disconnect the charger, then reconnect it firmly to both the wall outlet and the laptop’s charging port. <br>• Make sure the connector aligns correctly (some laptops have a keyed connector that only fits one way). |\n| 3 | **Check the laptop’s charging port** | • Look inside the port for dust, lint, or bent pins. <br>• Use a soft brush or compressed air to clean the port gently. <br>• If pins appear damaged, the port may need professional repair. |\n| 4 | **Test with an alternate charger (if available)** | • Borrow a charger that matches the laptop’s voltage/amperage specifications. <br>• If the battery charges with the alternate charger, the original charger is defective and should be replaced. |\n| 5 | **Inspect the battery status in the OS** | • **Windows:** Open *Power & sleep settings* → *Additional power settings* → *Battery* → *Battery health* or run `powercfg /batteryreport`. <br>• **macOS:** Hold **Option** and click the battery icon, or go to *System Settings → Battery → Battery Health*. <br>• Look for messages such as “Battery needs service” or “Not charging”. |\n| 6 | **Perform a power reset** (helps clear firmware glitches) | 1. Shut down the laptop. <br>2. Unplug the charger and, if removable, take out the battery. <br>3. Press and hold the power button for **30 seconds**. <br>4. Re‑install the battery (if removable), plug the charger back in, and power on. |\n| 7 | **Update BIOS/UEFI and power‑management drivers** | • Visit the laptop manufacturer’s support site, download the latest BIOS/UEFI firmware and any “Battery” or “Power Management” drivers, and install them. <br>• Reboot and test charging again. |\n| 8 | **If the battery still won’t charge, consider battery replacement** | • Batteries have a limited number of charge cycles; a failing cell often shows the “not charging” symptom. <br>• Order a genuine replacement battery (use the laptop’s service tag or model number to ensure compatibility). <br>• Follow the manufacturer’s instructions for safe removal and installation, or have a certified technician perform the swap. |\n| 9 | **Escalate if hardware fault persists** | • If after steps 1‑8 the laptop still does not charge and the charger and port appear normal, the internal charging circuitry (DC‑in board or motherboard) may be defective. <br>• Open a service request with the hardware support team or schedule a repair with an authorized service center. |\n\n---\n\n## Quick Diagnostic Checklist (for the support agent)\n\n| ✅ | Item |\n|----|------|\n| ☐ Charger powers the outlet (test with another device) |\n| ☐ Charger shows no physical damage and LED (if any) is on |\n| ☐ Charger firmly seated in laptop’s charging port |\n| ☐ Charging port clean and pins intact |\n| ☐ Battery health status in OS is “Good” |\n| ☐ Power reset performed |\n| ☐ BIOS/driver updates applied |\n| ☐ Alternate charger tested (if possible) |\n| ☐ Battery replaced (if older than 12‑18 months or flagged by OS) |\n\nIf any of the above items fail, address that specific point before moving to the next step.\n\n---\n\n### Expected Outcome\n- **Successful resolution:** Battery begins to charge (indicator light or OS shows charging status) and holds charge after a full cycle.  \n- **If not resolved:** The issue is likely hardware‑level (charging port or motherboard) and should be escalated for repair/replacement",
+    "retrieved_documents": [
+      {
+        "document_id": "kb:17",
+        "title": "Battery Not Charging",
+        "category": "hardware",
+        "content": "Check charger, replace battery, inspect charging port.",
+        "score": 1.0,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:60",
+        "title": "Billing Discrepancy",
+        "category": "other",
+        "content": "Check invoice, verify charges.",
+        "score": 0.2131371173164858,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:32",
+        "title": "Router Not Responding",
+        "category": "network",
+        "content": "Restart router, reset settings, check power supply.",
+        "score": 0.1893547690031844,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:19",
+        "title": "USB Device Not Recognized",
+        "category": "hardware",
+        "content": "Reconnect device, update drivers, try different port.",
+        "score": 0.13937084884572776,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:15",
+        "title": "Mouse Not Detected",
+        "category": "hardware",
+        "content": "Reconnect mouse, change USB port, update drivers.",
+        "score": 0.13372042675629883,
+        "retriever": "hybrid"
+      }
+    ],
+    "category": "software",
+    "confidence": 0.925,
+    "fallback_used": false,
+    "retrieval_strategy": "hybrid",
+    "metrics": {
+      "faithfulness": 0.367762774962819,
+      "answer_relevance": 0.7571985721588135,
+      "context_relevance": 0.5344135761260986,
+      "answer_correctness": 0.6378573179244995,
+      "evidence_support": 1.0
+    }
+  },
+  {
+    "case_id": "gen_004",
+    "ticket": "I cannot connect to the company VPN. It keeps disconnecting.",
+    "relevant_documents": [
+      "kb:31"
+    ],
+    "expected_answer": "The issue is related to VPN connectivity. Verify the network connection, confirm the VPN credentials and configuration, reconnect to the VPN, and restart the VPN client if necessary. If the VPN continues disconnecting, investigate the VPN configuration or escalate the issue.",
+    "required_evidence": [
+      "VPN Disconnecting"
+    ],
+    "generated_answer": "**Ticket Summary**  \nUser reports that the corporate VPN connects but repeatedly disconnects.\n\n**Relevant Knowledge‑Base Article**  \n*VPN Disconnecting* – “Check internet stability, update VPN client.”\n\n---\n\n## Step‑by‑Step Resolution\n\n| Step | Action | Details / Commands | Expected Result |\n|------|--------|--------------------|-----------------|\n| 1 | **Verify basic internet connectivity** | • Open a web browser and load a few external sites (e.g., https://www.google.com). <br>• Run `ping 8.8.8.8` (or any reliable external IP) for 10 seconds. | Stable ping with < 100 ms latency and < 2 % packet loss. If the connection is flaky, resolve the local network issue first (restart Wi‑Fi/router, switch to wired, contact ISP). |\n| 2 | **Check VPN client version** | • Open the VPN client → *Help* → *About* (or run `vpnclient --version`). <br>• Compare with the latest version listed on the corporate software portal. | If the client is out‑of‑date, proceed to step 3. |\n| 3 | **Update the VPN client** | • Download the latest installer from the internal software repository (e.g., `\\\\fileserver\\software\\VPN\\vpn‑latest.exe`). <br>• Run the installer and follow the prompts (choose “Repair/Upgrade”). <br>• Re‑boot the machine (optional but recommended). | Updated client with any bug‑fixes that address disconnects. |\n| 4 | **Test the VPN connection** | • Launch the VPN client, log in with normal credentials, and connect. <br>• Remain connected for at least 5 minutes while monitoring the status. | Connection stays stable. If it still drops, continue to step 5. |\n| 5 | **Inspect local network for interference** | • Disable any third‑party firewalls, antivirus VPN‑blocking modules, or proxy settings temporarily. <br>• Ensure no other VPN or tunneling software is running concurrently. | Eliminates software conflicts that can cause intermittent drops. |\n| 6 | **Review VPN logs** | • Locate the client log file (commonly `%AppData%\\VPN\\logs\\vpn.log`). <br>• Look for entries such as “connection lost”, “re‑key failure”, or “network unreachable”. <br>• Capture the last 20 lines and attach them to the ticket if the issue persists. | Provides concrete error codes for deeper investigation if needed. |\n| 7 | **If still disconnecting – gather additional data** | • Run `tracert <VPN‑gateway‑IP>` to see if any hops are timing out. <br>• Execute `ipconfig /all` and note the DNS servers and default gateway. <br>• Provide these details to the network team. | Enables the network team to check for upstream routing or ISP issues. |\n| 8 | **Escalate if required** | • If steps 1‑7 do not resolve the problem, reopen the ticket with: <br>  • VPN client version<br>  • Log excerpts (step 6)<br>  • Network test results (steps 1 & 5) <br>  • Any recent changes to the workstation (OS updates, new software). | Provides the support tier with all necessary diagnostics for a faster fix. |\n\n---\n\n### Quick Checklist for the User\n\n1. **Internet stable?** – Yes/No  \n2. **VPN client up‑to‑date?** – Yes/No (if No → update)  \n3. **VPN stays connected after update?** – Yes/No  \n4. **Any other security software disabled?** – Yes/No  \n5. **Log file attached?** – Yes/No  \n\nIf the answer to any of the first three items is “No”, follow the corresponding step before moving on.\n\n---\n\n**Reference:** The above procedure follows the *VPN Disconnecting* guidance from the knowledge base (“Check internet stability, update VPN client”) and adds standard diagnostic actions to ensure a thorough resolution.",
+    "retrieved_documents": [
+      {
+        "document_id": "kb:31",
+        "title": "VPN Disconnecting",
+        "category": "network",
+        "content": "Check internet stability, update VPN client.",
+        "score": 1.0,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:102",
+        "title": "VPN Authentication Error",
+        "category": "network",
+        "content": "Verify credentials, reset VPN profile.",
+        "score": 0.8438904852153003,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:34",
+        "title": "Network Authentication Failure",
+        "category": "network",
+        "content": "Verify credentials, reconnect network.",
+        "score": 0.2755136265139628,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:67",
+        "title": "Cannot Connect to Server",
+        "category": "network",
+        "content": "Check network connectivity, restart server.",
+        "score": 0.18430233742943897,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:97",
+        "title": "Router Firmware Issue",
+        "category": "network",
+        "content": "Update firmware, restart router.",
+        "score": 0.18321157098897517,
+        "retriever": "hybrid"
+      }
+    ],
+    "category": "network",
+    "confidence": 0.976,
+    "fallback_used": false,
+    "retrieval_strategy": "hybrid",
+    "metrics": {
+      "faithfulness": 0.3088493159868651,
+      "answer_relevance": 0.7196469306945801,
+      "context_relevance": 0.6523661613464355,
+      "answer_correctness": 0.5499858260154724,
+      "evidence_support": 1.0
+    }
+  },
+  {
+    "case_id": "gen_005",
+    "ticket": "I am getting an access denied message when trying to open the application.",
+    "relevant_documents": [
+      "kb:35"
+    ],
+    "expected_answer": "The issue is related to application access permissions. Verify that the user has the required application role or permissions and that the account is active. If the required permissions are missing, update the user's access or escalate the request to the appropriate administrator.",
+    "required_evidence": [
+      "Access Denied to Application"
+    ],
+    "generated_answer": "**Ticket Summary**  \nUser reports receiving an **“Access Denied”** message when attempting to open the application.\n\n**Relevant Knowledge‑Base Article**  \n- **Access Denied to Application** – “Check role permissions, grant access rights.”\n\n---\n\n## Step‑by‑Step Resolution\n\n| Step | Action | Details / How‑to |\n|------|--------|-------------------|\n| 1 | **Confirm the exact error message** | Ask the user to copy‑paste the full dialog (e.g., “Access Denied – You do not have permission to open this application”). This helps differentiate a generic “access denied” from a more specific “license expired” or “account locked” message. |\n| 2 | **Identify the user’s account and role** | • Open the **User Management** console (or IAM portal). <br>• Locate the user’s account (search by username or email). <br>• Note the assigned **role/group** (e.g., *StandardUser*, *PowerUser*, *Admin*). |\n| 3 | **Verify role permissions for the application** | • In the **Roles/Permissions** matrix, locate the role identified in step 2. <br>• Ensure the role has the **“Launch/Application Access”** permission (or the specific permission name used in your platform). <br>• If the permission is missing, proceed to step 4. |\n| 4 | **Grant the required permission** | • Edit the role or add the user to a role that already includes the needed permission. <br>• Save changes and **propagate** (some systems require a short sync or logout/login). |\n| 5 | **Check for recent permission changes or revocations** | • Review the audit log for the user (last 24‑48 h) to see if permissions were removed or the account was disabled. <br>• If a revocation is found, determine whether it was intentional; if not, restore the appropriate rights. |\n| 6 | **Validate the user’s account status** | • Ensure the account is **active**, not locked, and not expired. <br>• Confirm the user is not flagged for MFA or password reset that could block access. |\n| 7 | **Ask the user to re‑login** | • Have the user **log out** of the application (or close the client) and log back in to pick up the new permissions. |\n| 8 | **Test access** | • If possible, have the user attempt to open the application again while you observe (screen share or remote session). |\n| 9 | **Escalate if still denied** | • If the error persists after confirming permissions and account status, collect the following for further investigation: <br>  • Full error screenshot <br>  • Application version and OS <br>  • Any recent changes to group policies or network firewalls. <br>  • Provide these details to the **Application Support** tier. |\n|10| **Close the ticket** | • Once the user can open the application, document the changes made (role updated, permission granted) and mark the ticket resolved. |\n\n---\n\n## Quick Reference Checklist (for the support agent)\n\n- [ ] Verify exact error wording.  \n- [ ] Locate user account & current role.  \n- [ ] Confirm role includes **application‑access** permission.  \n- [ ] Add/grant permission if missing.  \n- [ ] Ensure account is active & not locked.  \n- [ ] Have user re‑login and test.  \n- [ ] Escalate with logs if problem persists.\n\n---\n\n### Why This Works\nThe KB entry for **“Access Denied to Application”** directly points to **role permissions** as the root cause. By systematically confirming the user’s role, the associated permissions, and the account’s active status, you address the most common reasons for an access‑denied response. If those are correct, the issue likely lies elsewhere (e.g., revocation, licensing), which the escalation step covers.\n\n---\n\n**Next Action:** Follow the steps above, update the ticket with each action taken, and inform the user of progress. If you need any clarification on locating permissions in your specific admin console, let me know!",
+    "retrieved_documents": [
+      {
+        "document_id": "kb:35",
+        "title": "Access Denied to Application",
+        "category": "access_permission",
+        "content": "Check role permissions, grant access rights.",
+        "score": 1.0,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:108",
+        "title": "Invalid Credentials Error",
+        "category": "access_permission",
+        "content": "Reset password, verify username.",
+        "score": 0.710646966182921,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:43",
+        "title": "Access Revoked Error",
+        "category": "access_permission",
+        "content": "Reassign permissions, verify user status.",
+        "score": 0.49857006416447763,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:12",
+        "title": "Application Login Timeout",
+        "category": "software",
+        "content": "Check server response, restart app, verify credentials.",
+        "score": 0.4180190627351826,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:8",
+        "title": "File Not Opening in Application",
+        "category": "software",
+        "content": "Verify file format, update software, reinstall application.",
+        "score": 0.3787763789005707,
+        "retriever": "hybrid"
+      }
+    ],
+    "category": "access_permission",
+    "confidence": 0.97,
+    "fallback_used": false,
+    "retrieval_strategy": "hybrid",
+    "metrics": {
+      "faithfulness": 0.3224382831249386,
+      "answer_relevance": 0.6248325109481812,
+      "context_relevance": 0.4697149991989136,
+      "answer_correctness": 0.5013571977615356,
+      "evidence_support": 1.0
+    }
+  },
+  {
+    "case_id": "gen_006",
+    "ticket": "My account has been locked after several unsuccessful login attempts.",
+    "relevant_documents": [
+      "kb:45",
+      "kb:109"
+    ],
+    "expected_answer": "The account may be locked because of multiple failed login attempts. Verify the user's identity and account status, follow the account unlock procedure, and reset the password if necessary. If repeated failed attempts continue or unauthorized activity is suspected, escalate the incident for security investigation.",
+    "required_evidence": [
+      "Multiple Failed Login Attempts",
+      "User Locked Out of System"
+    ],
+    "generated_answer": "**Ticket Summary**  \nThe user’s account was locked after a series of failed login attempts.\n\n**Relevant KB Articles**  \n- **Multiple Failed Login Attempts** – lock, notify, enforce password reset.  \n- **User Locked Out of System** – unlock account, reset password.  \n\n---\n\n## Step‑by‑Step Resolution\n\n| Step | Action | Details / Commands |\n|------|--------|--------------------|\n| 1 | **Verify the requester’s identity** | • Ask the user to confirm at least two of the following: full name, employee ID, last successful login time, or a security‑question answer.<br>• If you have a ticket‑ing system with SSO, cross‑check the ticket creator’s email against the locked account. |\n| 2 | **Locate the locked account** | • Open the admin console (e.g., Azure AD, Okta, ADUC, etc.).<br>• Search for the user’s UPN / username. |\n| 3 | **Unlock the account** | • **Azure AD**: `Set‑AzureADUser -ObjectId <ObjectId> -AccountEnabled $true`  <br>• **Okta**: Admin → People → Select user → **More Actions → Unlock**.<br>• **Active Directory**: Right‑click the user → **Properties → Account** → un‑check **Account is locked out**. |\n| 4 | **Force a password reset** | • Generate a temporary password that meets the password policy.<br>• Mark “User must change password at next sign‑in.”<br>• Communicate the temporary password securely (e.g., encrypted email or a password‑reset link). |\n| 5 | **Notify the user** | • Send a confirmation email that includes:<br>   - Account has been unlocked.<br>   - Temporary password and instructions to change it on first login.<br>   - Reminder to review recent activity. |\n| 6 | **Enable / reinforce Multi‑Factor Authentication (MFA)** *(optional but recommended)* | • If MFA is not already enabled, enroll the user now.<br>• If MFA is already enabled, ask the user to verify that their MFA device is up‑to‑date. |\n| 7 | **Log the incident** | • Record the unlock event, password reset, and any MFA actions in the ticket.<br>• Tag the ticket with “Multiple Failed Login Attempts” for reporting. |\n| 8 | **Monitor for further anomalies** | • Add the user to a short‑term watchlist (24‑48 h).<br>• Review sign‑in logs for any unusual IPs or locations. |\n| 9 | **Close the ticket** | • Confirm with the user that they can now log in successfully.<br>• Update the ticket status to *Resolved* and add a brief resolution note. |\n\n---\n\n### Quick Reference Script (for AD)\n\n```powershell\n# 1. Find the user\n$user = Get-ADUser -Identity \"jdoe\"\n\n# 2. Unlock\nUnlock-ADAccount -Identity $user.SamAccountName\n\n# 3. Set temporary password\n$tempPwd = \"Temp#$(Get-Random -Maximum 9999)\"\nSet-ADAccountPassword -Identity $user.SamAccountName -Reset -NewPassword (ConvertTo-SecureString $tempPwd -AsPlainText -Force)\nSet-ADUser -Identity $user.SamAccountName -ChangePasswordAtLogon $true\n\n# 4. (Optional) Force MFA enrollment via your MFA provider’s API\n```\n\n---\n\n### What to Communicate to the User\n\n> *“Your account was automatically locked after several unsuccessful login attempts. We have now unlocked it and set a temporary password. Please log in using the temporary password, then immediately change it to a password of your choice. For added security, we recommend enabling Multi‑Factor Authentication if you haven’t already done so. Let us know if you encounter any further issues.”*\n\n---\n\n**Result** – The user regains access, the risk of a brute‑force attack is mitigated, and future security is strengthened.",
+    "retrieved_documents": [
+      {
+        "document_id": "kb:45",
+        "title": "Multiple Failed Login Attempts",
+        "category": "security",
+        "content": "Lock account, notify user, enforce password reset.",
+        "score": 1.0,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:117",
+        "title": "Account Brute Force Attempt",
+        "category": "security",
+        "content": "Lock account, enable MFA.",
+        "score": 0.9739669138154371,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:53",
+        "title": "Account Hijacking Suspected",
+        "category": "security",
+        "content": "Reset password, enable MFA.",
+        "score": 0.6653682244884218,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:109",
+        "title": "User Locked Out of System",
+        "category": "access_permission",
+        "content": "Unlock account, reset password.",
+        "score": 0.6488243085836582,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:38",
+        "title": "Login Loop Issue",
+        "category": "access_permission",
+        "content": "Clear cookies, reset password, check session settings.",
+        "score": 0.3955669297937297,
+        "retriever": "hybrid"
+      }
+    ],
+    "category": "access_permission",
+    "confidence": 0.97,
+    "fallback_used": false,
+    "retrieval_strategy": "hybrid",
+    "metrics": {
+      "faithfulness": 0.5062036854880196,
+      "answer_relevance": 0.6175613403320312,
+      "context_relevance": 0.5276665687561035,
+      "answer_correctness": 0.5957059860229492,
+      "evidence_support": 1.0
+    }
+  },
+  {
+    "case_id": "gen_007",
+    "ticket": "The application crashes immediately when I try to start it.",
+    "relevant_documents": [
+      "kb:78"
+    ],
+    "expected_answer": "The issue is related to an application crash during startup. Restart the system, verify that the application is compatible with the current environment, check for available software updates, and retry launching the application. If the application continues to crash on startup, collect the relevant error information and escalate the issue.",
+    "required_evidence": [
+      "Crash on Startup"
+    ],
+    "generated_answer": "**Ticket Summary**  \n*User reports that the application crashes immediately on launch.*\n\n**Root‑cause possibilities (based on KB)**  \n\n| Potential cause | Relevant KB entry |\n|-----------------|-------------------|\n| Corrupt installation or missing files | **Crash on Startup** – “reinstall app” |\n| Out‑of‑date binaries or libraries | **Crash on Startup** – “update dependencies” |\n| Stale cache or corrupted local data | **iOS App Crash Troubleshooting** – “clear cache” |\n| Unchecked error logs that may reveal a specific failure | **Crash on Startup** – “check logs” |\n\n---\n\n## Step‑by‑Step Resolution\n\n1. **Gather Immediate Diagnostic Information**  \n   a. **Locate the crash log**  \n   - **Windows:** `%LOCALAPPDATA%\\[AppName]\\Logs` or Event Viewer → *Windows Logs → Application*.  \n   - **macOS:** `~/Library/Logs/[AppName]/` or Console.app → *User Reports*.  \n   - **Linux:** `/var/log/[appname]/` or `~/.config/[appname]/logs`.  \n   b. **Copy the most recent entry** and note any error codes, missing DLL/so files, or exception messages.  \n   *Why:* The KB “Check logs” is the first troubleshooting step; logs often pinpoint a missing dependency or a fatal exception.\n\n2. **Verify that the user is running the latest released version**  \n   - Open the app’s *About* screen (if reachable) or check the version number in the installer folder.  \n   - Compare with the version listed on the official download page.  \n   - If an update is available, **download and install** it.  \n   *Why:* Both “Crash on Startup” and “iOS App Crash Troubleshooting” stress updating the app (or its dependencies) as a common fix.\n\n3. **Clear the application cache / local data**  \n   - **Windows:** Delete `%LOCALAPPDATA%\\[AppName]\\Cache` (or use the app’s “Clear Cache” option if the UI loads).  \n   - **macOS:** Remove `~/Library/Caches/[AppName]`.  \n   - **Linux:** Remove `~/.cache/[appname]`.  \n   - **iOS/Android (if mobile):** In Settings → App → *Clear Cache* (or reinstall, which automatically clears it).  \n   *Why:* Corrupted cache can cause immediate crashes; the iOS KB explicitly recommends clearing cache.\n\n4. **Reinstall the application**  \n   a. **Uninstall** the current copy:  \n   - Windows: *Control Panel → Programs → Uninstall* or *Settings → Apps*.  \n   - macOS: Drag the app from `/Applications` to Trash, then delete leftover files in `~/Library/Application Support/[AppName]`.  \n   - Linux: `sudo apt-get remove [appname]` (or the appropriate package manager).  \n   b. **Delete residual configuration folders** (e.g., `%APPDATA%`, `~/Library/Application Support`).  \n   c. **Download the latest installer** from the official site and run it.  \n   *Why:* A fresh install eliminates corrupted binaries and ensures all required dependencies are correctly placed, as recommended in the “Crash on Startup” article.\n\n5. **Update system‑level dependencies**  \n   - **Windows:** Run *Windows Update* and ensure the Visual C++ Redistributable packages are current.  \n   - **macOS:** Run *Software Update* (ensures latest frameworks).  \n   - **Linux:** `sudo apt-get update && sudo apt-get upgrade` (or the distro equivalent) to refresh libraries such as `libstdc++`, `glibc`, etc.  \n   *Why:* The KB mentions “update dependencies”; missing or outdated runtime libraries are a frequent cause of launch‑time crashes.\n\n6. **Retest the application**  \n   - Launch the app and observe whether it stays open for at least 30 seconds.  \n   - If it still crashes, capture the new log entry (Step 1) and note any new error messages.\n\n7. **Escalation (if still failing)**  \n   - Provide the support engineer with:  \n     * Application version, OS version, and hardware specs.  \n     * Full crash log (from Step 1).  \n     * Steps already performed (reinstall,",
+    "retrieved_documents": [
+      {
+        "document_id": "kb:78",
+        "title": "Crash on Startup",
+        "category": "software",
+        "content": "Check logs, reinstall app, update dependencies.",
+        "score": 1.0,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:7",
+        "title": "Application Freezing Frequently",
+        "category": "software",
+        "content": "Clear cache, update software, check system resources.",
+        "score": 0.63186930154263,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:77",
+        "title": "Application Not Responding",
+        "category": "soft  ware",
+        "content": "Force close app, restart system, update software.",
+        "score": 0.615785615113501,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:3",
+        "title": "iOS App Crash Troubleshooting",
+        "category": "software",
+        "content": "Update to the latest app version and clear cache.",
+        "score": 0.6014424631891298,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:83",
+        "title": "Background Process Failure",
+        "category": "software",
+        "content": "Restart service, check logs, verify config.",
+        "score": 0.508595467074347,
+        "retriever": "hybrid"
+      }
+    ],
+    "category": "software",
+    "confidence": 0.925,
+    "fallback_used": false,
+    "retrieval_strategy": "hybrid",
+    "metrics": {
+      "faithfulness": 0.3087594802150639,
+      "answer_relevance": 0.6314354538917542,
+      "context_relevance": 0.5174124836921692,
+      "answer_correctness": 0.5406945943832397,
+      "evidence_support": 1.0
+    }
+  },
+  {
+    "case_id": "gen_008",
+    "ticket": "I cannot access the shared drive from my computer.",
+    "relevant_documents": [
+      "kb:100"
+    ],
+    "expected_answer": "The issue is related to access to the shared drive. Verify network connectivity, confirm that the shared drive is available, and check that the user has the required permissions. Reconnect to the shared drive after correcting any connectivity or permission issue. If access remains unavailable, escalate for further investigation.",
+    "required_evidence": [
+      "Cannot Access Shared Drive"
+    ],
+    "generated_answer": "**Ticket Summary**  \nUser reports that they are unable to access a shared drive from their workstation.\n\n**Relevant Knowledge‑Base Article**  \n*Cannot Access Shared Drive* – “Check network permissions, reconnect drive.”  \n\n---\n\n## Step‑by‑Step Resolution\n\n| # | Action | Details / Commands | Expected Result |\n|---|--------|--------------------|-----------------|\n| 1 | **Confirm basic network connectivity** | • Open a command prompt.<br>• Run `ping <file‑server‑hostname>` (or the IP address of the server hosting the share).<br>• If the ping fails, verify the Ethernet/Wi‑Fi connection and any VPN client if applicable. | You receive replies (≈ 0 ms‑30 ms). If not, resolve the network issue before proceeding. |\n| 2 | **Validate user permissions on the share** | • Ask the user for the exact share path (e.g., `\\\\fileserver\\DeptShare`).<br>• In a browser or File Explorer, try to open the UNC path directly.<br>• If an “Access is denied” message appears, the account lacks NTFS/Share permissions. | Either the share opens (permissions are OK) or you see an explicit permission error. |\n| 3 | **Check that the user is logged in with the correct domain account** | • In a command prompt run `whoami` – it should return `DOMAIN\\username`.<br>• If the user is logged on locally or with a different domain, have them log off and log back on with the proper credentials. | `whoami` shows the expected domain account. |\n| 4 | **Reconnect (remap) the network drive** | **Option A – Using File Explorer**<br>1. Right‑click **This PC** → **Disconnect network drive** (remove the problematic mapping).<br>2. Click **Map network drive**.<br>3. Choose a drive letter, enter the UNC path, check **Reconnect at sign‑in**, and click **Finish**.<br><br>**Option B – Using command line**<br>`net use X: /delete /y`  *(replace X with the mapped letter)*<br>`net use X: \\\\fileserver\\DeptShare /persistent:yes` | The drive is successfully mapped and appears in **This PC**. |\n| 5 | **Test file access** | Open the newly mapped drive and try to create, open, and delete a test file. | No errors; the user can read/write as expected. |\n| 6 | **If the drive still fails to connect** | • Verify that the file‑server’s share is online (contact the server team).<br>• Ensure no firewall or security software on the workstation is blocking SMB (ports 445/139).<br>• Check for recent Group‑Policy changes that might have removed the user’s share permissions. | Identify any external factor (server outage, firewall, policy) and involve the appropriate team. |\n| 7 | **Document the outcome** | Record the steps taken, the final status (resolved / escalated), and any changes made (e.g., permissions updated, drive re‑mapped). | Provides a clear audit trail for future reference. |\n\n---\n\n### Quick Reference Checklist (for the support analyst)\n\n- ☐ Ping the file server – confirm connectivity.  \n- ☐ Verify `whoami` shows the correct domain account.  \n- ☐ Test the UNC path directly → note any “Access denied”.  \n- ☐ Remove old mapping (`net use X: /delete`).  \n- ☐ Re‑map the drive (File Explorer or `net use`).  \n- ☐ Perform a read/write test.  \n- ☐ If still failing, check server status, firewall, or permission changes.  \n\n---\n\n**Next Steps for the Analyst**  \n1. Follow the table above in order.  \n2. If step 2 reveals a permission issue, open a ticket with the **Permissions Management** team to grant the required access.  \n3. If the server is unreachable, create an incident with the **Infrastructure** team.  \n\nOnce the drive is accessible, confirm with the user and close the ticket.  \n\n---  \n\n*This solution directly follows the guidance from the knowledge‑base entry “Cannot Access Shared Drive – Check network permissions, reconnect drive.”*",
+    "retrieved_documents": [
+      {
+        "document_id": "kb:100",
+        "title": "Cannot Access Shared Drive",
+        "category": "network",
+        "content": "Check network permissions, reconnect drive.",
+        "score": 1.0,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:85",
+        "title": "External Hard Drive Not Showing",
+        "category": "hardware",
+        "content": "Check connection, update drivers, assign drive letter.",
+        "score": 0.28332566884181265,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:138",
+        "title": "User Cannot Download Files",
+        "category": "access_permission",
+        "content": "Check permissions, verify network.",
+        "score": 0.1704597743552707,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:41",
+        "title": "Unable to Access Dashboard",
+        "category": "access_permission",
+        "content": "Check permissions, verify login status.",
+        "score": 0.0993971048686552,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:43",
+        "title": "Access Revoked Error",
+        "category": "access_permission",
+        "content": "Reassign permissions, verify user status.",
+        "score": 0.09246415649607236,
+        "retriever": "hybrid"
+      }
+    ],
+    "category": "access_permission",
+    "confidence": 0.967,
+    "fallback_used": false,
+    "retrieval_strategy": "hybrid",
+    "metrics": {
+      "faithfulness": 0.3014799163422801,
+      "answer_relevance": 0.5894505977630615,
+      "context_relevance": 0.5818672776222229,
+      "answer_correctness": 0.7110328674316406,
+      "evidence_support": 1.0
+    }
+  },
+  {
+    "case_id": "gen_009",
+    "ticket": "The application keeps timing out when I use it.",
+    "relevant_documents": [
+      "kb:140"
+    ],
+    "expected_answer": "The issue is related to an application timeout. Verify network connectivity, check whether the application service is available, retry the operation, and review any relevant timeout or configuration settings. If the timeout persists, collect the error details and escalate for further investigation.",
+    "required_evidence": [
+      "Application Timeout Error"
+    ],
+    "generated_answer": "**Ticket Summary**  \n*User reports that the application “keeps timing out” during normal use.*\n\n**Root‑cause categories most often associated with this symptom (per KB)**  \n\n| KB Article | Typical cause | Primary remedy |\n|------------|---------------|----------------|\n| **Application Timeout Error** | Server overload, network latency, insufficient client‑side timeout setting | Increase timeout value, verify server load |\n| **Application Login Timeout** | Authentication service slow or unavailable | Check server response, restart app, verify credentials |\n| **Application Freezing / Not Responding** | Resource exhaustion on client or server | Clear cache, update software, restart |\n\nThe first article directly matches the reported issue, so the resolution will focus on **checking server load and adjusting the timeout configuration**, while also covering the most common ancillary checks.\n\n---\n\n## Step‑by‑Step Resolution\n\n### 1. Gather Immediate Diagnostic Information\n| Action | Why | How |\n|--------|-----|-----|\n| **a. Capture the exact error message** | Determines whether it’s a generic “timeout” or a specific HTTP/DB timeout code. | Ask the user to copy the popup text or screenshot. |\n| **b. Note the operation that triggers the timeout** (e.g., opening a dashboard, saving a record). | Helps isolate whether a particular service is slow. | Request a brief description from the user. |\n| **c. Verify the client environment** (OS, app version, network type). | Some timeout settings are client‑side. | Ask the user to run `app --version` and note Wi‑Fi vs. wired. |\n\n> *If the user cannot provide details, proceed with the generic steps below; you can collect the data later if the issue persists.*\n\n### 2. Quick “Reset” Checks (low‑effort, high‑impact)\n1. **Restart the application** – closes any hung sessions.  \n2. **Restart the client machine** – clears residual memory leaks.  \n3. **Clear the application cache** (see KB “Application Freezing Frequently”).  \n   - Windows: `%APPDATA%\\YourApp\\Cache` → delete contents.  \n   - macOS: `~/Library/Application Support/YourApp/Cache` → delete.  \n\n> These steps often resolve transient timeout spikes caused by stale cache or hung processes.\n\n### 3. Verify Server Health & Load\n| Action | Tool / Command | Expected outcome |\n|--------|----------------|------------------|\n| **a. Ping / traceroute to the server** | `ping server.company.com` / `tracert server.company.com` | < 100 ms latency, no packet loss. |\n| **b. Check server CPU / memory usage** | Use monitoring dashboard (e.g., Grafana, CloudWatch) or ask the infrastructure team. | Utilization < 70 % for CPU, < 80 % for RAM. |\n| **c. Review recent logs for error spikes** | `tail -n 200 /var/log/yourapp/app.log` | Look for repeated “timeout” entries or long query times. |\n\n- **If server load is high** → open a capacity‑increase ticket or schedule a maintenance window.  \n- **If network latency is abnormal** → involve the network team to investigate routing or firewall issues.\n\n### 4. Increase the Application Timeout Setting\nThe exact location varies by platform; choose the appropriate method:\n\n| Platform | Setting location | Recommended value |\n|----------|------------------|-------------------|\n| **Web client (config file)** | `config/application.yml` → `requestTimeoutMs` | Increase from default 30 000 ms to **60 000 ms** (or 2× current). |\n| **Desktop client (registry / ini)** | `settings.ini` → `TimeoutSeconds` | Set to **120** seconds. |\n| **Mobile app (remote config)** | Admin console → “API Timeout” | Raise to **90 seconds**. |\n\n**Procedure (example for a Windows desktop client):**\n1. Close the app.  \n2. Open `C:\\Program Files\\YourApp\\config\\settings.ini` in Notepad (run as Administrator).  \n3. Locate the line `TimeoutSeconds=30`.  \n4. Change it to `TimeoutSeconds=120`.  \n5. Save and restart the app.  \n\n> *Reference: KB “Application Timeout Error” – “Increase timeout, check server load.”*\n\n### 5. Validate the Fix\n1. Perform the same operation that previously timed out.  \n2.",
+    "retrieved_documents": [
+      {
+        "document_id": "kb:140",
+        "title": "Application Timeout Error",
+        "category": "software",
+        "content": "Increase timeout, check server load.",
+        "score": 1.0,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:12",
+        "title": "Application Login Timeout",
+        "category": "software",
+        "content": "Check server response, restart app, verify credentials.",
+        "score": 0.9022265976573505,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:7",
+        "title": "Application Freezing Frequently",
+        "category": "software",
+        "content": "Clear cache, update software, check system resources.",
+        "score": 0.8632756302284469,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:77",
+        "title": "Application Not Responding",
+        "category": "soft  ware",
+        "content": "Force close app, restart system, update software.",
+        "score": 0.5060134667878154,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:75",
+        "title": "Application Update Loop",
+        "category": "software",
+        "content": "Clear update cache, restart app, reinstall latest version.",
+        "score": 0.3047537613090937,
+        "retriever": "hybrid"
+      }
+    ],
+    "category": "software",
+    "confidence": 0.925,
+    "fallback_used": false,
+    "retrieval_strategy": "hybrid",
+    "metrics": {
+      "faithfulness": 0.27004003453140074,
+      "answer_relevance": 0.5132836699485779,
+      "context_relevance": 0.5841630697250366,
+      "answer_correctness": 0.49598199129104614,
+      "evidence_support": 1.0
+    }
+  },
+  {
+    "case_id": "gen_010",
+    "ticket": "I received an alert that someone may have accessed my account without authorization.",
+    "relevant_documents": [
+      "kb:53",
+      "kb:124"
+    ],
+    "expected_answer": "The alert may indicate suspicious or unauthorized account activity. Verify the user's recent login activity and account status, change the account password, invalidate suspicious sessions or tokens if applicable, and escalate the incident for security investigation. Do not ignore the alert if unauthorized activity cannot be ruled out.",
+    "required_evidence": [
+      "Account Hijacking Suspected",
+      "Suspicious Login Location"
+    ],
+    "generated_answer": "**Ticket Summary**  \nThe user received an alert indicating a possible unauthorized access to their account.\n\n**Relevant KB Articles**  \n- **Unauthorized Access Alert** – “Block user, review logs.”  \n- **Suspicious Login Location** – “Verify user, reset credentials.”  \n- **Account Hijacking Suspected** – “Reset password, enable MFA.”  \n- **Security Alert Notification** – “Investigate logs, take corrective action.”\n\n---\n\n## Step‑by‑Step Resolution\n\n| Step | Action | Details / Commands | Why |\n|------|--------|--------------------|-----|\n| 1 | **Acknowledge the alert with the user** | Send a brief confirmation (e.g., “We’ve received your security alert and are investigating.”) | Sets expectations and assures the user the issue is being handled. |\n| 2 | **Verify the user’s identity** | • Ask for two‑factor verification (e.g., a code sent to the registered phone/email).<br>• Confirm personal security questions or employee ID. | Prevents social‑engineering attacks before you act on the account. |\n| 3 | **Temporarily block the account** | • In the admin console, set the account status to **“Locked/Disabled.”**<br>• If your platform supports “Force logout,” execute it to terminate all active sessions. | Stops any ongoing unauthorized activity while you investigate. |\n| 4 | **Collect and review recent authentication logs** | • Pull logs for the last 30‑48 hours (login timestamps, IP addresses, device types, geo‑location).<br>• Look for: <br>  • Logins from unfamiliar IPs or countries.<br>  • Multiple failed attempts followed by a successful login.<br>  • Logins from new device fingerprints. | Identifies the source and scope of the breach (see *Unauthorized Access Alert* & *Security Alert Notification*). |\n| 5 | **Determine if credentials were compromised** | • If logs show a successful login from an unknown location/device, treat it as compromised.<br>• If no suspicious logins appear, still assume compromise as a precaution. | Guides the next remediation steps. |\n| 6 | **Reset the user’s password** | • Generate a strong, system‑enforced password or require the user to create one that meets complexity rules.<br>• Force password change at next sign‑in. | Removes any stolen password from the attacker’s possession (*Account Hijacking Suspected*). |\n| 7 | **Enable / enforce Multi‑Factor Authentication (MFA)** | • Turn on MFA for the account if not already active.<br>• If MFA is already enabled, require re‑registration of the authenticator app/device. | Adds an additional barrier against future unauthorized access. |\n| 8 | **Review and adjust security settings** | • Ensure security questions, recovery email/phone are up‑to‑date.<br>• Disable any unused API keys or third‑party app tokens linked to the account. | Reduces attack surface. |\n| 9 | **Unblock the account** | • After password reset and MFA enrollment, change status back to **“Active.”**<br>• Notify the user to log in with the new credentials. | Restores normal access once the account is secured. |\n|10| **Communicate findings & next‑step recommendations**| • Summarize what was discovered in the logs (e.g., “Login from IP 203.0.113.45, Singapore, at 03:12 UTC”).<br>• Advise the user to monitor account activity and report any anomalies.<br>• Suggest periodic password changes and reviewing authorized devices. | Provides transparency and reinforces security hygiene. |\n|11| **Document the incident**| • Log the ticket resolution steps, timestamps, and any evidence in the incident management system.<br>• Tag the ticket with the relevant KB articles for future reference. | Ensures compliance and aids future investigations. |\n\n---\n\n### Quick Reference Checklist (for the support agent)\n\n- [ ] Verify user identity (2‑FA)  \n- [ ] Lock/disable the account  \n- [ ] Export and analyze authentication logs (last 48 h)  \n- [ ] Reset password (force change)  \n- [ ] Enable / re‑enroll MFA  \n- [ ] Review recovery info & third‑party tokens  \n- [ ] Unlock account & notify user  \n- [ ] Document findings & close ticket  \n\n---\n\n**Final Note to the User**",
+    "retrieved_documents": [
+      {
+        "document_id": "kb:139",
+        "title": "Unauthorized Access Alert",
+        "category": "security",
+        "content": "Block user, review logs.",
+        "score": 1.0,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:124",
+        "title": "Suspicious Login Location",
+        "category": "security",
+        "content": "Verify user, reset credentials.",
+        "score": 0.5800093729101833,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:53",
+        "title": "Account Hijacking Suspected",
+        "category": "security",
+        "content": "Reset password, enable MFA.",
+        "score": 0.5320129515665273,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:69",
+        "title": "Security Alert Notification",
+        "category": "security",
+        "content": "Investigate logs, take corrective action.",
+        "score": 0.46624987556696956,
+        "retriever": "hybrid"
+      },
+      {
+        "document_id": "kb:120",
+        "title": "Unauthorized Database Access",
+        "category": "security",
+        "content": "Restrict DB access, review logs.",
+        "score": 0.4291865101305412,
+        "retriever": "hybrid"
+      }
+    ],
+    "category": "software",
+    "confidence": 0.925,
+    "fallback_used": false,
+    "retrieval_strategy": "hybrid",
+    "metrics": {
+      "faithfulness": 0.4083738469559213,
+      "answer_relevance": 0.6414430737495422,
+      "context_relevance": 0.5708715319633484,
+      "answer_correctness": 0.6636900901794434,
+      "evidence_support": 1.0
+    }
+  }
+]

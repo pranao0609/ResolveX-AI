@@ -1,0 +1,95 @@
+{
+  "report": {
+    "name": "ResolveX Phase 9 Evaluation & Benchmarking",
+    "phase": 9,
+    "generated_at": "2026-09-24T17:16:08.700927+00:00"
+  },
+  "datasets": {
+    "knowledge_base_documents": 144,
+    "retrieval_evaluation_queries": 30,
+    "generation_evaluation_cases": 10
+  },
+  "retrieval_evaluation": {
+    "metrics": [
+      "Recall@5",
+      "Recall@10",
+      "Precision@5",
+      "Precision@10",
+      "MRR",
+      "nDCG@5",
+      "nDCG@10"
+    ],
+    "results": {
+      "bm25": {
+        "queries": 30,
+        "recall@5": 0.8,
+        "recall@10": 0.9166666666666666,
+        "precision@5": 0.1733333333333334,
+        "precision@10": 0.10333333333333337,
+        "mrr": 0.7289285714285715,
+        "ndcg@5": 0.7250426411719545,
+        "ndcg@10": 0.7657199778858116
+      },
+      "dense": {
+        "queries": 30,
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "precision@5": 0.22666666666666677,
+        "precision@10": 0.11333333333333338,
+        "mrr": 1.0,
+        "ndcg@5": 0.9973240263049395,
+        "ndcg@10": 0.9973240263049395
+      },
+      "hybrid": {
+        "queries": 30,
+        "recall@5": 0.9666666666666667,
+        "recall@10": 1.0,
+        "precision@5": 0.2200000000000001,
+        "precision@10": 0.11333333333333338,
+        "mrr": 0.9214285714285714,
+        "ndcg@5": 0.9244076946336915,
+        "ndcg@10": 0.9355188057448026
+      },
+      "hybrid_reranker": {
+        "queries": 30,
+        "recall@5": 0.9666666666666667,
+        "recall@10": 0.9666666666666667,
+        "precision@5": 0.21333333333333343,
+        "precision@10": 0.10666666666666672,
+        "mrr": 0.8861111111111112,
+        "ndcg@5": 0.9037418951454832,
+        "ndcg@10": 0.9037418951454832
+      }
+    }
+  },
+  "generation_evaluation": {
+    "metrics": [
+      "Faithfulness",
+      "Answer Relevance",
+      "Context Relevance",
+      "Answer Correctness",
+      "Evidence Support"
+    ],
+    "results": {
+      "evaluation_cases": 10,
+      "faithfulness": 0.34363326135090955,
+      "answer_relevance": 0.6467078268527985,
+      "context_relevance": 0.5485819637775421,
+      "answer_correctness": 0.6083516180515289,
+      "evidence_support": 1.0
+    }
+  },
+  "methodology": {
+    "retrieval": "Retrieval was evaluated against a manually constructed 30-query benchmark using Recall, Precision, MRR and nDCG.",
+    "generation": "Generation was evaluated using 10 manually curated ticket/reference answer cases.",
+    "semantic_model": "all-MiniLM-L6-v2 was used for semantic generation metrics.",
+    "evidence_support": "Evidence support evaluates whether required evaluation evidence is represented by retrieved documents or the generated answer."
+  },
+  "limitations": [
+    "The retrieval benchmark currently contains 30 manually constructed queries.",
+    "The generation benchmark currently contains 10 manually curated cases.",
+    "Generation metrics are internal semantic baselines and are not human evaluation scores.",
+    "Faithfulness and context relevance are estimated using embedding similarity and do not constitute formal factual verification.",
+    "The benchmark is based on the current ResolveX knowledge base."
+  ]
+}

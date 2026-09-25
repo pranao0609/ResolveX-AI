@@ -1,3 +1,4 @@
+# ── Core application ──────────────────────────────────────────────────────────
 fastapi
 uvicorn[standard]
 pydantic
@@ -14,3 +15,9 @@ pytesseract
 PyPDF2
 alembic
 httpx
+rank-bm25
+# ── Testing ───────────────────────────────────────────────────────────────────
+pytest
+pytest-cov
+pytest-asyncio
+langgrapg

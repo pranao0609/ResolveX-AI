@@ -1,0 +1,216 @@
+[
+    {
+        "query_id": "q001",
+        "query": "I can't get into my email account",
+        "relevant_document_ids": [
+            "kb:73",
+            "kb:105"
+        ]
+    },
+    {
+        "query_id": "q002",
+        "query": "My mailbox is not synchronizing with the email client",
+        "relevant_document_ids": [
+            "kb:5"
+        ]
+    },
+    {
+        "query_id": "q003",
+        "query": "The password reset email never arrives",
+        "relevant_document_ids": [
+            "kb:4"
+        ]
+    },
+    {
+        "query_id": "q004",
+        "query": "Emails are failing to reach the recipient",
+        "relevant_document_ids": [
+            "kb:135"
+        ]
+    },
+    {
+        "query_id": "q005",
+        "query": "The application keeps freezing while I am using it",
+        "relevant_document_ids": [
+            "kb:7"
+        ]
+    },
+    {
+        "query_id": "q006",
+        "query": "The software update keeps repeating and never finishes",
+        "relevant_document_ids": [
+            "kb:75"
+        ]
+    },
+    {
+        "query_id": "q007",
+        "query": "An application crashes immediately when I start it",
+        "relevant_document_ids": [
+            "kb:78"
+        ]
+    },
+    {
+        "query_id": "q008",
+        "query": "I get a 404 error when using the application",
+        "relevant_document_ids": [
+            "kb:76"
+        ]
+    },
+    {
+        "query_id": "q009",
+        "query": "The API is returning an error response",
+        "relevant_document_ids": [
+            "kb:65"
+        ]
+    },
+    {
+        "query_id": "q010",
+        "query": "The API integration is not working correctly",
+        "relevant_document_ids": [
+            "kb:81"
+        ]
+    },
+    {
+        "query_id": "q011",
+        "query": "My laptop mouse is not being detected",
+        "relevant_document_ids": [
+            "kb:15"
+        ]
+    },
+    {
+        "query_id": "q012",
+        "query": "The computer battery is not charging",
+        "relevant_document_ids": [
+            "kb:17"
+        ]
+    },
+    {
+        "query_id": "q013",
+        "query": "The hard disk is missing from the system",
+        "relevant_document_ids": [
+            "kb:18"
+        ]
+    },
+    {
+        "query_id": "q014",
+        "query": "My USB device isn't recognized by the computer",
+        "relevant_document_ids": [
+            "kb:19"
+        ]
+    },
+    {
+        "query_id": "q015",
+        "query": "The system keeps shutting down randomly",
+        "relevant_document_ids": [
+            "kb:16"
+        ]
+    },
+    {
+        "query_id": "q016",
+        "query": "My VPN keeps disconnecting",
+        "relevant_document_ids": [
+            "kb:31"
+        ]
+    },
+    {
+        "query_id": "q017",
+        "query": "I cannot connect to the server",
+        "relevant_document_ids": [
+            "kb:67",
+            "kb:137"
+        ]
+    },
+    {
+        "query_id": "q018",
+        "query": "The network connection keeps dropping",
+        "relevant_document_ids": [
+            "kb:27"
+        ]
+    },
+    {
+        "query_id": "q019",
+        "query": "The website cannot be reached",
+        "relevant_document_ids": [
+            "kb:28"
+        ]
+    },
+    {
+        "query_id": "q020",
+        "query": "The network has very high latency",
+        "relevant_document_ids": [
+            "kb:96"
+        ]
+    },
+    {
+        "query_id": "q021",
+        "query": "The VPN authentication is failing",
+        "relevant_document_ids": [
+            "kb:102"
+        ]
+    },
+    {
+        "query_id": "q022",
+        "query": "I don't have permission to open the application",
+        "relevant_document_ids": [
+            "kb:35"
+        ]
+    },
+    {
+        "query_id": "q023",
+        "query": "My account has expired and I cannot use it",
+        "relevant_document_ids": [
+            "kb:37"
+        ]
+    },
+    {
+        "query_id": "q024",
+        "query": "I am locked out of the system",
+        "relevant_document_ids": [
+            "kb:109"
+        ]
+    },
+    {
+        "query_id": "q025",
+        "query": "The user role does not have the required permissions",
+        "relevant_document_ids": [
+            "kb:40",
+            "kb:110"
+        ]
+    },
+    {
+        "query_id": "q026",
+        "query": "The account has been disabled",
+        "relevant_document_ids": [
+            "kb:106"
+        ]
+    },
+    {
+        "query_id": "q027",
+        "query": "I think someone is trying to access my account",
+        "relevant_document_ids": [
+            "kb:53",
+            "kb:124"
+        ]
+    },
+    {
+        "query_id": "q028",
+        "query": "A suspicious script was detected on the system",
+        "relevant_document_ids": [
+            "kb:115"
+        ]
+    },
+    {
+        "query_id": "q029",
+        "query": "The security certificate has expired",
+        "relevant_document_ids": [
+            "kb:48"
+        ]
+    },
+    {
+        "query_id": "q030",
+        "query": "There was an attempted security breach",
+        "relevant_document_ids": [
+            "kb:144"
+        ]
+    }
+]

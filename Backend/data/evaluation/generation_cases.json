@@ -1,0 +1,116 @@
+[
+    {
+        "case_id": "gen_001",
+        "ticket": "I cannot log in because I never receive the password reset email.",
+        "relevant_documents": [
+            "kb:4"
+        ],
+        "expected_answer": "The issue is related to password reset email delivery. Verify that the user's email address is correct, check spam or junk folders, confirm that the password reset service is functioning, and retry the password reset request. If the email still does not arrive, escalate the issue for further investigation.",
+        "required_evidence": [
+            "Password Reset Email Delivery"
+        ]
+    },
+    {
+        "case_id": "gen_002",
+        "ticket": "The email client is not synchronizing new messages.",
+        "relevant_documents": [
+            "kb:5"
+        ],
+        "expected_answer": "The issue is related to email client synchronization. Verify the network connection, confirm the email account configuration and credentials, restart the email client, and trigger a manual synchronization. If synchronization continues to fail, escalate for further investigation.",
+        "required_evidence": [
+            "Email Client Not Syncing"
+        ]
+    },
+    {
+        "case_id": "gen_003",
+        "ticket": "My laptop battery is not charging even though the charger is connected.",
+        "relevant_documents": [
+            "kb:17"
+        ],
+        "expected_answer": "The issue is related to the battery not charging. Check that the charger and power connection are secure, inspect the charging adapter and cable for damage, and restart the system. If the battery still does not charge, the battery or charging hardware may require further diagnosis or replacement.",
+        "required_evidence": [
+            "Battery Not Charging"
+        ]
+    },
+    {
+        "case_id": "gen_004",
+        "ticket": "I cannot connect to the company VPN. It keeps disconnecting.",
+        "relevant_documents": [
+            "kb:31"
+        ],
+        "expected_answer": "The issue is related to VPN connectivity. Verify the network connection, confirm the VPN credentials and configuration, reconnect to the VPN, and restart the VPN client if necessary. If the VPN continues disconnecting, investigate the VPN configuration or escalate the issue.",
+        "required_evidence": [
+            "VPN Disconnecting"
+        ]
+    },
+    {
+        "case_id": "gen_005",
+        "ticket": "I am getting an access denied message when trying to open the application.",
+        "relevant_documents": [
+            "kb:35"
+        ],
+        "expected_answer": "The issue is related to application access permissions. Verify that the user has the required application role or permissions and that the account is active. If the required permissions are missing, update the user's access or escalate the request to the appropriate administrator.",
+        "required_evidence": [
+            "Access Denied to Application"
+        ]
+    },
+    {
+        "case_id": "gen_006",
+        "ticket": "My account has been locked after several unsuccessful login attempts.",
+        "relevant_documents": [
+            "kb:45",
+            "kb:109"
+        ],
+        "expected_answer": "The account may be locked because of multiple failed login attempts. Verify the user's identity and account status, follow the account unlock procedure, and reset the password if necessary. If repeated failed attempts continue or unauthorized activity is suspected, escalate the incident for security investigation.",
+        "required_evidence": [
+            "Multiple Failed Login Attempts",
+            "User Locked Out of System"
+        ]
+    },
+    {
+        "case_id": "gen_007",
+        "ticket": "The application crashes immediately when I try to start it.",
+        "relevant_documents": [
+            "kb:78"
+        ],
+        "expected_answer": "The issue is related to an application crash during startup. Restart the system, verify that the application is compatible with the current environment, check for available software updates, and retry launching the application. If the application continues to crash on startup, collect the relevant error information and escalate the issue.",
+        "required_evidence": [
+            "Crash on Startup"
+        ]
+    },
+    {
+        "case_id": "gen_008",
+        "ticket": "I cannot access the shared drive from my computer.",
+        "relevant_documents": [
+            "kb:100"
+        ],
+        "expected_answer": "The issue is related to access to the shared drive. Verify network connectivity, confirm that the shared drive is available, and check that the user has the required permissions. Reconnect to the shared drive after correcting any connectivity or permission issue. If access remains unavailable, escalate for further investigation.",
+        "required_evidence": [
+            "Cannot Access Shared Drive"
+        ]
+    },
+    {
+        "case_id": "gen_009",
+        "ticket": "The application keeps timing out when I use it.",
+        "relevant_documents": [
+            "kb:140"
+        ],
+        "expected_answer": "The issue is related to an application timeout. Verify network connectivity, check whether the application service is available, retry the operation, and review any relevant timeout or configuration settings. If the timeout persists, collect the error details and escalate for further investigation.",
+        "required_evidence": [
+            "Application Timeout Error"
+        ]
+    },
+    {
+        "case_id": "gen_010",
+        "ticket": "I received an alert that someone may have accessed my account without authorization.",
+        "relevant_documents": [
+            "kb:53",
+            "kb:124"
+        ],
+        "expected_answer": "The alert may indicate suspicious or unauthorized account activity. Verify the user's recent login activity and account status, change the account password, invalidate suspicious sessions or tokens if applicable, and escalate the incident for security investigation. Do not ignore the alert if unauthorized activity cannot be ruled out.",
+        "required_evidence": [
+            "Account Hijacking Suspected",
+            "Suspicious Login Location"
+        ]
+    }
+]
