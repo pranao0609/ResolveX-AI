@@ -2,9 +2,9 @@ name: ResolveX CI
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
 
 jobs:
   resolvex-ci:
@@ -33,11 +33,11 @@ jobs:
           pip install -r Backend/requirements.txt
           pip install black ruff
 
-      - name: Code Formatting Check (Black)
+      - name: Code Formatting Check
         run: |
           black --check Backend
 
-      - name: Code Linting (Ruff)
+      - name: Code Linting
         run: |
           ruff check Backend
 

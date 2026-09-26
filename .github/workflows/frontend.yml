@@ -1,39 +1,103 @@
-name: Frontend CI/CD (Simple)
+name: Frontend CI/CD
 
 on:
   push:
     branches: [main]
-    paths: ['Frontend/**']
+    paths:
+      - "Frontend/**"
+      - ".github/workflows/frontend.yml"
 
 jobs:
   deploy:
+    name: Deploy Frontend
     runs-on: ubuntu-latest
 
     steps:
-    - name: Write SSH Key
-      run: |
-        echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
-        chmod 600 key.pem
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-    - name: Deploy Frontend via Git Pull
-      run: |
-        ssh -i key.pem -o StrictHostKeyChecking=no \
-        ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+      - name: Validate Deployment Secrets
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_USER: ${{ secrets.EC2_USER }}
+          EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+        run: |
+          set -e
+
+          if [ -z "$EC2_HOST" ]; then
+            echo "ERROR: EC2_HOST secret is empty"
+            exit 1
+          fi
+
+          if [ -z "$EC2_USER" ]; then
+            echo "ERROR: EC2_USER secret is empty"
+            exit 1
+          fi
+
+          if [ -z "$EC2_SSH_KEY" ]; then
+            echo "ERROR: EC2_SSH_KEY secret is empty"
+            exit 1
+          fi
+
+          echo "EC2_HOST is configured"
+          echo "EC2_USER is configured"
+          echo "EC2_SSH_KEY is configured"
+
+      - name: Write SSH Key
+        env:
+          EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+        run: |
+          printf '%s\n' "$EC2_SSH_KEY" > key.pem
+          chmod 600 key.pem
+
+      - name: Test SSH Connection
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_USER: ${{ secrets.EC2_USER }}
+        run: |
+          set -e
+
+          echo "Testing SSH connection..."
+          echo "Target host: $EC2_HOST"
+          echo "Target user: $EC2_USER"
+
+          ssh \
+            -i key.pem \
+            -o StrictHostKeyChecking=no \
+            -o BatchMode=yes \
+            -o ConnectTimeout=15 \
+            "$EC2_USER@$EC2_HOST" \
+            "echo SSH_CONNECTION_SUCCESS"
+
+      - name: Deploy Frontend
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_USER: ${{ secrets.EC2_USER }}
+        run: |
+          ssh \
+            -i key.pem \
+            -o StrictHostKeyChecking=no \
+            -o BatchMode=yes \
+            -o ConnectTimeout=15 \
+            "$EC2_USER@$EC2_HOST" << 'EOF'
 
           set -e
 
-          echo "Pulling latest code..."
+          echo "Changing to ResolveX..."
           cd ~/ResolveX-AI
-          
+
+          echo "Pulling latest code..."
+          git fetch origin main
+          git reset --hard origin/main
+
+          echo "Installing frontend dependencies..."
+          cd Frontend
+          npm install
 
           echo "Building frontend..."
-          cd Frontend
-          git fetch origin
-          git reset --hard origin/main
-          npm install
           npm run build
 
-          echo "Deploying to nginx..."
+          echo "Deploying frontend to nginx..."
           sudo rm -rf /var/www/resolvex/*
           sudo cp -r dist/* /var/www/resolvex/
 
@@ -43,6 +107,14 @@ jobs:
           echo "Reloading nginx..."
           sudo systemctl reload nginx
 
-          echo "DONE"
+          echo "Checking nginx..."
+          sudo systemctl is-active --quiet nginx
 
-        EOF
+          echo "Frontend deployment SUCCESS"
+
+          EOF
+
+      - name: Cleanup SSH Key
+        if: always()
+        run: |
+          rm -f key.pem

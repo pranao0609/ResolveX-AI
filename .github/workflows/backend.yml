@@ -3,76 +3,143 @@ name: Backend CI/CD
 on:
   push:
     branches: [main]
-    paths: ['Backend/**', '.github/workflows/backend.yml']
+    paths:
+      - "Backend/**"
+      - ".github/workflows/backend.yml"
 
 jobs:
   deploy:
+    name: Deploy Backend
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-    # 🔍 STEP 1 — Write SSH Key
-    - name: Write SSH Key
-      run: |
-        echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
-        chmod 600 key.pem
+      - name: Validate Deployment Secrets
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_USER: ${{ secrets.EC2_USER }}
+          EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+        run: |
+          set -e
 
-        echo "---- KEY CHECK (first 3 lines) ----"
-        head -n 3 key.pem
+          if [ -z "$EC2_HOST" ]; then
+            echo "ERROR: EC2_HOST secret is empty"
+            exit 1
+          fi
 
-    # 🔍 STEP 2 — Test SSH manually (CRITICAL)
-    - name: Test SSH Connection
-      run: |
-        echo "Testing SSH connection..."
+          if [ -z "$EC2_USER" ]; then
+            echo "ERROR: EC2_USER secret is empty"
+            exit 1
+          fi
 
-        ssh -i key.pem \
-        -o StrictHostKeyChecking=no \
-        -o LogLevel=DEBUG \
-        ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
-        "echo SUCCESS"
+          if [ -z "$EC2_SSH_KEY" ]; then
+            echo "ERROR: EC2_SSH_KEY secret is empty"
+            exit 1
+          fi
 
-    # 🔍 STEP 3 — Check remote environment
-    - name: Check Remote Server State
-      run: |
-        ssh -i key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+          echo "EC2_HOST is configured"
+          echo "EC2_USER is configured"
+          echo "EC2_SSH_KEY is configured"
+
+      - name: Write SSH Key
+        env:
+          EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+        run: |
+          printf '%s\n' "$EC2_SSH_KEY" > key.pem
+          chmod 600 key.pem
+
+      - name: Test SSH Connection
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_USER: ${{ secrets.EC2_USER }}
+        run: |
+          set -e
+
+          echo "Testing SSH connection..."
+          echo "Target host: $EC2_HOST"
+          echo "Target user: $EC2_USER"
+
+          ssh \
+            -i key.pem \
+            -o StrictHostKeyChecking=no \
+            -o BatchMode=yes \
+            -o ConnectTimeout=15 \
+            "$EC2_USER@$EC2_HOST" \
+            "echo SSH_CONNECTION_SUCCESS"
+
+      - name: Check Remote Server State
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_USER: ${{ secrets.EC2_USER }}
+        run: |
+          ssh \
+            -i key.pem \
+            -o StrictHostKeyChecking=no \
+            -o BatchMode=yes \
+            -o ConnectTimeout=15 \
+            "$EC2_USER@$EC2_HOST" << 'EOF'
+
+          set -e
+
           echo "Connected to server"
+
+          echo "Current user:"
           whoami
+
+          echo "Current directory:"
           pwd
+
+          echo "ResolveX backend:"
           ls -la ~/ResolveX-AI/Backend || echo "Backend folder missing"
-        EOF
 
-    # 🚀 STEP 4 — Deploy manually (NO appleboy)
-    - name: Deploy Backend
-      run: |
-        ssh -i key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+          EOF
 
-          set -e   # stop on error
+      - name: Deploy Backend
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_USER: ${{ secrets.EC2_USER }}
+        run: |
+          ssh \
+            -i key.pem \
+            -o StrictHostKeyChecking=no \
+            -o BatchMode=yes \
+            -o ConnectTimeout=15 \
+            "$EC2_USER@$EC2_HOST" << 'EOF'
 
-          cd ~/ResolveX-AI/Backend || exit 1
+          set -e
+
+          echo "Changing to ResolveX backend..."
+          cd ~/ResolveX-AI/Backend
 
           echo "Pulling latest code..."
           git fetch origin main
           git reset --hard origin/main
 
-          echo "Activating virtualenv..."
+          echo "Activating virtual environment..."
           python3 -m venv venv || true
           source venv/bin/activate
 
           echo "Installing dependencies..."
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
 
           echo "Restarting backend service..."
           sudo systemctl restart resolvex-backend
 
-          echo "Checking service status..."
+          echo "Checking backend service..."
           sudo systemctl status resolvex-backend --no-pager
 
-          echo "Checking if service is alive..."
+          echo "Checking backend service health..."
           sleep 3
-          sudo systemctl is-active resolvex-backend || exit 1
+          sudo systemctl is-active --quiet resolvex-backend
 
-          echo "Deployment SUCCESS"
+          echo "Backend deployment SUCCESS"
 
-        EOF
+          EOF
+
+      - name: Cleanup SSH Key
+        if: always()
+        run: |
+          rm -f key.pem
