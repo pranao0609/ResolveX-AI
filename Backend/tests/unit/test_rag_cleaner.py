@@ -21,9 +21,7 @@ def make_document(
 
 
 def test_cleaner_strips_title_whitespace():
-    document = make_document(
-        title="   VPN Troubleshooting   "
-    )
+    document = make_document(title="   VPN Troubleshooting   ")
 
     cleaned = DocumentCleaner.clean(document)
 
@@ -31,9 +29,7 @@ def test_cleaner_strips_title_whitespace():
 
 
 def test_cleaner_removes_html_from_title():
-    document = make_document(
-        title="<h1>VPN Troubleshooting</h1>"
-    )
+    document = make_document(title="<h1>VPN Troubleshooting</h1>")
 
     cleaned = DocumentCleaner.clean(document)
 
@@ -41,9 +37,7 @@ def test_cleaner_removes_html_from_title():
 
 
 def test_cleaner_removes_html_from_content():
-    document = make_document(
-        content="<p>Restart the VPN client.</p>"
-    )
+    document = make_document(content="<p>Restart the VPN client.</p>")
 
     cleaned = DocumentCleaner.clean(document)
 
@@ -51,9 +45,7 @@ def test_cleaner_removes_html_from_content():
 
 
 def test_cleaner_normalizes_line_endings():
-    document = make_document(
-        content="Step 1\r\nStep 2\r\nStep 3"
-    )
+    document = make_document(content="Step 1\r\nStep 2\r\nStep 3")
 
     cleaned = DocumentCleaner.clean(document)
 
@@ -61,9 +53,7 @@ def test_cleaner_normalizes_line_endings():
 
 
 def test_cleaner_preserves_paragraph_boundaries():
-    document = make_document(
-        content="First paragraph.\n\nSecond paragraph."
-    )
+    document = make_document(content="First paragraph.\n\nSecond paragraph.")
 
     cleaned = DocumentCleaner.clean(document)
 
@@ -71,9 +61,7 @@ def test_cleaner_preserves_paragraph_boundaries():
 
 
 def test_cleaner_collapses_excessive_blank_lines():
-    document = make_document(
-        content="First paragraph.\n\n\n\n\nSecond paragraph."
-    )
+    document = make_document(content="First paragraph.\n\n\n\n\nSecond paragraph.")
 
     cleaned = DocumentCleaner.clean(document)
 
@@ -81,9 +69,7 @@ def test_cleaner_collapses_excessive_blank_lines():
 
 
 def test_cleaner_normalizes_multiple_spaces():
-    document = make_document(
-        content="Restart    the     VPN client."
-    )
+    document = make_document(content="Restart    the     VPN client.")
 
     cleaned = DocumentCleaner.clean(document)
 
@@ -91,9 +77,7 @@ def test_cleaner_normalizes_multiple_spaces():
 
 
 def test_cleaner_preserves_capitalization():
-    document = make_document(
-        content="Run PowerShell and execute Get-Service."
-    )
+    document = make_document(content="Run PowerShell and execute Get-Service.")
 
     cleaned = DocumentCleaner.clean(document)
 
@@ -127,9 +111,7 @@ def test_cleaner_does_not_modify_original_document():
 
 
 def test_cleaner_handles_whitespace_only_content():
-    document = make_document(
-        content="   \n\n   "
-    )
+    document = make_document(content="   \n\n   ")
 
     cleaned = DocumentCleaner.clean(document)
 
@@ -137,9 +119,7 @@ def test_cleaner_handles_whitespace_only_content():
 
 
 def test_cleaner_handles_whitespace_only_title():
-    document = make_document(
-        title="   "
-    )
+    document = make_document(title="   ")
 
     cleaned = DocumentCleaner.clean(document)
 

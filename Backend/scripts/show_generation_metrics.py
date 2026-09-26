@@ -1,7 +1,6 @@
 import json
 from pathlib import Path
 
-
 RESULTS_PATH = (
     Path(__file__).resolve().parents[1]
     / "data"
@@ -18,11 +17,7 @@ with open(
     results = json.load(file)
 
 
-results = [
-    result
-    for result in results
-    if "metrics" in result
-]
+results = [result for result in results if "metrics" in result]
 
 
 print("=" * 120)
@@ -68,13 +63,8 @@ print("AVERAGE SCORES")
 print("-" * 40)
 
 for metric in metric_names:
-    average = sum(
-        result["metrics"][metric]
-        for result in results
-    ) / len(results)
+    average = sum(result["metrics"][metric] for result in results) / len(results)
 
-    print(
-        f"{metric:<25}: {average:.4f}"
-    )
+    print(f"{metric:<25}: {average:.4f}")
 
 print("=" * 120)

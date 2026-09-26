@@ -1,0 +1,61 @@
+{
+  "metadata": {
+    "timestamp": "2026-09-26T13:35:00Z",
+    "phase": "Phase 28 — CI/CD",
+    "python_version": "3.11",
+    "environment": "test"
+  },
+  "workflow": {
+    "file": ".github/workflows/ci.yml",
+    "job_name": "resolvex-ci",
+    "runner": "ubuntu-latest",
+    "triggers": ["push", "pull_request"],
+    "secrets_required": false
+  },
+  "pipeline_stages": {
+    "format_check": {
+      "tool": "black",
+      "mode": "--check",
+      "target": "Backend",
+      "status": "PASSED"
+    },
+    "lint_check": {
+      "tool": "ruff",
+      "target": "Backend",
+      "status": "PASSED"
+    },
+    "security_tests": {
+      "test_path": "Backend/tests/security",
+      "passed": 23,
+      "failed": 0,
+      "status": "PASSED"
+    },
+    "full_tests": {
+      "test_path": "Backend/tests",
+      "passed": 753,
+      "failed": 0,
+      "status": "PASSED"
+    },
+    "benchmark_smoke_test": {
+      "script": "Backend/scripts/benchmark_smoke_test.py",
+      "benchmark_cases": 12,
+      "hybrid_recall_at_5": 0.85,
+      "reranked_recall_at_5": 1.0,
+      "status": "PASSED"
+    }
+  },
+  "ci_boundary": {
+    "validates": [
+      "Code formatting consistency via Black",
+      "Code linting rules via Ruff",
+      "Security policy guards and sanitization via 23 dedicated tests",
+      "Complete agent graph, retrieval, and policy logic via 753 tests",
+      "Benchmark engine and dataset schema validity via offline smoke test"
+    ],
+    "does_not_validate": [
+      "Live LLM provider availability or quota limits",
+      "Production cloud infrastructure state",
+      "Live database network connectivity"
+    ]
+  }
+}

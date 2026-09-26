@@ -53,9 +53,7 @@ def test_resolution_uses_conversation_memory():
 
     kwargs = mock_generate.call_args.kwargs
 
-    assert kwargs["conversation_history"] == state[
-        "conversation_history"
-    ]
+    assert kwargs["conversation_history"] == state["conversation_history"]
 
     assert kwargs["ticket_text"] == "Unable to access email"
     assert kwargs["diagnosis"] == "Email authentication failure"
@@ -109,15 +107,11 @@ def test_resolution_uses_historical_memory():
 
     kwargs = mock_generate.call_args.kwargs
 
-    assert "Historical troubleshooting evidence:" in kwargs[
-        "context"
-    ]
+    assert "Historical troubleshooting evidence:" in kwargs["context"]
 
     assert "Reset VPN credentials." in kwargs["context"]
 
-    assert result["resolution"] == (
-        "Reset the VPN credentials."
-    )
+    assert result["resolution"] == ("Reset the VPN credentials.")
 
 
 def test_resolution_without_memory_preserves_existing_behavior():
@@ -154,15 +148,11 @@ def test_resolution_without_memory_preserves_existing_behavior():
 
     kwargs = mock_generate.call_args.kwargs
 
-    assert kwargs["context"] == (
-        "Check printer power and connection."
-    )
+    assert kwargs["context"] == ("Check printer power and connection.")
 
     assert kwargs["conversation_history"] == []
 
-    assert result["resolution"] == (
-        "Reconnect the printer network cable."
-    )
+    assert result["resolution"] == ("Reconnect the printer network cable.")
 
 
 def test_resolution_memory_metadata():

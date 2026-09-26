@@ -9,7 +9,6 @@ from ai.agents.retrieval_tools import (
     search_previous_tickets,
 )
 
-
 # ============================================================================
 # Helpers
 # ============================================================================
@@ -594,9 +593,7 @@ def test_rerank_documents_reranker_failure_propagates():
     )
 
     mock_reranker = MagicMock()
-    mock_reranker.rerank.side_effect = RuntimeError(
-        "reranker unavailable"
-    )
+    mock_reranker.rerank.side_effect = RuntimeError("reranker unavailable")
 
     with (
         patch(

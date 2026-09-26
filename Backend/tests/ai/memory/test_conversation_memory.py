@@ -110,9 +110,7 @@ def test_update_state_does_not_mutate_original() -> None:
 
     assert state["conversation_history"] == []
 
-    assert updated["conversation_history"][0]["content"] == (
-        "VPN failed"
-    )
+    assert updated["conversation_history"][0]["content"] == ("VPN failed")
 
 
 def test_empty_role_is_rejected() -> None:

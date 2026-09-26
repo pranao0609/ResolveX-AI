@@ -18,9 +18,7 @@ import sys
 # Ensure Backend directory is on Python path
 sys.path.insert(
     0,
-    os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..")
-    ),
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "..")),
 )
 
 from app.core.logger import logger
@@ -43,9 +41,7 @@ def build_index(reset: bool = True):
         IngestionResult
     """
 
-    logger.info(
-        "Starting canonical ResolveX RAG index build"
-    )
+    logger.info("Starting canonical ResolveX RAG index build")
 
     init_db()
 
@@ -53,9 +49,7 @@ def build_index(reset: bool = True):
     doc_store = get_doc_store()
 
     if reset:
-        logger.info(
-            "Resetting existing FAISS index and document store"
-        )
+        logger.info("Resetting existing FAISS index and document store")
 
         vector_store.reset()
         doc_store.clear()
@@ -72,9 +66,7 @@ def build_index(reset: bool = True):
         result = service.ingest_knowledge_base()
 
     except Exception:
-        logger.exception(
-            "Canonical RAG index build failed"
-        )
+        logger.exception("Canonical RAG index build failed")
         raise
 
     finally:
@@ -88,13 +80,10 @@ def build_index(reset: bool = True):
 
     if not aligned:
         logger.error(
-            "RAG index build failed: "
-            "FAISS and DocumentStore are misaligned"
+            "RAG index build failed: " "FAISS and DocumentStore are misaligned"
         )
 
-        raise RuntimeError(
-            "FAISS and DocumentStore are misaligned"
-        )
+        raise RuntimeError("FAISS and DocumentStore are misaligned")
 
     logger.info(
         "Canonical RAG index build completed: "
@@ -117,8 +106,7 @@ def build_index(reset: bool = True):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description=(
-            "Build ResolveX RAG index from PostgreSQL "
-            "knowledge-base entries."
+            "Build ResolveX RAG index from PostgreSQL " "knowledge-base entries."
         )
     )
 
@@ -133,6 +121,4 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    build_index(
-        reset=not args.no_reset
-    )
+    build_index(reset=not args.no_reset)

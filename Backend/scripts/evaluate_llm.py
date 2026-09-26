@@ -3,7 +3,6 @@ import json
 import sys
 from pathlib import Path
 
-
 # ---------------------------------------------------------------------------
 # Import path
 # ---------------------------------------------------------------------------
@@ -16,32 +15,23 @@ if str(BACKEND_ROOT) not in sys.path:
 
 from evaluation.generation.llm_benchmark import LLMBenchmark
 
-
 # ---------------------------------------------------------------------------
 # Output
 # ---------------------------------------------------------------------------
 
-OUTPUT_PATH = (
-    BACKEND_ROOT
-    / "evaluation"
-    / "reports"
-    / "phase12_llm_evaluation.json"
-)
+OUTPUT_PATH = BACKEND_ROOT / "evaluation" / "reports" / "phase12_llm_evaluation.json"
 
 
 # ---------------------------------------------------------------------------
 # Summary
 # ---------------------------------------------------------------------------
 
+
 def calculate_summary(
     results: list[dict],
 ) -> dict:
 
-    successful = [
-        result
-        for result in results
-        if "error" not in result
-    ]
+    successful = [result for result in results if "error" not in result]
 
     metric_names = [
         "correctness",
@@ -55,37 +45,21 @@ def calculate_summary(
     metrics = {}
 
     for metric_name in metric_names:
-        values = [
-            float(
-                result["metrics"][metric_name]
-            )
-            for result in successful
-        ]
+        values = [float(result["metrics"][metric_name]) for result in successful]
 
-        metrics[metric_name] = (
-            sum(values) / len(values)
-            if values
-            else 0.0
-        )
+        metrics[metric_name] = sum(values) / len(values) if values else 0.0
 
     fallback_count = sum(
-        bool(result.get("fallback_used", False))
-        for result in successful
+        bool(result.get("fallback_used", False)) for result in successful
     )
 
     return {
         "total_cases": len(results),
         "successful_cases": len(successful),
-        "error_cases": (
-            len(results) - len(successful)
-        ),
+        "error_cases": (len(results) - len(successful)),
         "metrics": metrics,
         "fallback_count": fallback_count,
-        "fallback_rate": (
-            fallback_count / len(successful)
-            if successful
-            else 0.0
-        ),
+        "fallback_rate": (fallback_count / len(successful) if successful else 0.0),
     }
 
 
@@ -93,14 +67,12 @@ def calculate_summary(
 # Main
 # ---------------------------------------------------------------------------
 
+
 async def main() -> None:
     benchmark = LLMBenchmark()
 
     print("=" * 90)
-    print(
-        "RESOLVEX PHASE 12 — "
-        "LLM EVALUATION BENCHMARK"
-    )
+    print("RESOLVEX PHASE 12 — " "LLM EVALUATION BENCHMARK")
     print("=" * 90)
     print()
 
@@ -111,9 +83,7 @@ async def main() -> None:
     summary = calculate_summary(results)
 
     report = {
-        "benchmark": (
-            "ResolveX Phase 12 LLM Evaluation"
-        ),
+        "benchmark": ("ResolveX Phase 12 LLM Evaluation"),
         "prompt_version": 2,
         "dataset": "evaluation_dataset.jsonl",
         "summary": summary,
@@ -142,39 +112,23 @@ async def main() -> None:
     print("PHASE 12 RESULTS")
     print("=" * 90)
 
-    print(
-        f"Cases: {summary['total_cases']}"
-    )
+    print(f"Cases: {summary['total_cases']}")
 
-    print(
-        f"Successful: "
-        f"{summary['successful_cases']}"
-    )
+    print(f"Successful: " f"{summary['successful_cases']}")
 
-    print(
-        f"Errors: "
-        f"{summary['error_cases']}"
-    )
+    print(f"Errors: " f"{summary['error_cases']}")
 
     print()
 
     for name, value in summary["metrics"].items():
-        print(
-            f"{name:25s}: {value:.4f}"
-        )
+        print(f"{name:25s}: {value:.4f}")
 
     print()
 
-    print(
-        f"Fallback rate            : "
-        f"{summary['fallback_rate']:.2%}"
-    )
+    print(f"Fallback rate            : " f"{summary['fallback_rate']:.2%}")
 
     print()
-    print(
-        f"Report saved to: "
-        f"{OUTPUT_PATH}"
-    )
+    print(f"Report saved to: " f"{OUTPUT_PATH}")
 
     print("=" * 90)
 

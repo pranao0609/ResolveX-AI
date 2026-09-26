@@ -57,10 +57,7 @@ def test_retrieval_agent_records_kb_tool_call() -> None:
 
     assert len(tool_calls) == 3
 
-    names = [
-        call["tool"]
-        for call in tool_calls
-    ]
+    names = [call["tool"] for call in tool_calls]
 
     assert names == [
         "search_knowledge_base",
@@ -109,23 +106,15 @@ def test_retrieval_agent_preserves_existing_tool_metadata() -> None:
     ):
         result = retrieval_agent(_base_state())
 
-    metadata_calls = result[
-        "retrieval_metadata"
-    ]["tool_calls"]
+    metadata_calls = result["retrieval_metadata"]["tool_calls"]
 
     assert len(metadata_calls) == 3
 
-    assert metadata_calls[0]["tool"] == (
-        "search_knowledge_base"
-    )
+    assert metadata_calls[0]["tool"] == ("search_knowledge_base")
 
-    assert metadata_calls[1]["tool"] == (
-        "search_previous_tickets"
-    )
+    assert metadata_calls[1]["tool"] == ("search_previous_tickets")
 
-    assert metadata_calls[2]["tool"] == (
-        "rerank_documents"
-    )
+    assert metadata_calls[2]["tool"] == ("rerank_documents")
 
 
 def test_retrieval_agent_preserves_existing_state_tool_calls() -> None:
@@ -140,9 +129,7 @@ def test_retrieval_agent_preserves_existing_state_tool_calls() -> None:
     }
 
     state = _base_state()
-    state["tool_calls"] = [
-        existing_call
-    ]
+    state["tool_calls"] = [existing_call]
 
     documents = [
         {

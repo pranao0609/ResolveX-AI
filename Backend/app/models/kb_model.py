@@ -16,14 +16,14 @@ class KnowledgeBaseEntry(Base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
 
     title = Column(String(255), nullable=False)
-    content = Column(Text, nullable=False)       # the solution/article body
+    content = Column(Text, nullable=False)  # the solution/article body
     category = Column(String(100), nullable=True)
     source = Column(
-    String(100),
-    nullable=False,
-    default="knowledge_base",
-)  # "ticket" | "article" | "manual"
-    relevance_score = Column(Float, nullable=True)   # cached similarity score
+        String(100),
+        nullable=False,
+        default="knowledge_base",
+    )  # "ticket" | "article" | "manual"
+    relevance_score = Column(Float, nullable=True)  # cached similarity score
 
     # FAISS vector reference
     faiss_index_id = Column(Integer, nullable=True)

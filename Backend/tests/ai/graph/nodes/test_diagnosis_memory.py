@@ -6,14 +6,10 @@ def test_diagnosis_agent_uses_historical_memory():
         {
             "ticket_id": 101,
             "title": "Keyboard failure",
-            "description": (
-                "Laptop keyboard stopped responding."
-            ),
+            "description": ("Laptop keyboard stopped responding."),
             "category": "hardware",
             "status": "closed",
-            "solution": (
-                "Reinstall the keyboard driver."
-            ),
+            "solution": ("Reinstall the keyboard driver."),
             "confidence": 0.92,
             "explanation": None,
             "submitted_by": "user101",
@@ -28,22 +24,14 @@ def test_diagnosis_agent_uses_historical_memory():
         (),
         {
             "problem": "Keyboard failure",
-            "possible_root_cause": (
-                "Keyboard driver failure."
-            ),
-            "evidence": [
-                "Historical ticket matched."
-            ],
+            "possible_root_cause": ("Keyboard driver failure."),
+            "evidence": ["Historical ticket matched."],
             "missing_information": [],
             "confidence": 0.91,
             "model_dump": lambda self: {
                 "problem": "Keyboard failure",
-                "possible_root_cause": (
-                    "Keyboard driver failure."
-                ),
-                "evidence": [
-                    "Historical ticket matched."
-                ],
+                "possible_root_cause": ("Keyboard driver failure."),
+                "evidence": ["Historical ticket matched."],
                 "missing_information": [],
                 "confidence": 0.91,
             },
@@ -73,13 +61,9 @@ def test_diagnosis_agent_uses_historical_memory():
 
     state = {
         "ticket_id": 10,
-        "cleaned_ticket": (
-            "Keyboard not working"
-        ),
+        "cleaned_ticket": ("Keyboard not working"),
         "category": "hardware",
-        "retrieved_context": (
-            "Keyboard troubleshooting evidence."
-        ),
+        "retrieved_context": ("Keyboard troubleshooting evidence."),
         "conversation_history": [],
         "previous_tickets": [],
         "tool_calls": [],
@@ -102,9 +86,7 @@ def test_diagnosis_agent_uses_historical_memory():
             False,
         )
 
-    with patch(
-        "ai.graph.nodes.diagnosis.SessionLocal"
-    ) as mock_session:
+    with patch("ai.graph.nodes.diagnosis.SessionLocal") as mock_session:
 
         mock_db = mock_session.return_value
 
@@ -125,66 +107,30 @@ def test_diagnosis_agent_uses_historical_memory():
                     diagnosis_agent,
                 )
 
-                result = diagnosis_agent(
-                    state
-                )
+                result = diagnosis_agent(state)
 
-    assert len(
-        result["previous_tickets"]
-    ) == 1
+    assert len(result["previous_tickets"]) == 1
 
-    assert (
-        result["previous_tickets"][0][
-            "ticket_id"
-        ]
-        == 101
-    )
+    assert result["previous_tickets"][0]["ticket_id"] == 101
 
-    assert (
-        "Historical Ticket Evidence"
-        in captured["context"]
-    )
+    assert "Historical Ticket Evidence" in captured["context"]
 
-    assert (
-        "Reinstall the keyboard driver."
-        in captured["context"]
-    )
+    assert "Reinstall the keyboard driver." in captured["context"]
 
-    assert len(
-        result["conversation_history"]
-    ) == 2
+    assert len(result["conversation_history"]) == 2
 
-    assert (
-        result["conversation_history"][0][
-            "role"
-        ]
-        == "user"
-    )
+    assert result["conversation_history"][0]["role"] == "user"
 
-    assert (
-        result["conversation_history"][1][
-            "role"
-        ]
-        == "assistant"
-    )
+    assert result["conversation_history"][1]["role"] == "assistant"
 
-    assert len(
-        result["tool_calls"]
-    ) == 1
+    assert len(result["tool_calls"]) == 1
 
-    assert (
-        result["tool_calls"][0]["tool"]
-        == "search_memory"
-    )
+    assert result["tool_calls"][0]["tool"] == "search_memory"
 
-    assert (
-        result["metadata"]["memory"][
-            "historical_ticket_count"
-        ]
-        == 1
-    )
+    assert result["metadata"]["memory"]["historical_ticket_count"] == 1
 
     mock_db.close.assert_called_once()
+
 
 def test_diagnosis_agent_continues_when_memory_fails():
     diagnosis_result = type(
@@ -192,17 +138,13 @@ def test_diagnosis_agent_continues_when_memory_fails():
         (),
         {
             "problem": "Network issue",
-            "possible_root_cause": (
-                "Network adapter unavailable."
-            ),
+            "possible_root_cause": ("Network adapter unavailable."),
             "evidence": [],
             "missing_information": [],
             "confidence": 0.84,
             "model_dump": lambda self: {
                 "problem": "Network issue",
-                "possible_root_cause": (
-                    "Network adapter unavailable."
-                ),
+                "possible_root_cause": ("Network adapter unavailable."),
                 "evidence": [],
                 "missing_information": [],
                 "confidence": 0.84,
@@ -212,13 +154,9 @@ def test_diagnosis_agent_continues_when_memory_fails():
 
     state = {
         "ticket_id": 11,
-        "cleaned_ticket": (
-            "Network disconnected"
-        ),
+        "cleaned_ticket": ("Network disconnected"),
         "category": "network",
-        "retrieved_context": (
-            "Network troubleshooting evidence."
-        ),
+        "retrieved_context": ("Network troubleshooting evidence."),
         "conversation_history": [],
         "previous_tickets": [],
         "tool_calls": [],
@@ -226,17 +164,13 @@ def test_diagnosis_agent_continues_when_memory_fails():
         "metadata": {},
     }
 
-    with patch(
-        "ai.graph.nodes.diagnosis.SessionLocal"
-    ) as mock_session:
+    with patch("ai.graph.nodes.diagnosis.SessionLocal") as mock_session:
 
         mock_db = mock_session.return_value
 
         with patch(
             "ai.graph.nodes.diagnosis.execute_tool",
-            side_effect=RuntimeError(
-                "database unavailable"
-            ),
+            side_effect=RuntimeError("database unavailable"),
         ):
 
             with patch(
@@ -251,37 +185,16 @@ def test_diagnosis_agent_continues_when_memory_fails():
                     diagnosis_agent,
                 )
 
-                result = diagnosis_agent(
-                    state
-                )
+                result = diagnosis_agent(state)
 
-    assert (
-        result["diagnosis"]
-        == "Network issue"
-    )
+    assert result["diagnosis"] == "Network issue"
 
-    assert (
-        result["fallback_used"]
-        is False
-    )
+    assert result["fallback_used"] is False
 
-    assert (
-        result["previous_tickets"]
-        == []
-    )
+    assert result["previous_tickets"] == []
 
-    assert (
-        result["metadata"]["memory"][
-            "historical_ticket_count"
-        ]
-        == 0
-    )
+    assert result["metadata"]["memory"]["historical_ticket_count"] == 0
 
-    assert (
-        result["metadata"]["memory"][
-            "memory_error"
-        ]
-        is not None
-    )
+    assert result["metadata"]["memory"]["memory_error"] is not None
 
     mock_db.close.assert_called_once()

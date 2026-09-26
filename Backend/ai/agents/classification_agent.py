@@ -35,7 +35,6 @@ from ai.agents.classification_policy import (
     classification_requires_reclassification,
 )
 
-
 # ---------------------------------------------------------------------------
 # Final categories exposed by ResolveX
 # ---------------------------------------------------------------------------
@@ -132,22 +131,14 @@ def _attempt_reclassification(
     """
 
     try:
-        alternative_category, alternative_confidence = (
-            reclassify_with_zero_shot(text)
-        )
+        alternative_category, alternative_confidence = reclassify_with_zero_shot(text)
 
-        alternative_category = _validate_category(
-            alternative_category
-        )
+        alternative_category = _validate_category(alternative_category)
 
-        alternative_confidence = _validate_confidence(
-            alternative_confidence
-        )
+        alternative_confidence = _validate_confidence(alternative_confidence)
 
         logger.info(
-            "Classification recheck: "
-            "primary=%s(%.3f), "
-            "alternative=%s(%.3f)",
+            "Classification recheck: " "primary=%s(%.3f), " "alternative=%s(%.3f)",
             primary_category,
             primary_confidence,
             alternative_category,
@@ -160,9 +151,7 @@ def _attempt_reclassification(
 
         if alternative_confidence > primary_confidence:
             logger.info(
-                "Reclassification selected: "
-                "%s -> %s "
-                "(%.3f -> %.3f)",
+                "Reclassification selected: " "%s -> %s " "(%.3f -> %.3f)",
                 primary_category,
                 alternative_category,
                 primary_confidence,
@@ -183,10 +172,7 @@ def _attempt_reclassification(
         # Primary classification remains preferred
         # ---------------------------------------------------------------
 
-        logger.info(
-            "Primary classification retained after "
-            "reclassification check"
-        )
+        logger.info("Primary classification retained after " "reclassification check")
 
         return {
             "category": primary_category,
@@ -285,56 +271,43 @@ def run_classification_agent(
         # ===============================================================
 
         if not isinstance(text, str):
-            raise TypeError(
-                "Classification input must be a string"
-            )
+            raise TypeError("Classification input must be a string")
 
         cleaned_text = text.strip()
 
         if not cleaned_text:
             logger.warning(
-                "Classification agent received empty ticket text "
-                "ticket_id=%s",
+                "Classification agent received empty ticket text " "ticket_id=%s",
                 ticket_id,
             )
 
             confidence = DEFAULT_CONFIDENCE
 
-            classification_metadata = (
-                build_classification_metadata(
-                    primary_category=DEFAULT_CATEGORY,
-                    primary_confidence=confidence,
-                    final_category=DEFAULT_CATEGORY,
-                    final_confidence=confidence,
-                    reclassification_triggered=False,
-                    reclassification_used=False,
-                    reclassified=False,
-                    alternative_category=None,
-                    alternative_confidence=None,
-                    reclassification_error=None,
-                )
+            classification_metadata = build_classification_metadata(
+                primary_category=DEFAULT_CATEGORY,
+                primary_confidence=confidence,
+                final_category=DEFAULT_CATEGORY,
+                final_confidence=confidence,
+                reclassification_triggered=False,
+                reclassification_used=False,
+                reclassified=False,
+                alternative_category=None,
+                alternative_confidence=None,
+                reclassification_error=None,
             )
 
             return {
                 "category": DEFAULT_CATEGORY,
                 "confidence": confidence,
-                "confidence_level": classify_confidence_level(
-                    confidence
-                ),
-                "requires_review": classification_requires_review(
-                    confidence
-                ),
+                "confidence_level": classify_confidence_level(confidence),
+                "requires_review": classification_requires_review(confidence),
                 "requires_reclassification": (
-                    classification_requires_reclassification(
-                        confidence
-                    )
+                    classification_requires_reclassification(confidence)
                 ),
                 "reclassified": False,
                 "reclassification_used": False,
                 "reclassification_error": None,
-                "classification_metadata": (
-                    classification_metadata
-                ),
+                "classification_metadata": (classification_metadata),
                 "fallback_used": True,
                 "error": "empty_classification_input",
             }
@@ -343,21 +316,15 @@ def run_classification_agent(
         # 2. Primary classification
         # ===============================================================
 
-        category, confidence = classify_ticket(
-            cleaned_text
-        )
+        category, confidence = classify_ticket(cleaned_text)
 
         # ===============================================================
         # 3. Validate primary classifier result
         # ===============================================================
 
-        category = _validate_category(
-            category
-        )
+        category = _validate_category(category)
 
-        confidence = _validate_confidence(
-            confidence
-        )
+        confidence = _validate_confidence(confidence)
 
         # ===============================================================
         # 4. Preserve primary classification
@@ -379,10 +346,8 @@ def run_classification_agent(
         # 5. Phase 15.4 — Controlled Reclassification
         # ===============================================================
 
-        reclassification_triggered = (
-            classification_requires_reclassification(
-                primary_confidence
-            )
+        reclassification_triggered = classification_requires_reclassification(
+            primary_confidence
         )
 
         if reclassification_triggered:
@@ -397,104 +362,62 @@ def run_classification_agent(
                 confidence,
             )
 
-            reclassification_result = (
-                _attempt_reclassification(
-                    text=cleaned_text,
-                    primary_category=primary_category,
-                    primary_confidence=primary_confidence,
-                )
+            reclassification_result = _attempt_reclassification(
+                text=cleaned_text,
+                primary_category=primary_category,
+                primary_confidence=primary_confidence,
             )
 
             # -----------------------------------------------------------
             # Apply final classification
             # -----------------------------------------------------------
 
-            category = reclassification_result[
-                "category"
-            ]
+            category = reclassification_result["category"]
 
-            confidence = reclassification_result[
-                "confidence"
-            ]
+            confidence = reclassification_result["confidence"]
 
             # -----------------------------------------------------------
             # Reclassification metadata
             # -----------------------------------------------------------
 
-            reclassified = reclassification_result[
-                "reclassified"
-            ]
+            reclassified = reclassification_result["reclassified"]
 
-            reclassification_used = (
-                reclassification_result[
-                    "reclassification_used"
-                ]
-            )
+            reclassification_used = reclassification_result["reclassification_used"]
 
-            reclassification_error = (
-                reclassification_result[
-                    "reclassification_error"
-                ]
-            )
+            reclassification_error = reclassification_result["reclassification_error"]
 
-            alternative_category = (
-                reclassification_result.get(
-                    "alternative_category"
-                )
-            )
+            alternative_category = reclassification_result.get("alternative_category")
 
-            alternative_confidence = (
-                reclassification_result.get(
-                    "alternative_confidence"
-                )
+            alternative_confidence = reclassification_result.get(
+                "alternative_confidence"
             )
 
         # ===============================================================
         # 6. Final confidence policy
         # ===============================================================
 
-        confidence_level = classify_confidence_level(
-            confidence
-        )
+        confidence_level = classify_confidence_level(confidence)
 
-        requires_review = classification_requires_review(
-            confidence
-        )
+        requires_review = classification_requires_review(confidence)
 
         # This describes the FINAL confidence.
-        requires_reclassification = (
-            classification_requires_reclassification(
-                confidence
-            )
-        )
+        requires_reclassification = classification_requires_reclassification(confidence)
 
         # ===============================================================
         # 7. Phase 15.5 — Classification Decision Metadata
         # ===============================================================
 
-        classification_metadata = (
-            build_classification_metadata(
-                primary_category=primary_category,
-                primary_confidence=primary_confidence,
-                final_category=category,
-                final_confidence=confidence,
-                reclassification_triggered=(
-                    reclassification_triggered
-                ),
-                reclassification_used=(
-                    reclassification_used
-                ),
-                reclassified=reclassified,
-                alternative_category=(
-                    alternative_category
-                ),
-                alternative_confidence=(
-                    alternative_confidence
-                ),
-                reclassification_error=(
-                    reclassification_error
-                ),
-            )
+        classification_metadata = build_classification_metadata(
+            primary_category=primary_category,
+            primary_confidence=primary_confidence,
+            final_category=category,
+            final_confidence=confidence,
+            reclassification_triggered=(reclassification_triggered),
+            reclassification_used=(reclassification_used),
+            reclassified=reclassified,
+            alternative_category=(alternative_category),
+            alternative_confidence=(alternative_confidence),
+            reclassification_error=(reclassification_error),
         )
 
         # ===============================================================
@@ -521,9 +444,7 @@ def run_classification_agent(
             requires_reclassification,
             reclassified,
             reclassification_used,
-            classification_metadata[
-                "decision_reason"
-            ],
+            classification_metadata["decision_reason"],
             fallback_used,
         )
 
@@ -536,19 +457,11 @@ def run_classification_agent(
             "confidence": confidence,
             "confidence_level": confidence_level,
             "requires_review": requires_review,
-            "requires_reclassification": (
-                requires_reclassification
-            ),
+            "requires_reclassification": (requires_reclassification),
             "reclassified": reclassified,
-            "reclassification_used": (
-                reclassification_used
-            ),
-            "reclassification_error": (
-                reclassification_error
-            ),
-            "classification_metadata": (
-                classification_metadata
-            ),
+            "reclassification_used": (reclassification_used),
+            "reclassification_error": (reclassification_error),
+            "classification_metadata": (classification_metadata),
             "fallback_used": fallback_used,
             "error": error_message,
         }
@@ -562,49 +475,38 @@ def run_classification_agent(
         error_message = str(exc)
 
         logger.exception(
-            "Classification agent failed "
-            "ticket_id=%s: %s",
+            "Classification agent failed " "ticket_id=%s: %s",
             ticket_id,
             exc,
         )
 
         confidence = DEFAULT_CONFIDENCE
 
-        classification_metadata = (
-            build_classification_metadata(
-                primary_category=DEFAULT_CATEGORY,
-                primary_confidence=confidence,
-                final_category=DEFAULT_CATEGORY,
-                final_confidence=confidence,
-                reclassification_triggered=False,
-                reclassification_used=False,
-                reclassified=False,
-                alternative_category=None,
-                alternative_confidence=None,
-                reclassification_error=error_message,
-            )
+        classification_metadata = build_classification_metadata(
+            primary_category=DEFAULT_CATEGORY,
+            primary_confidence=confidence,
+            final_category=DEFAULT_CATEGORY,
+            final_confidence=confidence,
+            reclassification_triggered=False,
+            reclassification_used=False,
+            reclassified=False,
+            alternative_category=None,
+            alternative_confidence=None,
+            reclassification_error=error_message,
         )
 
         return {
             "category": DEFAULT_CATEGORY,
             "confidence": confidence,
-            "confidence_level": classify_confidence_level(
-                confidence
-            ),
-            "requires_review": classification_requires_review(
-                confidence
-            ),
+            "confidence_level": classify_confidence_level(confidence),
+            "requires_review": classification_requires_review(confidence),
             "requires_reclassification": (
-                classification_requires_reclassification(
-                    confidence
-                )
+                classification_requires_reclassification(confidence)
             ),
             "reclassified": False,
             "reclassification_used": False,
             "reclassification_error": error_message,
-            "classification_metadata": (
-                classification_metadata
-            ),
+            "classification_metadata": (classification_metadata),
             "fallback_used": fallback_used,
             "error": error_message,
         }

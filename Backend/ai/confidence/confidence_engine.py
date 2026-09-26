@@ -35,8 +35,8 @@ def compute_confidence(
         Composite confidence float in [0.0, 1.0], rounded to 4 decimal places.
     """
     raw = (
-        CONFIDENCE_WEIGHT_SIMILARITY      * _clamp(similarity_score)
-        + CONFIDENCE_WEIGHT_LLM_SCORE     * _clamp(llm_score)
+        CONFIDENCE_WEIGHT_SIMILARITY * _clamp(similarity_score)
+        + CONFIDENCE_WEIGHT_LLM_SCORE * _clamp(llm_score)
         + CONFIDENCE_WEIGHT_CLASSIFICATION * _clamp(classification_score)
     )
     score = round(_clamp(raw), 4)

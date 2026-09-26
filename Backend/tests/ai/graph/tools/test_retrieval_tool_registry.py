@@ -6,7 +6,6 @@ from ai.graph.tools.retrieval_tools import (
 )
 from ai.graph.tools.tool_types import ToolCategory
 
-
 EXPECTED_TOOLS = {
     "search_knowledge_base",
     "search_previous_tickets",
@@ -21,9 +20,7 @@ def test_retrieval_registry_contains_expected_tools() -> None:
 
 
 def test_retrieval_registry_contains_global_registry() -> None:
-    assert set(
-        retrieval_tool_registry.list_tools()
-    ) == EXPECTED_TOOLS
+    assert set(retrieval_tool_registry.list_tools()) == EXPECTED_TOOLS
 
 
 def test_retrieval_tools_are_read_tools() -> None:
@@ -64,9 +61,6 @@ def test_registry_returns_definitions() -> None:
 
     assert len(definitions) == 3
 
-    names = {
-        definition.name
-        for definition in definitions
-    }
+    names = {definition.name for definition in definitions}
 
     assert names == EXPECTED_TOOLS

@@ -40,13 +40,9 @@ class RAGEmbedder:
         ]
 
         if chunk.category:
-            parts.append(
-                f"Category: {chunk.category}"
-            )
+            parts.append(f"Category: {chunk.category}")
 
-        parts.append(
-            f"Content: {chunk.content}"
-        )
+        parts.append(f"Content: {chunk.content}")
 
         return "\n".join(parts)
 
@@ -57,10 +53,7 @@ class RAGEmbedder:
     ) -> List[str]:
         """Build embedding text for multiple chunks."""
 
-        return [
-            cls.build_embedding_text(chunk)
-            for chunk in chunks
-        ]
+        return [cls.build_embedding_text(chunk) for chunk in chunks]
 
     @staticmethod
     def validate_embeddings(
@@ -72,14 +65,10 @@ class RAGEmbedder:
         """
 
         if not isinstance(embeddings, np.ndarray):
-            raise TypeError(
-                "Embeddings must be a numpy.ndarray"
-            )
+            raise TypeError("Embeddings must be a numpy.ndarray")
 
         if embeddings.ndim != 2:
-            raise ValueError(
-                "Embeddings must be a 2D array"
-            )
+            raise ValueError("Embeddings must be a 2D array")
 
         if embeddings.shape[0] != expected_count:
             raise ValueError(
@@ -96,9 +85,7 @@ class RAGEmbedder:
             )
 
         if not np.isfinite(embeddings).all():
-            raise ValueError(
-                "Embeddings contain NaN or infinite values"
-            )
+            raise ValueError("Embeddings contain NaN or infinite values")
 
     @classmethod
     def embed(

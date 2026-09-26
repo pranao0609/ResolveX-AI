@@ -44,8 +44,12 @@ class AnalyticsService:
 
         # Count tickets per bucket using list_all (placeholder — extend with SQL aggregation)
         all_tickets = self.repo.list_all(limit=10_000)
-        high = sum(1 for t in all_tickets if t.confidence and t.confidence >= CONFIDENCE_HIGH)
-        low = sum(1 for t in all_tickets if t.confidence and t.confidence < CONFIDENCE_LOW)
+        high = sum(
+            1 for t in all_tickets if t.confidence and t.confidence >= CONFIDENCE_HIGH
+        )
+        low = sum(
+            1 for t in all_tickets if t.confidence and t.confidence < CONFIDENCE_LOW
+        )
 
         return ConfidenceStats(
             avg_confidence=avg,

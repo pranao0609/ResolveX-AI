@@ -82,24 +82,16 @@ class TicketMemoryStore(MemoryStore):
         db_query = self.db.query(Ticket)
 
         if query.resolved_only:
-            db_query = db_query.filter(
-                Ticket.status.in_(self.RESOLVED_STATUSES)
-            )
+            db_query = db_query.filter(Ticket.status.in_(self.RESOLVED_STATUSES))
 
         if query.category:
-            db_query = db_query.filter(
-                Ticket.category == query.category
-            )
+            db_query = db_query.filter(Ticket.category == query.category)
 
         if query.submitted_by:
-            db_query = db_query.filter(
-                Ticket.submitted_by == query.submitted_by
-            )
+            db_query = db_query.filter(Ticket.submitted_by == query.submitted_by)
 
         if query.exclude_ticket_id is not None:
-            db_query = db_query.filter(
-                Ticket.id != query.exclude_ticket_id
-            )
+            db_query = db_query.filter(Ticket.id != query.exclude_ticket_id)
 
         if query.query:
             search_term = f"%{query.query}%"
@@ -110,16 +102,11 @@ class TicketMemoryStore(MemoryStore):
                 | Ticket.solution.ilike(search_term)
             )
 
-        db_query = db_query.order_by(
-            Ticket.created_at.desc()
-        )
+        db_query = db_query.order_by(Ticket.created_at.desc())
 
         tickets = db_query.limit(query.limit).all()
 
-        records = [
-            self._to_memory_record(ticket)
-            for ticket in tickets
-        ]
+        records = [self._to_memory_record(ticket) for ticket in tickets]
 
         return MemorySearchResult(
             records=records,

@@ -12,7 +12,7 @@ class TicketStatus(str, enum.Enum):
     OPEN = "open"
     IN_PROGRESS = "in_progress"
     AUTO_RESOLVED = "auto_resolved"
-    ESCALATED = "escalated"       # sent to human-in-the-loop
+    ESCALATED = "escalated"  # sent to human-in-the-loop
     CLOSED = "closed"
 
 
@@ -33,27 +33,27 @@ class Ticket(Base):
     # Core fields
     title = Column(String(255), nullable=False)
     description = Column(Text, nullable=False)
-    category = Column(String(100), nullable=True)          # classified category
+    category = Column(String(100), nullable=True)  # classified category
     priority = Column(String(50), default=TicketPriority.MEDIUM)
     status = Column(String(50), default=TicketStatus.OPEN)
 
     # AI-generated fields
-    solution = Column(Text, nullable=True)                 # LLM-generated resolution
-    confidence = Column(Float, nullable=True)              # AI confidence score 0–1
-    explanation = Column(Text, nullable=True)              # explainability output
-    embedding_id = Column(String(255), nullable=True)      # reference in FAISS index
+    solution = Column(Text, nullable=True)  # LLM-generated resolution
+    confidence = Column(Float, nullable=True)  # AI confidence score 0–1
+    explanation = Column(Text, nullable=True)  # explainability output
+    embedding_id = Column(String(255), nullable=True)  # reference in FAISS index
 
     # Metadata
-    submitted_by = Column(String(255), nullable=True)      # user email / id
-    assigned_to = Column(String(255), nullable=True)       # human agent (HITL)
-    
+    submitted_by = Column(String(255), nullable=True)  # user email / id
+    assigned_to = Column(String(255), nullable=True)  # human agent (HITL)
+
     # Expert Resolver Assignment fields
     assigned_resolver_id = Column(String(50), nullable=True)
     assigned_resolver_name = Column(String(100), nullable=True)
     assigned_resolver_category = Column(String(100), nullable=True)
     assigned_at = Column(DateTime(timezone=True), nullable=True)
 
-    attachment_paths = Column(Text, nullable=True)         # comma-separated file paths
+    attachment_paths = Column(Text, nullable=True)  # comma-separated file paths
 
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())

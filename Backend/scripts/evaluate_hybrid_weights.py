@@ -22,22 +22,11 @@ from typing import Dict, List
 from ai.rag.retrieval_evaluator import RetrievalEvaluator
 from ai.rag.hybrid_retriever import HybridRetriever
 
-
 BASE_DIR = Path(__file__).resolve().parents[1]
 
-QUERIES_PATH = (
-    BASE_DIR
-    / "data"
-    / "evaluation"
-    / "retrieval_queries.json"
-)
+QUERIES_PATH = BASE_DIR / "data" / "evaluation" / "retrieval_queries.json"
 
-RESULTS_PATH = (
-    BASE_DIR
-    / "data"
-    / "evaluation"
-    / "hybrid_weight_results.json"
-)
+RESULTS_PATH = BASE_DIR / "data" / "evaluation" / "hybrid_weight_results.json"
 
 
 # BM25 weight values to test.
@@ -64,9 +53,7 @@ def load_queries() -> List[Dict]:
     """Load retrieval evaluation queries."""
 
     if not QUERIES_PATH.exists():
-        raise FileNotFoundError(
-            f"Retrieval query file not found: {QUERIES_PATH}"
-        )
+        raise FileNotFoundError(f"Retrieval query file not found: {QUERIES_PATH}")
 
     with open(
         QUERIES_PATH,
@@ -76,9 +63,7 @@ def load_queries() -> List[Dict]:
         data = json.load(file)
 
     if not isinstance(data, list):
-        raise ValueError(
-            "retrieval_queries.json must contain a list"
-        )
+        raise ValueError("retrieval_queries.json must contain a list")
 
     return data
 
@@ -91,11 +76,7 @@ def evaluate_weight(
 
     print()
     print("=" * 70)
-    print(
-        f"Testing weights: "
-        f"BM25={bm25_weight:.1f} | "
-        f"Dense={dense_weight:.1f}"
-    )
+    print(f"Testing weights: " f"BM25={bm25_weight:.1f} | " f"Dense={dense_weight:.1f}")
     print("=" * 70)
 
     hybrid_retriever = HybridRetriever(
@@ -184,9 +165,7 @@ def save_results(results: List[Dict]) -> None:
         )
 
     print()
-    print(
-        f"Results saved to: {RESULTS_PATH}"
-    )
+    print(f"Results saved to: {RESULTS_PATH}")
 
 
 def main() -> None:

@@ -68,14 +68,10 @@ class MemoryRecord:
             "explanation": self.explanation,
             "submitted_by": self.submitted_by,
             "created_at": (
-                self.created_at.isoformat()
-                if self.created_at is not None
-                else None
+                self.created_at.isoformat() if self.created_at is not None else None
             ),
             "updated_at": (
-                self.updated_at.isoformat()
-                if self.updated_at is not None
-                else None
+                self.updated_at.isoformat() if self.updated_at is not None else None
             ),
             "metadata": dict(self.metadata),
         }

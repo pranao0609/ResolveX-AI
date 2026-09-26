@@ -6,27 +6,15 @@ import json
 import sys
 from pathlib import Path
 
-
 BACKEND_ROOT = Path(__file__).resolve().parents[1]
 
 sys.path.insert(0, str(BACKEND_ROOT))
 
 from ai.rag.retrieval_evaluator import RetrievalEvaluator
 
+QUERIES_PATH = BACKEND_ROOT / "data" / "evaluation" / "retrieval_queries.json"
 
-QUERIES_PATH = (
-    BACKEND_ROOT
-    / "data"
-    / "evaluation"
-    / "retrieval_queries.json"
-)
-
-OUTPUT_PATH = (
-    BACKEND_ROOT
-    / "data"
-    / "evaluation"
-    / "retrieval_results.json"
-)
+OUTPUT_PATH = BACKEND_ROOT / "data" / "evaluation" / "retrieval_results.json"
 
 
 def main():
@@ -82,9 +70,7 @@ def main():
     print("RESOLVEX RETRIEVAL EVALUATION")
     print("=" * 110)
 
-    print(
-        f"Evaluation queries: {len(queries)}"
-    )
+    print(f"Evaluation queries: {len(queries)}")
 
     print()
 

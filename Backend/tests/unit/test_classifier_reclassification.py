@@ -6,7 +6,6 @@ from ai.classification.classifier import (
     reclassify_with_zero_shot,
 )
 
-
 # ---------------------------------------------------------------------------
 # Valid zero-shot reclassification
 # ---------------------------------------------------------------------------
@@ -55,9 +54,7 @@ def test_reclassify_with_zero_shot_raises_when_model_unavailable():
     ):
 
         with pytest.raises(RuntimeError):
-            reclassify_with_zero_shot(
-                "The network connection is failing."
-            )
+            reclassify_with_zero_shot("The network connection is failing.")
 
 
 # ---------------------------------------------------------------------------
@@ -77,6 +74,4 @@ def test_reclassify_with_zero_shot_rejects_invalid_result():
     ):
 
         with pytest.raises(RuntimeError):
-            reclassify_with_zero_shot(
-                "The network connection is failing."
-            )
+            reclassify_with_zero_shot("The network connection is failing.")

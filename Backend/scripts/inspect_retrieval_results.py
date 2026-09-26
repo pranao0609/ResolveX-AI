@@ -1,7 +1,6 @@
 import json
 from pathlib import Path
 
-
 PATH = (
     Path(__file__).resolve().parents[1]
     / "data"
@@ -35,28 +34,17 @@ if isinstance(data, dict):
     for key, value in data.items():
 
         if isinstance(value, list):
-            print(
-                f"  {key}: list "
-                f"(length={len(value)})"
-            )
+            print(f"  {key}: list " f"(length={len(value)})")
 
         elif isinstance(value, dict):
-            print(
-                f"  {key}: dict "
-                f"(keys={list(value.keys())[:10]})"
-            )
+            print(f"  {key}: dict " f"(keys={list(value.keys())[:10]})")
 
         else:
-            print(
-                f"  {key}: "
-                f"{type(value).__name__} = {value}"
-            )
+            print(f"  {key}: " f"{type(value).__name__} = {value}")
 
 elif isinstance(data, list):
 
-    print(
-        f"\nList length: {len(data)}"
-    )
+    print(f"\nList length: {len(data)}")
 
     if data:
         print("\nFirst item:")

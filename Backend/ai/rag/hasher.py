@@ -34,9 +34,7 @@ class DocumentHasher:
 
         normalized = f"{title}\n{content}"
 
-        return hashlib.sha256(
-            normalized.encode("utf-8")
-        ).hexdigest()
+        return hashlib.sha256(normalized.encode("utf-8")).hexdigest()
 
     @classmethod
     def compute_hash(
@@ -61,9 +59,7 @@ class DocumentHasher:
 
         content_hash = cls.compute_hash(document)
 
-        return document.model_copy(
-            update={"content_hash": content_hash}
-        )
+        return document.model_copy(update={"content_hash": content_hash})
 
     @classmethod
     def attach_hashes(
@@ -72,10 +68,7 @@ class DocumentHasher:
     ) -> List[CanonicalDocument]:
         """Attach content hashes to a collection of documents."""
 
-        return [
-            cls.attach_hash(document)
-            for document in documents
-        ]
+        return [cls.attach_hash(document) for document in documents]
 
 
 class DocumentDeduplicator:
@@ -102,9 +95,7 @@ class DocumentDeduplicator:
             if not document.content_hash:
                 continue
 
-            hash_to_documents[
-                document.content_hash
-            ].append(document.document_id)
+            hash_to_documents[document.content_hash].append(document.document_id)
 
         return {
             content_hash: document_ids

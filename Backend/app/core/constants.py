@@ -14,8 +14,10 @@ PRIORITY_HIGH = "high"
 PRIORITY_CRITICAL = "critical"
 
 # ── Confidence thresholds (sourced from central Settings) ──────────────────────
-CONFIDENCE_HIGH = settings.AUTO_RESOLVE_THRESHOLD   # auto-resolve threshold (default 0.75)
-CONFIDENCE_LOW = settings.HITL_THRESHOLD            # escalate to HITL threshold (default 0.50)
+CONFIDENCE_HIGH = (
+    settings.AUTO_RESOLVE_THRESHOLD
+)  # auto-resolve threshold (default 0.75)
+CONFIDENCE_LOW = settings.HITL_THRESHOLD  # escalate to HITL threshold (default 0.50)
 
 # ── Ticket categories ─────────────────────────────────────────────────────────
 CATEGORIES = [
@@ -32,5 +34,5 @@ ALLOWED_EXTENSIONS = {".pdf", ".png", ".jpg", ".jpeg", ".txt", ".log"}
 MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024  # 10 MB
 
 # ── Embedding ─────────────────────────────────────────────────────────────────
-EMBEDDING_DIMENSION = 384   # all-MiniLM-L6-v2 output size
-TOP_K_RETRIEVAL = 5         # number of similar docs to retrieve
+EMBEDDING_DIMENSION = 384  # all-MiniLM-L6-v2 output size
+TOP_K_RETRIEVAL = 5  # number of similar docs to retrieve

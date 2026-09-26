@@ -22,21 +22,15 @@ def test_ingest_knowledge_base_loads_documents_and_runs_pipeline():
         chunks_indexed=4,
     )
 
-    service.loader.load_all = Mock(
-        return_value=documents
-    )
+    service.loader.load_all = Mock(return_value=documents)
 
-    service.pipeline.ingest = Mock(
-        return_value=expected_result
-    )
+    service.pipeline.ingest = Mock(return_value=expected_result)
 
     result = service.ingest_knowledge_base()
 
     service.loader.load_all.assert_called_once_with()
 
-    service.pipeline.ingest.assert_called_once_with(
-        documents
-    )
+    service.pipeline.ingest.assert_called_once_with(documents)
 
     assert result == expected_result
 
@@ -46,9 +40,7 @@ def test_ingest_knowledge_base_handles_empty_database():
 
     service = RAGIngestionService(db)
 
-    service.loader.load_all = Mock(
-        return_value=[]
-    )
+    service.loader.load_all = Mock(return_value=[])
 
     service.pipeline.ingest = Mock()
 

@@ -15,7 +15,7 @@ def test_verification_result_validation():
         policy_compliant=True,
         resolution_correct=True,
         confidence=0.95,
-)
+    )
 
     assert result.verification_passed is True
     assert result.supported_by_evidence is True
@@ -37,9 +37,7 @@ def test_verification_result_rejects_invalid_confidence():
     except Exception:
         return
 
-    raise AssertionError(
-        "Invalid confidence should be rejected"
-    )
+    raise AssertionError("Invalid confidence should be rejected")
 
 
 def test_render_verification_prompt():
@@ -116,20 +114,21 @@ def test_verify_resolution_success():
         "temperature": 0.1,
     }
 
-    with patch(
-        "ai.llm.verification_generator.load_prompt",
-        return_value=prompt,
-    ), patch(
-        "ai.llm.verification_generator._get_gateway",
-        return_value=gateway,
+    with (
+        patch(
+            "ai.llm.verification_generator.load_prompt",
+            return_value=prompt,
+        ),
+        patch(
+            "ai.llm.verification_generator._get_gateway",
+            return_value=gateway,
+        ),
     ):
         result, fallback = verify_resolution(
             ticket_text="Email issue",
             diagnosis="Authentication failure",
             root_cause="Invalid credentials",
-            resolution_steps=[
-                "Verify credentials."
-            ],
+            resolution_steps=["Verify credentials."],
             context="Credentials must be valid.",
         )
 
@@ -149,12 +148,11 @@ def test_verify_resolution_success():
 
     gateway.generate.assert_called_once()
 
+
 def test_verify_resolution_fallback():
     gateway = MagicMock()
 
-    gateway.generate.side_effect = Exception(
-        "Unexpected failure"
-    )
+    gateway.generate.side_effect = Exception("Unexpected failure")
 
     prompt = {
         "system_prompt": "Verify.",
@@ -163,20 +161,21 @@ def test_verify_resolution_fallback():
         "temperature": 0.1,
     }
 
-    with patch(
-        "ai.llm.verification_generator.load_prompt",
-        return_value=prompt,
-    ), patch(
-        "ai.llm.verification_generator._get_gateway",
-        return_value=gateway,
+    with (
+        patch(
+            "ai.llm.verification_generator.load_prompt",
+            return_value=prompt,
+        ),
+        patch(
+            "ai.llm.verification_generator._get_gateway",
+            return_value=gateway,
+        ),
     ):
         result, fallback = verify_resolution(
             ticket_text="Email issue",
             diagnosis="Authentication failure",
             root_cause="Unknown",
-            resolution_steps=[
-                "Investigate."
-            ],
+            resolution_steps=["Investigate."],
             context="",
         )
 

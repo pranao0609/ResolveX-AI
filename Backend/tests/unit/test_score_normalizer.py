@@ -46,10 +46,7 @@ def test_identical_scores():
 
     normalized = ScoreNormalizer.min_max(candidates)
 
-    assert all(
-        candidate.score == pytest.approx(1.0)
-        for candidate in normalized
-    )
+    assert all(candidate.score == pytest.approx(1.0) for candidate in normalized)
 
 
 def test_empty_candidates():
@@ -97,7 +94,4 @@ def test_scores_are_between_zero_and_one():
 
     normalized = ScoreNormalizer.min_max(candidates)
 
-    assert all(
-        0.0 <= candidate.score <= 1.0
-        for candidate in normalized
-    )
+    assert all(0.0 <= candidate.score <= 1.0 for candidate in normalized)

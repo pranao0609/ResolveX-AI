@@ -15,7 +15,6 @@ from sqlalchemy.orm import sessionmaker
 from app.main import app
 from app.database import Base, get_db
 
-
 # ── In-memory SQLite engine (no external dependency) ─────────────────────────
 
 SQLALCHEMY_TEST_URL = "sqlite:///:memory:"
@@ -30,6 +29,7 @@ TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engin
 
 # ── Session-scoped DB setup ───────────────────────────────────────────────────
 
+
 @pytest.fixture(scope="session", autouse=True)
 def setup_database():
     """Create all tables once per test session, then drop them."""
@@ -39,6 +39,7 @@ def setup_database():
 
 
 # ── Per-test DB session ───────────────────────────────────────────────────────
+
 
 @pytest.fixture()
 def db_session():
@@ -55,6 +56,7 @@ def db_session():
 
 
 # ── Override FastAPI DB dependency ────────────────────────────────────────────
+
 
 @pytest.fixture()
 def client(db_session):
@@ -78,13 +80,14 @@ def client(db_session):
 
 # ── Test data factories ───────────────────────────────────────────────────────
 
+
 @pytest.fixture()
 def sample_ticket_payload():
     """Minimal valid ticket form payload."""
     return {
         "title": "VPN connection drops every 10 minutes",
         "description": "The corporate VPN disconnects automatically when idle for 10 minutes. "
-                       "This started after the latest Windows update.",
+        "This started after the latest Windows update.",
         "category": "network",
         "submitted_by": "test_user@example.com",
     }

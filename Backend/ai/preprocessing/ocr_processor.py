@@ -8,6 +8,7 @@ from app.core.logger import logger
 try:
     from PIL import Image
     import pytesseract
+
     OCR_AVAILABLE = True
 except ImportError:
     OCR_AVAILABLE = False

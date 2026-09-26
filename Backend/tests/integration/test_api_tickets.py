@@ -9,8 +9,8 @@ import pytest
 from unittest.mock import AsyncMock, patch, MagicMock
 from app.schemas.resolution_schema import ResolutionResult
 
-
 # ── Shared mock resolution result ────────────────────────────────────────────
+
 
 def _fake_resolution(ticket_id: int = 1, confidence: float = 0.82) -> ResolutionResult:
     return ResolutionResult(
@@ -29,6 +29,7 @@ def _fake_resolution(ticket_id: int = 1, confidence: float = 0.82) -> Resolution
 
 # ── List tickets ──────────────────────────────────────────────────────────────
 
+
 class TestListTickets:
     """GET /api/v1/tickets"""
 
@@ -38,7 +39,12 @@ class TestListTickets:
 
     def test_empty_ticket_list_returns_list_structure(self, client):
         data = client.get("/api/v1/tickets").json()
-        assert "tickets" in data or isinstance(data, list) or "items" in data or "data" in data
+        assert (
+            "tickets" in data
+            or isinstance(data, list)
+            or "items" in data
+            or "data" in data
+        )
 
     def test_pagination_params_accepted(self, client):
         response = client.get("/api/v1/tickets?page=1&page_size=10")
@@ -63,6 +69,7 @@ class TestListTickets:
 
 # ── Get single ticket ─────────────────────────────────────────────────────────
 
+
 class TestGetTicket:
     """GET /api/v1/tickets/{id}"""
 
@@ -77,6 +84,7 @@ class TestGetTicket:
 
 # ── Create ticket ─────────────────────────────────────────────────────────────
 
+
 class TestCreateTicket:
     """POST /api/v1/tickets"""
 
@@ -84,7 +92,9 @@ class TestCreateTicket:
         """Helper: POST multipart form-data."""
         return client.post("/api/v1/tickets", data=payload)
 
-    def test_create_ticket_succeeds_with_valid_payload(self, client, sample_ticket_payload):
+    def test_create_ticket_succeeds_with_valid_payload(
+        self, client, sample_ticket_payload
+    ):
         with patch(
             "app.routes.ticket_routes.ResolutionService.resolve",
             new_callable=AsyncMock,
@@ -105,7 +115,9 @@ class TestCreateTicket:
         assert "id" in data
         assert isinstance(data["id"], int)
 
-    def test_create_ticket_returns_correct_category(self, client, sample_ticket_payload):
+    def test_create_ticket_returns_correct_category(
+        self, client, sample_ticket_payload
+    ):
         with patch(
             "app.routes.ticket_routes.ResolutionService.resolve",
             new_callable=AsyncMock,
@@ -114,7 +126,12 @@ class TestCreateTicket:
             data = self._post_ticket(client, sample_ticket_payload).json()
 
         assert data.get("category") in (
-            "network", "software", "hardware", "access_permission", "security", "other"
+            "network",
+            "software",
+            "hardware",
+            "access_permission",
+            "security",
+            "other",
         )
 
     def test_create_ticket_includes_confidence(self, client, sample_ticket_payload):
@@ -180,10 +197,17 @@ class TestCreateTicket:
 
         # 'decision' is NOT in TicketResponse — 'status' reflects the outcome
         assert "status" in data
-        assert data["status"] in ("open", "auto_resolved", "escalated", "in_progress", "closed")
+        assert data["status"] in (
+            "open",
+            "auto_resolved",
+            "escalated",
+            "in_progress",
+            "closed",
+        )
 
 
 # ── Update ticket ─────────────────────────────────────────────────────────────
+
 
 class TestUpdateTicket:
     """PATCH /api/v1/tickets/{id}"""
@@ -197,6 +221,7 @@ class TestUpdateTicket:
 
 
 # ── Delete ticket ─────────────────────────────────────────────────────────────
+
 
 class TestDeleteTicket:
     """DELETE /api/v1/tickets/{id}"""

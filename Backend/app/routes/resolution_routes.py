@@ -20,7 +20,9 @@ router = APIRouter()
 
 
 @router.post("/resolve/{ticket_id}", response_model=ResolutionResult)
-async def resolve_ticket(ticket_id: int, force: bool = False, db: Session = Depends(get_db)):
+async def resolve_ticket(
+    ticket_id: int, force: bool = False, db: Session = Depends(get_db)
+):
     """
     Trigger the AI pipeline for the given ticket.
     Steps: preprocess → classify → embed → RAG → LLM → confidence → decision.

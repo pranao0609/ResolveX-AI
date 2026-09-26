@@ -19,14 +19,9 @@ def append_error(
     Return an updated error list without mutating the input state.
     """
 
-    errors = list(
-        state.get("errors", [])
-    )
+    errors = list(state.get("errors", []))
 
-    errors.append(
-        f"{stage}: "
-        f"{type(exc).__name__}: {exc}"
-    )
+    errors.append(f"{stage}: " f"{type(exc).__name__}: {exc}")
 
     return errors
 
@@ -40,13 +35,9 @@ def append_warning(
     Return an updated warning list without mutating the input state.
     """
 
-    warnings = list(
-        state.get("warnings", [])
-    )
+    warnings = list(state.get("warnings", []))
 
-    warnings.append(
-        f"{stage}: {message}"
-    )
+    warnings.append(f"{stage}: {message}")
 
     return warnings
 
@@ -63,26 +54,16 @@ def create_state_snapshot(
     checkpointing, Redis, PostgreSQL, or another persistence layer.
     """
 
-    metadata = dict(
-        state.get("metadata", {})
-    )
+    metadata = dict(state.get("metadata", {}))
 
     metadata["last_stage"] = stage
 
-    metadata["updated_at"] = (
-        datetime.now(timezone.utc).isoformat()
-    )
+    metadata["updated_at"] = datetime.now(timezone.utc).isoformat()
 
     return {
-        "request_id": state.get(
-            "request_id"
-        ),
-        "graph_run_id": state.get(
-            "graph_run_id"
-        ),
-        "ticket_id": state.get(
-            "ticket_id"
-        ),
+        "request_id": state.get("request_id"),
+        "graph_run_id": state.get("graph_run_id"),
+        "ticket_id": state.get("ticket_id"),
         "stage": stage,
         "metadata": metadata,
     }

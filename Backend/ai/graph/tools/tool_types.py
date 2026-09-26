@@ -42,8 +42,7 @@ class RetrievalToolProtocol(Protocol):
         self,
         query: str,
         **kwargs: Any,
-    ) -> List[Dict[str, Any]]:
-        ...
+    ) -> List[Dict[str, Any]]: ...
 
 
 class ToolCallRecord(TypedDict, total=False):
@@ -81,8 +80,7 @@ class ToolCallable(Protocol):
         self,
         *args: Any,
         **kwargs: Any,
-    ) -> Any:
-        ...
+    ) -> Any: ...
 
 
 @dataclass(frozen=True)
@@ -117,9 +115,7 @@ class ToolRegistry:
         """Register a tool definition."""
 
         if definition.name in self._tools:
-            raise ValueError(
-                f"Tool already registered: {definition.name}"
-            )
+            raise ValueError(f"Tool already registered: {definition.name}")
 
         self._tools[definition.name] = definition
 
@@ -132,9 +128,7 @@ class ToolRegistry:
         try:
             return self._tools[name]
         except KeyError as exc:
-            raise KeyError(
-                f"Unknown ResolveX tool: {name}"
-            ) from exc
+            raise KeyError(f"Unknown ResolveX tool: {name}") from exc
 
     def contains(
         self,
@@ -174,9 +168,7 @@ class ToolRegistry:
                 **kwargs,
             )
 
-            latency_ms = (
-                perf_counter() - start
-            ) * 1000.0
+            latency_ms = (perf_counter() - start) * 1000.0
 
             result_count = _infer_result_count(result)
 
@@ -189,9 +181,7 @@ class ToolRegistry:
             )
 
         except Exception as exc:
-            latency_ms = (
-                perf_counter() - start
-            ) * 1000.0
+            latency_ms = (perf_counter() - start) * 1000.0
 
             return ToolResult(
                 tool=name,

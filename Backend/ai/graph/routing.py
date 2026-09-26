@@ -14,10 +14,13 @@ def route_retrieval_decision(
         retry    -> execute retrieval again
     """
 
-    retrieval_metadata = state.get(
-        "retrieval_metadata",
-        {},
-    ) or {}
+    retrieval_metadata = (
+        state.get(
+            "retrieval_metadata",
+            {},
+        )
+        or {}
+    )
 
     decision = retrieval_metadata.get(
         "retrieval_decision",

@@ -49,10 +49,9 @@ def precision_at_k(
 
     retrieved = retrieved_ids[:k]
 
-    return sum(
-        1 for document_id in retrieved
-        if document_id in relevant
-    ) / len(retrieved)
+    return sum(1 for document_id in retrieved if document_id in relevant) / len(
+        retrieved
+    )
 
 
 def reciprocal_rank(
@@ -104,10 +103,7 @@ def ndcg_at_k(
 
     ideal_relevant_count = min(len(relevant), k)
 
-    idcg = sum(
-        1.0 / math.log2(rank + 1)
-        for rank in range(1, ideal_relevant_count + 1)
-    )
+    idcg = sum(1.0 / math.log2(rank + 1) for rank in range(1, ideal_relevant_count + 1))
 
     if idcg == 0.0:
         return 0.0

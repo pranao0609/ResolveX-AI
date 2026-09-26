@@ -32,9 +32,7 @@ def test_pipeline_cleans_document():
     prepared = result.valid_documents[0]
 
     assert prepared.title == "Network Troubleshooting"
-    assert prepared.content == (
-        "Restart the router.\n\nCheck the connection."
-    )
+    assert prepared.content == ("Restart the router.\n\nCheck the connection.")
 
 
 def test_pipeline_attaches_content_hash():
@@ -49,9 +47,7 @@ def test_pipeline_attaches_content_hash():
 
 
 def test_pipeline_preserves_document_identity():
-    document = make_document(
-        document_id="kb:123"
-    )
+    document = make_document(document_id="kb:123")
 
     result = RAGDocumentPipeline.prepare([document])
 
@@ -62,9 +58,7 @@ def test_pipeline_preserves_document_identity():
 
 
 def test_pipeline_separates_invalid_documents():
-    valid_document = make_document(
-        document_id="kb:1"
-    )
+    valid_document = make_document(document_id="kb:1")
 
     invalid_document = make_document(
         document_id="kb:2",

@@ -25,4 +25,8 @@ class UserRepository:
         return self.db.query(User).filter(User.email == email).first()
 
     def list_agents(self) -> List[User]:
-        return self.db.query(User).filter(User.role == "agent", User.is_active == True).all()
+        return (
+            self.db.query(User)
+            .filter(User.role == "agent", User.is_active == True)
+            .all()
+        )

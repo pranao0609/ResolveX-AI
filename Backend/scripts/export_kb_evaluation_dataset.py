@@ -12,7 +12,6 @@ import json
 import sys
 from pathlib import Path
 
-
 BACKEND_ROOT = Path(__file__).resolve().parents[1]
 
 sys.path.insert(0, str(BACKEND_ROOT))
@@ -21,13 +20,7 @@ sys.path.insert(0, str(BACKEND_ROOT))
 from app.database import SessionLocal
 from app.models.kb_model import KnowledgeBaseEntry
 
-
-OUTPUT_PATH = (
-    BACKEND_ROOT
-    / "data"
-    / "evaluation"
-    / "kb_evaluation_dataset.json"
-)
+OUTPUT_PATH = BACKEND_ROOT / "data" / "evaluation" / "kb_evaluation_dataset.json"
 
 
 def main():
@@ -37,9 +30,7 @@ def main():
 
     try:
         entries = (
-            db.query(KnowledgeBaseEntry)
-            .order_by(KnowledgeBaseEntry.id.asc())
-            .all()
+            db.query(KnowledgeBaseEntry).order_by(KnowledgeBaseEntry.id.asc()).all()
         )
 
         dataset = []

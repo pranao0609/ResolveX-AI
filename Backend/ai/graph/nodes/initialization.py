@@ -27,22 +27,14 @@ def _ensure_runtime_metadata(
     if not graph_run_id:
         graph_run_id = str(uuid.uuid4())
 
-    metadata = dict(
-        state.get("metadata", {})
-    )
+    metadata = dict(state.get("metadata", {}))
 
     if "started_at" not in metadata:
-        metadata["started_at"] = (
-            datetime.now(timezone.utc).isoformat()
-        )
+        metadata["started_at"] = datetime.now(timezone.utc).isoformat()
 
-    metadata["ticket_id"] = state.get(
-        "ticket_id"
-    )
+    metadata["ticket_id"] = state.get("ticket_id")
 
-    metadata["last_stage"] = (
-        "initialize_state"
-    )
+    metadata["last_stage"] = "initialize_state"
 
     return {
         "request_id": request_id,
@@ -58,17 +50,11 @@ def initialize_graph_state(
     Initialize runtime state before the first agent executes.
     """
 
-    runtime = _ensure_runtime_metadata(
-        state
-    )
+    runtime = _ensure_runtime_metadata(state)
 
-    existing_errors = list(
-        state.get("errors", [])
-    )
+    existing_errors = list(state.get("errors", []))
 
-    existing_warnings = list(
-        state.get("warnings", [])
-    )
+    existing_warnings = list(state.get("warnings", []))
 
     return {
         "request_id": runtime["request_id"],
@@ -76,9 +62,7 @@ def initialize_graph_state(
         "metadata": runtime["metadata"],
         "errors": existing_errors,
         "warnings": existing_warnings,
-        "fallback_used": bool(
-            state.get("fallback_used", False)
-        ),
+        "fallback_used": bool(state.get("fallback_used", False)),
         "conversation_history": list(
             state.get(
                 "conversation_history",
@@ -116,20 +100,14 @@ def _stage_metadata(
     Redis, PostgreSQL, or another persistence backend.
     """
 
-    metadata = dict(
-        state.get("metadata", {})
-    )
+    metadata = dict(state.get("metadata", {}))
 
     metadata["last_stage"] = stage
 
-    metadata["updated_at"] = (
-        datetime.now(timezone.utc).isoformat()
-    )
+    metadata["updated_at"] = datetime.now(timezone.utc).isoformat()
 
     if completed:
-        metadata["completed_at"] = (
-            datetime.now(timezone.utc).isoformat()
-        )
+        metadata["completed_at"] = datetime.now(timezone.utc).isoformat()
 
     return metadata
 
@@ -143,19 +121,12 @@ def _append_error(
     Append an error while preserving all previous errors.
     """
 
-    errors = list(
-        state.get("errors", [])
-    )
+    errors = list(state.get("errors", []))
 
     if isinstance(exc, Exception):
-        errors.append(
-            f"{stage}: "
-            f"{type(exc).__name__}: {exc}"
-        )
+        errors.append(f"{stage}: " f"{type(exc).__name__}: {exc}")
     else:
-        errors.append(
-            f"{stage}: {exc}"
-        )
+        errors.append(f"{stage}: {exc}")
 
     return errors
 

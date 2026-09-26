@@ -77,10 +77,7 @@ def test_ticket_analyzer_propagates_classification_fallback():
     assert result["fallback_used"] is True
 
     assert "errors" in result
-    assert any(
-        "classifier unavailable" in error
-        for error in result["errors"]
-    )
+    assert any("classifier unavailable" in error for error in result["errors"])
 
 
 def test_ticket_analyzer_handles_classification_agent_failure():
@@ -98,9 +95,7 @@ def test_ticket_analyzer_handles_classification_agent_failure():
 
     with patch(
         "ai.graph.nodes.ticket_analyzer.run_classification_agent",
-        side_effect=RuntimeError(
-            "classification agent unavailable"
-        ),
+        side_effect=RuntimeError("classification agent unavailable"),
     ):
 
         result = ticket_analyzer(state)
@@ -111,6 +106,5 @@ def test_ticket_analyzer_handles_classification_agent_failure():
 
     assert "errors" in result
     assert any(
-        "classification agent unavailable" in error
-        for error in result["errors"]
+        "classification agent unavailable" in error for error in result["errors"]
     )

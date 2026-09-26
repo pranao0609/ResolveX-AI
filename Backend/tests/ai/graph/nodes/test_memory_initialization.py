@@ -86,12 +86,8 @@ def test_initialize_graph_state_preserves_runtime_fields():
     assert result["request_id"] == "request-test"
     assert result["graph_run_id"] == "graph-test"
 
-    assert result["errors"] == [
-        "existing error"
-    ]
+    assert result["errors"] == ["existing error"]
 
-    assert result["warnings"] == [
-        "existing warning"
-    ]
+    assert result["warnings"] == ["existing warning"]
 
     assert result["fallback_used"] is True

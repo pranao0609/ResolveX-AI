@@ -1,0 +1,20 @@
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W"]
+ignore = [
+    "E501",  # Line length handled by black
+    "E402",  # Module level import not at top of file
+    "F401",  # Unused imports
+    "F841",  # Unused local variables
+    "W291",  # Trailing whitespace in docstrings/markdown templates
+    "E712",  # Comparison to True in SQLAlchemy queries
+]
+
+

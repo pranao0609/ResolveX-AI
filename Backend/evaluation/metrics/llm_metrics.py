@@ -7,7 +7,6 @@ import numpy as np
 
 from ai.llm.schemas import ResolutionResult
 
-
 # ---------------------------------------------------------------------------
 # Text helpers
 # ---------------------------------------------------------------------------
@@ -214,14 +213,8 @@ def instruction_adherence(
         bool(result.diagnosis.strip()),
         bool(result.root_cause.strip()),
         bool(result.resolution_steps),
-        all(
-            isinstance(step, str) and step.strip()
-            for step in result.resolution_steps
-        ),
-        all(
-            isinstance(item, str) and item.strip()
-            for item in result.evidence
-        ),
+        all(isinstance(step, str) and step.strip() for step in result.resolution_steps),
+        all(isinstance(item, str) and item.strip() for item in result.evidence),
         0.0 <= result.confidence <= 1.0,
         isinstance(result.requires_human, bool),
     ]
@@ -293,12 +286,6 @@ def evaluate_llm_output(
             generated_answer,
             retrieved_context,
         ),
-        "instruction_adherence": instruction_adherence(
-        structured_output
-        ),
-        "structured_output_validity": (
-            structured_output_validity(
-                structured_output
-            )
-        ),
+        "instruction_adherence": instruction_adherence(structured_output),
+        "structured_output_validity": (structured_output_validity(structured_output)),
     }

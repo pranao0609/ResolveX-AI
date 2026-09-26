@@ -71,10 +71,7 @@ def test_unknown_exception_is_not_retryable():
     ],
 )
 def test_backoff_seconds(attempt, expected):
-    assert (
-        RetryPolicy.backoff_seconds(attempt)
-        == expected
-    )
+    assert RetryPolicy.backoff_seconds(attempt) == expected
 
 
 def test_backoff_rejects_invalid_attempt():

@@ -18,7 +18,6 @@ from ai.memory.conversation_memory import (
 from app.core.logger import logger
 from app.database import SessionLocal
 
-
 # ---------------------------------------------------------------------
 # Memory Tool Registry
 # ---------------------------------------------------------------------
@@ -52,26 +51,11 @@ def _build_historical_memory_context(
             "\n".join(
                 [
                     f"[Historical Ticket {index}]",
-                    (
-                        f"Category: "
-                        f"{ticket.get('category', '')}"
-                    ),
-                    (
-                        f"Title: "
-                        f"{ticket.get('title', '')}"
-                    ),
-                    (
-                        f"Problem: "
-                        f"{ticket.get('description', '')}"
-                    ),
-                    (
-                        f"Previous Solution: "
-                        f"{ticket.get('solution', '')}"
-                    ),
-                    (
-                        f"Confidence: "
-                        f"{ticket.get('confidence')}"
-                    ),
+                    (f"Category: " f"{ticket.get('category', '')}"),
+                    (f"Title: " f"{ticket.get('title', '')}"),
+                    (f"Problem: " f"{ticket.get('description', '')}"),
+                    (f"Previous Solution: " f"{ticket.get('solution', '')}"),
+                    (f"Confidence: " f"{ticket.get('confidence')}"),
                 ]
             )
         )
@@ -180,11 +164,7 @@ def diagnosis_agent(
     # 2. Initialize Memory State
     # =================================================================
 
-    conversation_memory = (
-        ConversationMemory.from_state(
-            state
-        )
-    )
+    conversation_memory = ConversationMemory.from_state(state)
 
     previous_tickets = list(
         state.get(
@@ -202,20 +182,15 @@ def diagnosis_agent(
         or []
     )
 
-    ticket_id = state.get(
-        "ticket_id"
-    )
+    ticket_id = state.get("ticket_id")
 
     # ---------------------------------------------------------------
     # Add current ticket to short-term memory only once
     # ---------------------------------------------------------------
 
-    if (
-        ticket_text
-        and not _conversation_contains_ticket(
-            conversation_memory,
-            ticket_id,
-        )
+    if ticket_text and not _conversation_contains_ticket(
+        conversation_memory,
+        ticket_id,
     ):
         conversation_memory.append(
             role="user",
@@ -235,29 +210,25 @@ def diagnosis_agent(
     try:
         db = SessionLocal()
 
-        memory_result, memory_record = (
-            execute_tool(
-                memory_registry,
-                agent="diagnosis_agent",
-                tool_name="search_memory",
-                kwargs={
-                    "db": db,
-                    "query": ticket_text,
-                    "category": classification,
-                    "exclude_ticket_id": ticket_id,
-                    "resolved_only": True,
-                    "limit": 5,
-                },
-            )
+        memory_result, memory_record = execute_tool(
+            memory_registry,
+            agent="diagnosis_agent",
+            tool_name="search_memory",
+            kwargs={
+                "db": db,
+                "query": ticket_text,
+                "category": classification,
+                "exclude_ticket_id": ticket_id,
+                "resolved_only": True,
+                "limit": 5,
+            },
         )
 
         # -----------------------------------------------------------
         # Preserve normalized tool telemetry
         # -----------------------------------------------------------
 
-        tool_calls.append(
-            memory_record
-        )
+        tool_calls.append(memory_record)
 
         # -----------------------------------------------------------
         # Tool execution itself can fail without raising because
@@ -268,21 +239,10 @@ def diagnosis_agent(
             memory_result,
             dict,
         ):
-            memory_error = (
-                "search_memory returned "
-                "an invalid result."
-            )
+            memory_error = "search_memory returned " "an invalid result."
 
-        elif (
-            memory_result.get("status")
-            != "success"
-        ):
-            memory_error = (
-                memory_result.get(
-                    "error"
-                )
-                or "search_memory failed."
-            )
+        elif memory_result.get("status") != "success":
+            memory_error = memory_result.get("error") or "search_memory failed."
 
         else:
             previous_tickets = list(
@@ -294,9 +254,7 @@ def diagnosis_agent(
             )
 
     except Exception as exc:
-        memory_error = (
-            f"{type(exc).__name__}: {exc}"
-        )
+        memory_error = f"{type(exc).__name__}: {exc}"
 
         logger.warning(
             "Historical memory unavailable "
@@ -345,11 +303,7 @@ def diagnosis_agent(
     # 4. Build Diagnosis Context
     # =================================================================
 
-    historical_context = (
-        _build_historical_memory_context(
-            previous_tickets
-        )
-    )
+    historical_context = _build_historical_memory_context(previous_tickets)
 
     diagnosis_context = context
 
@@ -362,8 +316,7 @@ def diagnosis_agent(
             )
         else:
             diagnosis_context = (
-                "=== Historical Ticket Evidence ===\n"
-                f"{historical_context}"
+                "=== Historical Ticket Evidence ===\n" f"{historical_context}"
             )
 
     # =================================================================
@@ -371,12 +324,10 @@ def diagnosis_agent(
     # =================================================================
 
     try:
-        diagnosis_result, fallback_used = (
-            generate_diagnosis(
-                ticket_text=ticket_text,
-                context=diagnosis_context,
-                classification=classification,
-            )
+        diagnosis_result, fallback_used = generate_diagnosis(
+            ticket_text=ticket_text,
+            context=diagnosis_context,
+            classification=classification,
         )
 
         existing_fallback = bool(
@@ -386,10 +337,7 @@ def diagnosis_agent(
             )
         )
 
-        combined_fallback = (
-            existing_fallback
-            or fallback_used
-        )
+        combined_fallback = existing_fallback or fallback_used
 
         # =============================================================
         # 6. Add Diagnosis Response to Conversation Memory
@@ -399,12 +347,8 @@ def diagnosis_agent(
             role="assistant",
             content=diagnosis_result.problem,
             ticket_id=ticket_id,
-            root_cause=(
-                diagnosis_result.possible_root_cause
-            ),
-            confidence=float(
-                diagnosis_result.confidence
-            ),
+            root_cause=(diagnosis_result.possible_root_cause),
+            confidence=float(diagnosis_result.confidence),
         )
 
         # =============================================================
@@ -433,28 +377,16 @@ def diagnosis_agent(
         )
 
         metadata["diagnosis"] = {
-            "confidence": float(
-                diagnosis_result.confidence
-            ),
-            "evidence_count": len(
-                diagnosis_result.evidence
-            ),
-            "missing_information_count": len(
-                diagnosis_result.missing_information
-            ),
+            "confidence": float(diagnosis_result.confidence),
+            "evidence_count": len(diagnosis_result.evidence),
+            "missing_information_count": len(diagnosis_result.missing_information),
             "fallback_used": fallback_used,
         }
 
         metadata["memory"] = {
-            "historical_ticket_count": (
-                len(previous_tickets)
-            ),
-            "historical_memory_used": bool(
-                previous_tickets
-            ),
-            "conversation_memory_count": (
-                conversation_memory.count
-            ),
+            "historical_ticket_count": (len(previous_tickets)),
+            "historical_memory_used": bool(previous_tickets),
+            "conversation_memory_count": (conversation_memory.count),
             "memory_error": memory_error,
         }
 
@@ -466,71 +398,33 @@ def diagnosis_agent(
             # ---------------------------------------------------------
             # Structured diagnosis contract
             # ---------------------------------------------------------
-
-            "diagnosis_result": (
-                diagnosis_result.model_dump()
-            ),
-
+            "diagnosis_result": (diagnosis_result.model_dump()),
             # ---------------------------------------------------------
             # Explicit diagnosis state fields
             # ---------------------------------------------------------
-
-            "diagnosis_problem": (
-                diagnosis_result.problem
-            ),
-
-            "diagnosis_root_cause": (
-                diagnosis_result.possible_root_cause
-            ),
-
-            "diagnosis_evidence": (
-                diagnosis_result.evidence
-            ),
-
-            "diagnosis_missing_information": (
-                diagnosis_result.missing_information
-            ),
-
-            "diagnosis_confidence": float(
-                diagnosis_result.confidence
-            ),
-
+            "diagnosis_problem": (diagnosis_result.problem),
+            "diagnosis_root_cause": (diagnosis_result.possible_root_cause),
+            "diagnosis_evidence": (diagnosis_result.evidence),
+            "diagnosis_missing_information": (diagnosis_result.missing_information),
+            "diagnosis_confidence": float(diagnosis_result.confidence),
             # ---------------------------------------------------------
             # Backward-compatible fields
             # ---------------------------------------------------------
-
-            "diagnosis": (
-                diagnosis_result.problem
-            ),
-
-            "root_cause": (
-                diagnosis_result.possible_root_cause
-            ),
-
+            "diagnosis": (diagnosis_result.problem),
+            "root_cause": (diagnosis_result.possible_root_cause),
             # ---------------------------------------------------------
             # Runtime / fallback
             # ---------------------------------------------------------
-
             "fallback_used": combined_fallback,
-
             # ---------------------------------------------------------
             # Phase 19.3 memory state
             # ---------------------------------------------------------
-
-            "conversation_history": (
-                conversation_memory.to_context()
-            ),
-
-            "previous_tickets": (
-                previous_tickets
-            ),
-
+            "conversation_history": (conversation_memory.to_context()),
+            "previous_tickets": (previous_tickets),
             "tool_calls": tool_calls,
-
             # ---------------------------------------------------------
             # Metadata
             # ---------------------------------------------------------
-
             "metadata": metadata,
         }
 
@@ -539,10 +433,7 @@ def diagnosis_agent(
     # =================================================================
 
     except Exception as exc:
-        logger.exception(
-            "Diagnosis agent failed for "
-            f"ticket_id={ticket_id}: {exc}"
-        )
+        logger.exception("Diagnosis agent failed for " f"ticket_id={ticket_id}: {exc}")
 
         errors = _append_error(
             state,
@@ -556,22 +447,15 @@ def diagnosis_agent(
         )
 
         metadata["memory"] = {
-            "historical_ticket_count": (
-                len(previous_tickets)
-            ),
-            "historical_memory_used": bool(
-                previous_tickets
-            ),
-            "conversation_memory_count": (
-                conversation_memory.count
-            ),
+            "historical_ticket_count": (len(previous_tickets)),
+            "historical_memory_used": bool(previous_tickets),
+            "conversation_memory_count": (conversation_memory.count),
             "memory_error": memory_error,
         }
 
         fallback_result = {
             "problem": (
-                "The reported support issue requires "
-                "further investigation."
+                "The reported support issue requires " "further investigation."
             ),
             "possible_root_cause": (
                 "No validated root cause could be "
@@ -579,8 +463,7 @@ def diagnosis_agent(
             ),
             "evidence": [],
             "missing_information": [
-                "Additional diagnostic information "
-                "is required."
+                "Additional diagnostic information " "is required."
             ],
             "confidence": 0.0,
         }
@@ -589,71 +472,31 @@ def diagnosis_agent(
             # ---------------------------------------------------------
             # Structured diagnosis contract
             # ---------------------------------------------------------
-
-            "diagnosis_result": (
-                fallback_result
-            ),
-
+            "diagnosis_result": (fallback_result),
             # ---------------------------------------------------------
             # Explicit diagnosis state fields
             # ---------------------------------------------------------
-
-            "diagnosis_problem": (
-                fallback_result["problem"]
-            ),
-
-            "diagnosis_root_cause": (
-                fallback_result[
-                    "possible_root_cause"
-                ]
-            ),
-
+            "diagnosis_problem": (fallback_result["problem"]),
+            "diagnosis_root_cause": (fallback_result["possible_root_cause"]),
             "diagnosis_evidence": [],
-
-            "diagnosis_missing_information": (
-                fallback_result[
-                    "missing_information"
-                ]
-            ),
-
+            "diagnosis_missing_information": (fallback_result["missing_information"]),
             "diagnosis_confidence": 0.0,
-
             # ---------------------------------------------------------
             # Backward compatibility
             # ---------------------------------------------------------
-
-            "diagnosis": (
-                fallback_result["problem"]
-            ),
-
-            "root_cause": (
-                fallback_result[
-                    "possible_root_cause"
-                ]
-            ),
-
+            "diagnosis": (fallback_result["problem"]),
+            "root_cause": (fallback_result["possible_root_cause"]),
             # ---------------------------------------------------------
             # Runtime
             # ---------------------------------------------------------
-
             "fallback_used": True,
-
             "errors": errors,
-
             # ---------------------------------------------------------
             # Preserve memory even on diagnosis failure
             # ---------------------------------------------------------
-
-            "conversation_history": (
-                conversation_memory.to_context()
-            ),
-
-            "previous_tickets": (
-                previous_tickets
-            ),
-
+            "conversation_history": (conversation_memory.to_context()),
+            "previous_tickets": (previous_tickets),
             "tool_calls": tool_calls,
-
             "metadata": metadata,
         }
 

@@ -20,7 +20,6 @@ from app.core.constants import (
     CONFIDENCE_LOW,
 )
 
-
 ClassificationConfidenceLevel = Literal[
     "high",
     "medium",

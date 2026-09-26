@@ -1,12 +1,20 @@
-"""
-config.py — Application configuration using Pydantic Settings.
-Reads settings from environment variables or .env file.
-For AWS RDS, populate the RDS* variables; DATABASE_URL is built automatically.
-"""
-
+import os
+from pathlib import Path
+from dotenv import load_dotenv
 from pydantic_settings import BaseSettings
 from pydantic import computed_field
 from functools import lru_cache
+
+# Locate Backend/.env relative to this config file
+BACKEND_DIR = Path(__file__).resolve().parent.parent
+PROJECT_ROOT = BACKEND_DIR.parent
+ENV_PATH = BACKEND_DIR / ".env"
+ROOT_ENV_PATH = BACKEND_DIR.parent / ".env"
+
+if ENV_PATH.exists():
+    load_dotenv(dotenv_path=ENV_PATH, override=False)
+elif ROOT_ENV_PATH.exists():
+    load_dotenv(dotenv_path=ROOT_ENV_PATH, override=False)
 
 
 class Settings(BaseSettings):
@@ -17,6 +25,18 @@ class Settings(BaseSettings):
     DEBUG: bool = True
     LOG_LEVEL: str = "INFO"
 
+    # -- LangSmith Observability --
+    LANGSMITH_TRACING: bool = False
+    LANGSMITH_API_KEY: str = ""
+    LANGSMITH_PROJECT: str = "ResolveX"
+    LANGSMITH_ENDPOINT: str = "https://api.smith.langchain.com"
+
+    # -- MLOps / MLflow Experiment Tracking --
+    MLFLOW_ENABLED: bool = False
+    MLFLOW_TRACKING_URI: str = ""
+    MLFLOW_EXPERIMENT_NAME: str = "ResolveX"
+    MLFLOW_RUN_NAME: str = ""
+
     # -- Security & CORS --
     CORS_ORIGINS: str = "http://localhost:5173,http://localhost:3000"
 
@@ -26,7 +46,9 @@ class Settings(BaseSettings):
         """Parse comma-separated CORS_ORIGINS into a list of cleaned origin URLs."""
         if not self.CORS_ORIGINS:
             return ["http://localhost:5173"]
-        return [origin.strip() for origin in self.CORS_ORIGINS.split(",") if origin.strip()]
+        return [
+            origin.strip() for origin in self.CORS_ORIGINS.split(",") if origin.strip()
+        ]
 
     # -- AWS RDS PostgreSQL --
     # Set these in your .env file (copy from .env.example)
@@ -36,11 +58,13 @@ class Settings(BaseSettings):
     RDS_USER: str = "postgres"
     RDS_PASSWORD: str = "postgres"
     RDS_SSL: bool = False
+
     @computed_field
     @property
     def DATABASE_URL(self) -> str:
         """Build the asyncpg-compatible PostgreSQL DSN from RDS fields."""
         import urllib.parse
+
         quoted_password = urllib.parse.quote_plus(self.RDS_PASSWORD)
         return (
             f"postgresql+psycopg2://{self.RDS_USER}:{quoted_password}"
@@ -61,13 +85,19 @@ class Settings(BaseSettings):
 
     # -- Confidence Thresholds & Weights --
     AUTO_RESOLVE_THRESHOLD: float = 0.75  # confidence >= this → auto-resolve
-    HITL_THRESHOLD: float = 0.50          # confidence < this → escalate to human
+    HITL_THRESHOLD: float = 0.50  # confidence < this → escalate to human
     CONFIDENCE_WEIGHT_SIMILARITY: float = 0.4
     CONFIDENCE_WEIGHT_LLM_SCORE: float = 0.3
     CONFIDENCE_WEIGHT_CLASSIFICATION: float = 0.3
 
     # -- Classification --
     CLASSIFICATION_CONFIDENCE_THRESHOLD: float = 0.6
+
+    # -- Contextual Bandit Decision Policy --
+    POLICY_MODE: str = "heuristic"
+    BANDIT_TYPE: str = "linucb"
+    LINUCB_ALPHA: float = 0.5
+    POLICY_RANDOM_SEED: int = 42
 
     # -- Storage --
     UPLOAD_DIR: str = "uploads"
@@ -92,13 +122,16 @@ class Settings(BaseSettings):
 
     LLM_RATE_LIMIT_REQUESTS: int = 60
     LLM_RATE_LIMIT_WINDOW_SECONDS: int = 60
-    
+
     from pydantic import model_validator
 
     @model_validator(mode="after")
     def validate_confidence_weights(self):
         weights_sum = round(
-            self.CONFIDENCE_WEIGHT_SIMILARITY + self.CONFIDENCE_WEIGHT_LLM_SCORE + self.CONFIDENCE_WEIGHT_CLASSIFICATION, 4
+            self.CONFIDENCE_WEIGHT_SIMILARITY
+            + self.CONFIDENCE_WEIGHT_LLM_SCORE
+            + self.CONFIDENCE_WEIGHT_CLASSIFICATION,
+            4,
         )
         if weights_sum != 1.0:
             raise ValueError(f"Confidence weights must sum to 1.0 (got {weights_sum})")
@@ -106,18 +139,43 @@ class Settings(BaseSettings):
 
     def validate_critical_settings(self) -> None:
         """Validate critical configuration bounds without printing secret values."""
+        # ── Security & Production Environment Bounds ─────────────────────────
+        if self.ENVIRONMENT.lower() == "production":
+            if self.DEBUG:
+                raise ValueError("DEBUG mode must be False in production environment")
+            if "*" in self.parsed_cors_origins:
+                raise ValueError(
+                    "Wildcard CORS origin '*' is forbidden in production environment"
+                )
+            if not self.GROQ_API_KEY or self.GROQ_API_KEY == "your-groq-api-key-here":
+                raise ValueError(
+                    "GROQ_API_KEY must be configured in production environment"
+                )
+
+        if "*" in self.parsed_cors_origins:
+            raise ValueError(
+                "Wildcard CORS origin '*' is incompatible with allow_credentials=True"
+            )
+
         if not (0.0 <= self.AUTO_RESOLVE_THRESHOLD <= 1.0):
-            raise ValueError(f"AUTO_RESOLVE_THRESHOLD must be between 0.0 and 1.0 (got {self.AUTO_RESOLVE_THRESHOLD})")
+            raise ValueError(
+                f"AUTO_RESOLVE_THRESHOLD must be between 0.0 and 1.0 (got {self.AUTO_RESOLVE_THRESHOLD})"
+            )
         if not (0.0 <= self.HITL_THRESHOLD <= 1.0):
-            raise ValueError(f"HITL_THRESHOLD must be between 0.0 and 1.0 (got {self.HITL_THRESHOLD})")
+            raise ValueError(
+                f"HITL_THRESHOLD must be between 0.0 and 1.0 (got {self.HITL_THRESHOLD})"
+            )
         if self.HITL_THRESHOLD > self.AUTO_RESOLVE_THRESHOLD:
-            raise ValueError(f"HITL_THRESHOLD ({self.HITL_THRESHOLD}) cannot exceed AUTO_RESOLVE_THRESHOLD ({self.AUTO_RESOLVE_THRESHOLD})")
+            raise ValueError(
+                f"HITL_THRESHOLD ({self.HITL_THRESHOLD}) cannot exceed AUTO_RESOLVE_THRESHOLD ({self.AUTO_RESOLVE_THRESHOLD})"
+            )
         if self.MAX_FILE_SIZE_MB <= 0:
-            raise ValueError(f"MAX_FILE_SIZE_MB must be positive (got {self.MAX_FILE_SIZE_MB})")
+            raise ValueError(
+                f"MAX_FILE_SIZE_MB must be positive (got {self.MAX_FILE_SIZE_MB})"
+            )
         if self.RAG_CHUNK_SIZE <= 0:
             raise ValueError(
-                f"RAG_CHUNK_SIZE must be positive "
-                f"(got {self.RAG_CHUNK_SIZE})"
+                f"RAG_CHUNK_SIZE must be positive " f"(got {self.RAG_CHUNK_SIZE})"
             )
         if self.RAG_CHUNK_OVERLAP < 0:
             raise ValueError(
@@ -159,29 +217,20 @@ class Settings(BaseSettings):
 
         if self.BM25_WEIGHT < 0.0:
             raise ValueError(
-                f"BM25_WEIGHT cannot be negative "
-                f"(got {self.BM25_WEIGHT})"
+                f"BM25_WEIGHT cannot be negative " f"(got {self.BM25_WEIGHT})"
             )
 
         if self.DENSE_WEIGHT < 0.0:
             raise ValueError(
-                f"DENSE_WEIGHT cannot be negative "
-                f"(got {self.DENSE_WEIGHT})"
+                f"DENSE_WEIGHT cannot be negative " f"(got {self.DENSE_WEIGHT})"
             )
 
-        if (
-            self.BM25_WEIGHT == 0.0
-            and self.DENSE_WEIGHT == 0.0
-        ):
-            raise ValueError(
-                "BM25_WEIGHT and DENSE_WEIGHT "
-                "cannot both be zero"
-            )
+        if self.BM25_WEIGHT == 0.0 and self.DENSE_WEIGHT == 0.0:
+            raise ValueError("BM25_WEIGHT and DENSE_WEIGHT " "cannot both be zero")
 
         if self.RETRIEVAL_TOP_K <= 0:
             raise ValueError(
-                f"RETRIEVAL_TOP_K must be positive "
-                f"(got {self.RETRIEVAL_TOP_K})"
+                f"RETRIEVAL_TOP_K must be positive " f"(got {self.RETRIEVAL_TOP_K})"
             )
 
         if self.RETRIEVAL_CANDIDATE_K <= 0:
@@ -197,8 +246,9 @@ class Settings(BaseSettings):
                 f"(got candidate_k={self.RETRIEVAL_CANDIDATE_K}, "
                 f"top_k={self.RETRIEVAL_TOP_K})"
             )
+
     class Config:
-        env_file = ".env"
+        env_file = (str(ENV_PATH), str(ROOT_ENV_PATH), ".env")
         env_file_encoding = "utf-8"
         extra = "ignore"
 

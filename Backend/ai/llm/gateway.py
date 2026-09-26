@@ -77,16 +77,10 @@ class LLMGateway:
         """
 
         request_timeout = (
-            timeout
-            if timeout is not None
-            else settings.LLM_TIMEOUT_SECONDS
+            timeout if timeout is not None else settings.LLM_TIMEOUT_SECONDS
         )
 
-        retries = (
-            max_retries
-            if max_retries is not None
-            else settings.LLM_MAX_RETRIES
-        )
+        retries = max_retries if max_retries is not None else settings.LLM_MAX_RETRIES
 
         retries = max(1, retries)
 
@@ -109,9 +103,7 @@ class LLMGateway:
                     timeout=request_timeout,
                 )
 
-                elapsed_ms = (
-                    time.perf_counter() - start_time
-                ) * 1000
+                elapsed_ms = (time.perf_counter() - start_time) * 1000
 
                 self.last_usage = LLMUsageRecord.from_response(
                     model=model,
@@ -135,9 +127,7 @@ class LLMGateway:
                 return response
 
             except Exception as exc:
-                elapsed_ms = (
-                    time.perf_counter() - start_time
-                ) * 1000
+                elapsed_ms = (time.perf_counter() - start_time) * 1000
 
                 self.last_usage = LLMUsageRecord.from_error(
                     model=model,
@@ -159,23 +149,17 @@ class LLMGateway:
                     if isinstance(exc, LLMError):
                         raise
 
-                    raise LLMError(
-                        f"Unexpected LLM gateway error: {exc}"
-                    ) from exc
+                    raise LLMError(f"Unexpected LLM gateway error: {exc}") from exc
 
                 if attempt >= retries:
                     if isinstance(exc, LLMError):
                         last_error = exc
                     else:
-                        last_error = LLMError(
-                            f"Unexpected LLM gateway error: {exc}"
-                        )
+                        last_error = LLMError(f"Unexpected LLM gateway error: {exc}")
 
                     break
 
-                delay = self.retry_policy.backoff_seconds(
-                    attempt
-                )
+                delay = self.retry_policy.backoff_seconds(attempt)
 
                 logger.info(
                     "LLM Gateway retry scheduled "
@@ -188,9 +172,7 @@ class LLMGateway:
         if last_error is not None:
             raise last_error
 
-        raise LLMError(
-            "LLM Gateway failed without a captured error"
-        )
+        raise LLMError("LLM Gateway failed without a captured error")
 
     @staticmethod
     def validate_resolution(
@@ -202,9 +184,7 @@ class LLMGateway:
         """
 
         try:
-            return ResolutionResult.model_validate_json(
-                response.content
-            )
+            return ResolutionResult.model_validate_json(response.content)
 
         except Exception as exc:
             raise LLMInvalidResponseError(

@@ -17,9 +17,7 @@ class FakeCompletion:
     def __init__(self):
         self.choices = [
             SimpleNamespace(
-                message=SimpleNamespace(
-                    content='{"diagnosis": "Test issue"}'
-                )
+                message=SimpleNamespace(content='{"diagnosis": "Test issue"}')
             )
         ]
 
@@ -56,9 +54,7 @@ def test_groq_provider_returns_llm_response(monkeypatch):
         timeout=10,
     )
 
-    assert response.content == (
-        '{"diagnosis": "Test issue"}'
-    )
+    assert response.content == ('{"diagnosis": "Test issue"}')
 
     assert response.model == "test-model"
 
@@ -103,9 +99,7 @@ def test_groq_provider_timeout(monkeypatch):
             class completions:
                 @staticmethod
                 def create(**kwargs):
-                    raise Exception(
-                        "Request timed out"
-                    )
+                    raise Exception("Request timed out")
 
     monkeypatch.setattr(
         "ai.llm.providers.groq_provider.Groq",
@@ -133,9 +127,7 @@ def test_groq_provider_rate_limit(monkeypatch):
             class completions:
                 @staticmethod
                 def create(**kwargs):
-                    raise Exception(
-                        "429 rate limit exceeded"
-                    )
+                    raise Exception("429 rate limit exceeded")
 
     monkeypatch.setattr(
         "ai.llm.providers.groq_provider.Groq",

@@ -53,6 +53,7 @@ hybrid_retriever = HybridRetriever(
 
 doc_store = get_doc_store()
 
+
 def _build_agent_retrieval_registry() -> ToolRegistry:
     """
     Build the retrieval-tool registry using the current module-level
@@ -80,8 +81,7 @@ def _build_agent_retrieval_registry() -> ToolRegistry:
         ToolDefinition(
             name="search_previous_tickets",
             description=(
-                "Search historical tickets for similar "
-                "incidents and resolutions."
+                "Search historical tickets for similar " "incidents and resolutions."
             ),
             category=ToolCategory.READ,
             handler=search_previous_tickets,
@@ -92,8 +92,7 @@ def _build_agent_retrieval_registry() -> ToolRegistry:
         ToolDefinition(
             name="rerank_documents",
             description=(
-                "Rerank retrieved evidence using the "
-                "configured relevance reranker."
+                "Rerank retrieved evidence using the " "configured relevance reranker."
             ),
             category=ToolCategory.READ,
             handler=rerank_documents,
@@ -101,6 +100,8 @@ def _build_agent_retrieval_registry() -> ToolRegistry:
     )
 
     return registry
+
+
 # =====================================================================
 # Retrieval Agent
 # =====================================================================
@@ -138,18 +139,11 @@ def retrieval_agent(
     # 1. Read Existing State
     # =================================================================
 
-    original_query = (
-        state.get("cleaned_ticket", "")
-        or ""
-    )
+    original_query = state.get("cleaned_ticket", "") or ""
 
-    existing_retrieval_metadata = dict(
-        state.get("retrieval_metadata", {})
-    )
+    existing_retrieval_metadata = dict(state.get("retrieval_metadata", {}))
 
-    graph_metadata = dict(
-        state.get("metadata", {})
-    )
+    graph_metadata = dict(state.get("metadata", {}))
 
     previous_attempt = int(
         graph_metadata.get(
@@ -160,48 +154,29 @@ def retrieval_agent(
 
     current_attempt = previous_attempt + 1
 
-    retry_query = graph_metadata.get(
-        "retrieval_next_query"
-    )
+    retry_query = graph_metadata.get("retrieval_next_query")
 
-    previous_decision = (
-        existing_retrieval_metadata.get(
-            "retrieval_decision"
-        )
-    )
+    previous_decision = existing_retrieval_metadata.get("retrieval_decision")
 
     # =================================================================
     # 2. Query Analysis / Retry Query Selection
     # =================================================================
 
-    if (
-        retry_query
-        and previous_decision == "retry"
-    ):
-        query = str(
-            retry_query
-        ).strip()
+    if retry_query and previous_decision == "retry":
+        query = str(retry_query).strip()
 
-        query_analysis = analyze_query(
-            query
-        )
+        query_analysis = analyze_query(query)
 
         query_source = "agent_retry_query"
 
     else:
-        query_analysis = analyze_query(
-            original_query
-        )
+        query_analysis = analyze_query(original_query)
 
-        query = (
-            query_analysis.retrieval_query
-        )
+        query = query_analysis.retrieval_query
 
         query_source = "query_analyzer"
 
-    query = " ".join(
-        query.split()
-    ).strip()
+    query = " ".join(query.split()).strip()
 
     query_length = len(query)
 
@@ -222,49 +197,33 @@ def retrieval_agent(
             "retrieval_agent",
         )
 
-        warnings = list(
-            state.get("warnings", [])
-        )
+        warnings = list(state.get("warnings", []))
 
-        warnings.append(
-            "retrieval_agent: empty query"
-        )
+        warnings.append("retrieval_agent: empty query")
 
-        retrieval_metadata = (
-            build_retrieval_metadata(
-                strategy=RETRIEVAL_STRATEGY,
-                top_k=RETRIEVAL_TOP_K,
-                candidate_k=RETRIEVAL_CANDIDATE_K,
-                bm25_weight=BM25_WEIGHT,
-                dense_weight=DENSE_WEIGHT,
-                candidate_count=0,
-                documents=[],
-                status="empty",
-                query_length=0,
-                fallback_used=False,
-            )
+        retrieval_metadata = build_retrieval_metadata(
+            strategy=RETRIEVAL_STRATEGY,
+            top_k=RETRIEVAL_TOP_K,
+            candidate_k=RETRIEVAL_CANDIDATE_K,
+            bm25_weight=BM25_WEIGHT,
+            dense_weight=DENSE_WEIGHT,
+            candidate_count=0,
+            documents=[],
+            status="empty",
+            query_length=0,
+            fallback_used=False,
         )
 
         retrieval_metadata.update(
             {
                 "retrieval_attempt": current_attempt,
                 "query_source": query_source,
-                "original_query": (
-                    query_analysis.original_query
-                ),
-                "normalized_query": (
-                    query_analysis.normalized_query
-                ),
+                "original_query": (query_analysis.original_query),
+                "normalized_query": (query_analysis.normalized_query),
                 "retrieval_query": "",
-                "rewrite_needed": (
-                    query_analysis.rewrite_needed
-                ),
-                "rewrite_strategy": (
-                    query_analysis.rewrite_strategy
-                ),
-                "rewrite_reason": (
-                    query_analysis.rewrite_reason
-                ),
+                "rewrite_needed": (query_analysis.rewrite_needed),
+                "rewrite_strategy": (query_analysis.rewrite_strategy),
+                "rewrite_reason": (query_analysis.rewrite_reason),
                 "tool_calls": [],
                 "knowledge_base_search_used": False,
                 "previous_ticket_search_used": False,
@@ -276,8 +235,7 @@ def retrieval_agent(
                 "retry_strategy": "none",
                 "next_query": "",
                 "termination_reason": (
-                    "Retrieval terminated because "
-                    "the query was empty."
+                    "Retrieval terminated because " "the query was empty."
                 ),
                 "top_score": 0.0,
                 "score_gap": 0.0,
@@ -288,22 +246,16 @@ def retrieval_agent(
             }
         )
 
-        metadata["retrieval_attempt"] = (
-            current_attempt
-        )
+        metadata["retrieval_attempt"] = current_attempt
 
-        metadata["retrieval_query_source"] = (
-            query_source
-        )
+        metadata["retrieval_query_source"] = query_source
 
         return {
             "retrieved_context": "",
             "retrieved_documents": [],
             "retrieval_metadata": retrieval_metadata,
             "warnings": warnings,
-            "tool_calls": list(
-                state.get("tool_calls", [])
-            ),
+            "tool_calls": list(state.get("tool_calls", [])),
             "metadata": metadata,
         }
 
@@ -321,17 +273,13 @@ def retrieval_agent(
         # preserves that dependency-injection behavior.
         # -------------------------------------------------------------
 
-        retrieval_tool_registry = (
-            _build_agent_retrieval_registry()
-        )
+        retrieval_tool_registry = _build_agent_retrieval_registry()
 
         # Existing Phase 16 retrieval metadata.
         tool_calls: list[dict[str, Any]] = []
 
         # New Phase 19 canonical state-level tool records.
-        state_tool_calls = list(
-            state.get("tool_calls", [])
-        )
+        state_tool_calls = list(state.get("tool_calls", []))
 
         # -------------------------------------------------------------
         # Tool 1 — Knowledge Base Search
@@ -357,9 +305,7 @@ def retrieval_agent(
 
         # Record the call before checking the result so failures
         # are observable as well.
-        state_tool_calls.append(
-            kb_tool_record
-        )
+        state_tool_calls.append(kb_tool_record)
 
         if kb_result["status"] == "error":
             raise RuntimeError(
@@ -367,10 +313,7 @@ def retrieval_agent(
                 f"{kb_result.get('error', 'unknown error')}"
             )
 
-        knowledge_base_documents = list(
-            kb_result.get("data", [])
-            or []
-        )
+        knowledge_base_documents = list(kb_result.get("data", []) or [])
 
         # Preserve legacy retrieval metadata.
         tool_calls.append(
@@ -378,9 +321,7 @@ def retrieval_agent(
                 "tool": "search_knowledge_base",
                 "status": "success",
                 "query": query,
-                "result_count": len(
-                    knowledge_base_documents
-                ),
+                "result_count": len(knowledge_base_documents),
             }
         )
 
@@ -410,8 +351,7 @@ def retrieval_agent(
                             0.0,
                         )
                     )
-                    for document
-                    in knowledge_base_documents
+                    for document in knowledge_base_documents
                 )
 
             except (
@@ -421,10 +361,8 @@ def retrieval_agent(
                 kb_top_score = 0.0
 
         kb_evidence_sufficient = (
-            len(knowledge_base_documents)
-            >= MIN_RETRIEVAL_DOCUMENTS
-            and kb_top_score
-            >= MIN_RETRIEVAL_TOP_SCORE
+            len(knowledge_base_documents) >= MIN_RETRIEVAL_DOCUMENTS
+            and kb_top_score >= MIN_RETRIEVAL_TOP_SCORE
         )
 
         # -------------------------------------------------------------
@@ -500,8 +438,7 @@ def retrieval_agent(
             # Preserve the legacy metadata contract if the failure
             # occurred before the legacy record was appended.
             if not any(
-                call.get("tool") == "search_previous_tickets"
-                for call in tool_calls
+                call.get("tool") == "search_previous_tickets" for call in tool_calls
             ):
                 tool_calls.append(
                     {
@@ -523,68 +460,46 @@ def retrieval_agent(
         # 6. Combine Evidence
         # -------------------------------------------------------------
 
-        combined_documents: list[
-            dict[str, Any]
-        ] = []
+        combined_documents: list[dict[str, Any]] = []
 
-        combined_documents.extend(
-            knowledge_base_documents
-        )
+        combined_documents.extend(knowledge_base_documents)
 
-        combined_documents.extend(
-            previous_ticket_documents
-        )
+        combined_documents.extend(previous_ticket_documents)
 
         # -------------------------------------------------------------
         # Deduplicate by index_id when available
         # -------------------------------------------------------------
 
-        deduplicated_documents: list[
-            dict[str, Any]
-        ] = []
+        deduplicated_documents: list[dict[str, Any]] = []
 
         seen_document_ids: set[int] = set()
 
         for document in combined_documents:
 
-            index_id = document.get(
-                "index_id"
-            )
+            index_id = document.get("index_id")
 
             if index_id is None:
-                deduplicated_documents.append(
-                    document
-                )
+                deduplicated_documents.append(document)
                 continue
 
             try:
-                normalized_id = int(
-                    index_id
-                )
+                normalized_id = int(index_id)
 
             except (
                 TypeError,
                 ValueError,
             ):
-                deduplicated_documents.append(
-                    document
-                )
+                deduplicated_documents.append(document)
                 continue
 
             if normalized_id in seen_document_ids:
                 continue
 
-            seen_document_ids.add(
-                normalized_id
-            )
+            seen_document_ids.add(normalized_id)
 
-            deduplicated_documents.append(
-                document
-            )
+            deduplicated_documents.append(document)
 
-        combined_documents = (
-            deduplicated_documents
-        )
+        combined_documents = deduplicated_documents
 
         # Preserve original retrieval score
         # before reranking overwrites score.
@@ -600,33 +515,25 @@ def retrieval_agent(
                 or 0.0
             )
 
-        candidate_count = len(
-            combined_documents
-        )
+        candidate_count = len(combined_documents)
 
         # =================================================================
         # 7. Tool 3 — Reranking
         # =================================================================
 
-        reranked_documents: list[
-            dict[str, Any]
-        ] = []
+        reranked_documents: list[dict[str, Any]] = []
 
         if combined_documents:
 
             try:
 
-                rerank_result, (
-                    rerank_tool_record
-                ) = execute_tool(
+                rerank_result, (rerank_tool_record) = execute_tool(
                     retrieval_tool_registry,
                     agent="retrieval_agent",
                     tool_name="rerank_documents",
                     arguments={
                         "query": query,
-                        "input_count": len(
-                            combined_documents
-                        ),
+                        "input_count": len(combined_documents),
                         "top_k": RETRIEVAL_TOP_K,
                     },
                     kwargs={
@@ -636,14 +543,9 @@ def retrieval_agent(
                     },
                 )
 
-                state_tool_calls.append(
-                    rerank_tool_record
-                )
+                state_tool_calls.append(rerank_tool_record)
 
-                if (
-                    rerank_result["status"]
-                    == "error"
-                ):
+                if rerank_result["status"] == "error":
                     raise RuntimeError(
                         "rerank_documents failed: "
                         f"{rerank_result.get('error', 'unknown error')}"
@@ -662,12 +564,8 @@ def retrieval_agent(
                         "tool": "rerank_documents",
                         "status": "success",
                         "query": query,
-                        "input_count": len(
-                            combined_documents
-                        ),
-                        "result_count": len(
-                            reranked_documents
-                        ),
+                        "input_count": len(combined_documents),
+                        "result_count": len(reranked_documents),
                     }
                 )
 
@@ -697,34 +595,19 @@ def retrieval_agent(
                         "tool": "rerank_documents",
                         "status": "failure",
                         "query": query,
-                        "input_count": len(
-                            combined_documents
-                        ),
+                        "input_count": len(combined_documents),
                         "result_count": 0,
-                        "error": (
-                            f"{type(exc).__name__}: "
-                            f"{exc}"
-                        ),
+                        "error": (f"{type(exc).__name__}: " f"{exc}"),
                     }
                 )
 
-                reranked_documents = (
-                    combined_documents[
-                        :RETRIEVAL_TOP_K
-                    ]
-                )
+                reranked_documents = combined_documents[:RETRIEVAL_TOP_K]
 
         # Explicitly preserve empty retrieval behavior.
         if not reranked_documents:
-            context_docs: list[
-                dict[str, Any]
-            ] = []
+            context_docs: list[dict[str, Any]] = []
         else:
-            context_docs = (
-                reranked_documents[
-                    :RETRIEVAL_TOP_K
-                ]
-            )
+            context_docs = reranked_documents[:RETRIEVAL_TOP_K]
 
         # Normalize retrieval/reranker scores.
         for document in context_docs:
@@ -806,8 +689,7 @@ def retrieval_agent(
         retrieval_score_gap = (
             max(
                 0.0,
-                retrieval_top_score
-                - retrieval_second_score,
+                retrieval_top_score - retrieval_second_score,
             )
             if len(context_docs) > 1
             else retrieval_top_score
@@ -816,8 +698,7 @@ def retrieval_agent(
         reranker_score_gap = (
             max(
                 0.0,
-                reranker_top_score
-                - reranker_second_score,
+                reranker_top_score - reranker_second_score,
             )
             if len(context_docs) > 1
             else reranker_top_score
@@ -844,117 +725,53 @@ def retrieval_agent(
         # 10. Retrieval Status
         # =================================================================
 
-        status = (
-            "success"
-            if context_docs
-            else "empty"
-        )
+        status = "success" if context_docs else "empty"
 
         # =================================================================
         # 11. Build Structured Retrieval Metadata
         # =================================================================
 
-        retrieval_metadata = (
-            build_retrieval_metadata(
-                strategy=RETRIEVAL_STRATEGY,
-                top_k=RETRIEVAL_TOP_K,
-                candidate_k=RETRIEVAL_CANDIDATE_K,
-                bm25_weight=BM25_WEIGHT,
-                dense_weight=DENSE_WEIGHT,
-                candidate_count=candidate_count,
-                documents=context_docs,
-                status=status,
-                query_length=query_length,
-                fallback_used=False,
-            )
+        retrieval_metadata = build_retrieval_metadata(
+            strategy=RETRIEVAL_STRATEGY,
+            top_k=RETRIEVAL_TOP_K,
+            candidate_k=RETRIEVAL_CANDIDATE_K,
+            bm25_weight=BM25_WEIGHT,
+            dense_weight=DENSE_WEIGHT,
+            candidate_count=candidate_count,
+            documents=context_docs,
+            status=status,
+            query_length=query_length,
+            fallback_used=False,
         )
 
         retrieval_metadata.update(
             {
-                "retrieval_attempt": (
-                    current_attempt
-                ),
+                "retrieval_attempt": (current_attempt),
                 "query_source": query_source,
-                "original_query": (
-                    query_analysis.original_query
-                ),
-                "normalized_query": (
-                    query_analysis.normalized_query
-                ),
+                "original_query": (query_analysis.original_query),
+                "normalized_query": (query_analysis.normalized_query),
                 "retrieval_query": query,
-                "rewrite_needed": (
-                    query_analysis.rewrite_needed
-                ),
-                "rewrite_strategy": (
-                    query_analysis.rewrite_strategy
-                ),
-                "rewrite_reason": (
-                    query_analysis.rewrite_reason
-                ),
-
+                "rewrite_needed": (query_analysis.rewrite_needed),
+                "rewrite_strategy": (query_analysis.rewrite_strategy),
+                "rewrite_reason": (query_analysis.rewrite_reason),
                 # Legacy Phase 16/18 observability.
                 "tool_calls": tool_calls,
-
                 "knowledge_base_search_used": True,
-
-                "knowledge_base_result_count": (
-                    len(
-                        knowledge_base_documents
-                    )
-                ),
-
-                "previous_ticket_search_used": (
-                    not kb_evidence_sufficient
-                ),
-
-                "previous_ticket_result_count": (
-                    len(
-                        previous_ticket_documents
-                    )
-                ),
-
-                "reranking_used": bool(
-                    combined_documents
-                ),
-
-                "reranked_result_count": (
-                    len(context_docs)
-                ),
-
-                "document_count": len(
-                    context_docs
-                ),
-
-                "candidate_count": (
-                    candidate_count
-                ),
-
+                "knowledge_base_result_count": (len(knowledge_base_documents)),
+                "previous_ticket_search_used": (not kb_evidence_sufficient),
+                "previous_ticket_result_count": (len(previous_ticket_documents)),
+                "reranking_used": bool(combined_documents),
+                "reranked_result_count": (len(context_docs)),
+                "document_count": len(context_docs),
+                "candidate_count": (candidate_count),
                 "top_score": top_score,
                 "score_gap": score_gap,
-
-                "retrieval_top_score": (
-                    retrieval_top_score
-                ),
-
-                "retrieval_score_gap": (
-                    retrieval_score_gap
-                ),
-
-                "reranker_top_score": (
-                    reranker_top_score
-                ),
-
-                "reranker_score_gap": (
-                    reranker_score_gap
-                ),
-
-                "initial_kb_top_score": (
-                    kb_top_score
-                ),
-
-                "initial_kb_evidence_sufficient": (
-                    kb_evidence_sufficient
-                ),
+                "retrieval_top_score": (retrieval_top_score),
+                "retrieval_score_gap": (retrieval_score_gap),
+                "reranker_top_score": (reranker_top_score),
+                "reranker_score_gap": (reranker_score_gap),
+                "initial_kb_top_score": (kb_top_score),
+                "initial_kb_evidence_sufficient": (kb_evidence_sufficient),
             }
         )
 
@@ -964,15 +781,11 @@ def retrieval_agent(
 
         if previous_decision:
 
-            retrieval_metadata[
-                "previous_retrieval_decision"
-            ] = previous_decision
+            retrieval_metadata["previous_retrieval_decision"] = previous_decision
 
         if retry_query:
 
-            retrieval_metadata[
-                "previous_retry_query"
-            ] = retry_query
+            retrieval_metadata["previous_retry_query"] = retry_query
 
         # =================================================================
         # 12. Observability
@@ -1014,29 +827,17 @@ def retrieval_agent(
             "retrieval_agent",
         )
 
-        metadata[
-            "retrieval_attempt"
-        ] = current_attempt
+        metadata["retrieval_attempt"] = current_attempt
 
-        metadata[
-            "retrieval_query_source"
-        ] = query_source
+        metadata["retrieval_query_source"] = query_source
 
-        metadata[
-            "retrieval_query"
-        ] = query
+        metadata["retrieval_query"] = query
 
-        metadata[
-            "retrieval_document_count"
-        ] = len(context_docs)
+        metadata["retrieval_document_count"] = len(context_docs)
 
-        metadata[
-            "retrieval_tool_count"
-        ] = len(tool_calls)
+        metadata["retrieval_tool_count"] = len(tool_calls)
 
-        metadata[
-            "retrieval_reranking_used"
-        ] = bool(combined_documents)
+        metadata["retrieval_reranking_used"] = bool(combined_documents)
 
         # =================================================================
         # 14. Return Successful Retrieval
@@ -1046,10 +847,8 @@ def retrieval_agent(
             "retrieved_context": context_text,
             "retrieved_documents": context_docs,
             "retrieval_metadata": retrieval_metadata,
-
             # Phase 19 canonical tool-call state.
             "tool_calls": state_tool_calls,
-
             "metadata": metadata,
         }
 
@@ -1076,112 +875,65 @@ def retrieval_agent(
             "retrieval_agent",
         )
 
-        metadata[
-            "retrieval_attempt"
-        ] = current_attempt
+        metadata["retrieval_attempt"] = current_attempt
 
-        metadata[
-            "retrieval_query_source"
-        ] = query_source
+        metadata["retrieval_query_source"] = query_source
 
-        error_message = (
-            f"{type(exc).__name__}: {exc}"
-        )
+        error_message = f"{type(exc).__name__}: {exc}"
 
         # Preserve the explicit configuration error contract expected
         # by retrieval tests and callers.
-        if (
-            isinstance(exc, ValueError)
-            and
-            "Unsupported knowledge-base retrieval strategy"
-            in str(exc)
-        ):
+        if isinstance(
+            exc, ValueError
+        ) and "Unsupported knowledge-base retrieval strategy" in str(exc):
             error_message = (
                 "ValueError: Unsupported "
                 "RETRIEVAL_STRATEGY: "
                 f"{RETRIEVAL_STRATEGY}"
             )
 
-        retrieval_metadata = (
-            build_retrieval_metadata(
-                strategy=RETRIEVAL_STRATEGY,
-                top_k=RETRIEVAL_TOP_K,
-                candidate_k=RETRIEVAL_CANDIDATE_K,
-                bm25_weight=BM25_WEIGHT,
-                dense_weight=DENSE_WEIGHT,
-                candidate_count=0,
-                documents=[],
-                status="failure",
-                query_length=query_length,
-                fallback_used=True,
-                error=error_message,
-            )
+        retrieval_metadata = build_retrieval_metadata(
+            strategy=RETRIEVAL_STRATEGY,
+            top_k=RETRIEVAL_TOP_K,
+            candidate_k=RETRIEVAL_CANDIDATE_K,
+            bm25_weight=BM25_WEIGHT,
+            dense_weight=DENSE_WEIGHT,
+            candidate_count=0,
+            documents=[],
+            status="failure",
+            query_length=query_length,
+            fallback_used=True,
+            error=error_message,
         )
 
         retrieval_metadata.update(
             {
-                "retrieval_attempt": (
-                    current_attempt
-                ),
-                "query_source": (
-                    query_source
-                ),
-                "original_query": (
-                    query_analysis.original_query
-                ),
-                "normalized_query": (
-                    query_analysis.normalized_query
-                ),
+                "retrieval_attempt": (current_attempt),
+                "query_source": (query_source),
+                "original_query": (query_analysis.original_query),
+                "normalized_query": (query_analysis.normalized_query),
                 "retrieval_query": query,
-                "rewrite_needed": (
-                    query_analysis.rewrite_needed
-                ),
-                "rewrite_strategy": (
-                    query_analysis.rewrite_strategy
-                ),
-                "rewrite_reason": (
-                    query_analysis.rewrite_reason
-                ),
-
+                "rewrite_needed": (query_analysis.rewrite_needed),
+                "rewrite_strategy": (query_analysis.rewrite_strategy),
+                "rewrite_reason": (query_analysis.rewrite_reason),
                 # Preserve legacy metadata.
-                "tool_calls": tool_calls
-                if "tool_calls" in locals()
-                else [],
-
-                "knowledge_base_search_used": (
-                    False
-                ),
-
-                "previous_ticket_search_used": (
-                    False
-                ),
-
+                "tool_calls": tool_calls if "tool_calls" in locals() else [],
+                "knowledge_base_search_used": (False),
+                "previous_ticket_search_used": (False),
                 "reranking_used": False,
-
                 "document_count": 0,
-
                 "candidate_count": 0,
-
                 "enough_evidence": False,
-
-                "evidence_reason": (
-                    "Retrieval tool execution failed."
-                ),
-
+                "evidence_reason": ("Retrieval tool execution failed."),
                 "retry_allowed": False,
-
                 "retry_strategy": "none",
-
                 "next_query": "",
-
                 "retrieval_decision": "continue",
-
                 "termination_reason": (
                     "Retrieval failed and the "
                     "current execution cannot safely "
                     "perform another retrieval."
                 ),
-
                 "top_score": 0.0,
                 "score_gap": 0.0,
                 "retrieval_top_score": 0.0,
@@ -1193,15 +945,11 @@ def retrieval_agent(
 
         if previous_decision:
 
-            retrieval_metadata[
-                "previous_retrieval_decision"
-            ] = previous_decision
+            retrieval_metadata["previous_retrieval_decision"] = previous_decision
 
         if retry_query:
 
-            retrieval_metadata[
-                "previous_retry_query"
-            ] = retry_query
+            retrieval_metadata["previous_retry_query"] = retry_query
 
         logger.error(
             f"ticket_id={state.get('ticket_id')} "
@@ -1219,7 +967,6 @@ def retrieval_agent(
             "retrieval_metadata": retrieval_metadata,
             "errors": errors,
             "fallback_used": True,
-
             # Preserve any tool records generated before failure.
             "tool_calls": (
                 state_tool_calls
@@ -1231,7 +978,6 @@ def retrieval_agent(
                     )
                 )
             ),
-
             "metadata": metadata,
         }
 
@@ -1269,30 +1015,19 @@ def retrieval_decision_agent(
         - none
     """
 
-    retrieval_metadata = dict(
-        state.get("retrieval_metadata", {})
-    )
+    retrieval_metadata = dict(state.get("retrieval_metadata", {}))
 
-    metadata = dict(
-        state.get("metadata", {})
-    )
+    metadata = dict(state.get("metadata", {}))
 
-    errors = list(
-        state.get("errors", [])
-    )
+    errors = list(state.get("errors", []))
 
-    warnings = list(
-        state.get("warnings", [])
-    )
+    warnings = list(state.get("warnings", []))
 
     # -----------------------------------------------------------------
     # 1. Read retrieval state
     # -----------------------------------------------------------------
 
-    documents = list(
-        state.get("retrieved_documents", [])
-        or []
-    )
+    documents = list(state.get("retrieved_documents", []) or [])
 
     current_query = (
         retrieval_metadata.get("retrieval_query")
@@ -1301,13 +1036,9 @@ def retrieval_decision_agent(
         or ""
     )
 
-    top_score = retrieval_metadata.get(
-        "top_score"
-    )
+    top_score = retrieval_metadata.get("top_score")
 
-    score_gap = retrieval_metadata.get(
-        "score_gap"
-    )
+    score_gap = retrieval_metadata.get("score_gap")
 
     retrieval_status = retrieval_metadata.get(
         "status",
@@ -1328,20 +1059,12 @@ def retrieval_decision_agent(
     # -----------------------------------------------------------------
 
     try:
-        top_score_value = (
-            float(top_score)
-            if top_score is not None
-            else 0.0
-        )
+        top_score_value = float(top_score) if top_score is not None else 0.0
     except (TypeError, ValueError):
         top_score_value = 0.0
 
     try:
-        score_gap_value = (
-            float(score_gap)
-            if score_gap is not None
-            else 0.0
-        )
+        score_gap_value = float(score_gap) if score_gap is not None else 0.0
     except (TypeError, ValueError):
         score_gap_value = 0.0
 
@@ -1351,40 +1074,23 @@ def retrieval_decision_agent(
     # 3. Evidence quality assessment
     # -----------------------------------------------------------------
 
-    enough_documents = (
-        document_count
-        >= MIN_RETRIEVAL_DOCUMENTS
-    )
+    enough_documents = document_count >= MIN_RETRIEVAL_DOCUMENTS
 
-    sufficient_top_score = (
-        top_score_value
-        >= MIN_RETRIEVAL_TOP_SCORE
-    )
+    sufficient_top_score = top_score_value >= MIN_RETRIEVAL_TOP_SCORE
 
-    retrieval_successful = (
-        retrieval_status == "success"
-        and document_count > 0
-    )
+    retrieval_successful = retrieval_status == "success" and document_count > 0
 
-    enough_evidence = (
-        retrieval_successful
-        and enough_documents
-        and sufficient_top_score
-    )
+    enough_evidence = retrieval_successful and enough_documents and sufficient_top_score
 
     # -----------------------------------------------------------------
     # 4. Determine evidence quality reason
     # -----------------------------------------------------------------
 
     if retrieval_status == "failure":
-        evidence_reason = (
-            "Retrieval failed."
-        )
+        evidence_reason = "Retrieval failed."
 
     elif document_count == 0:
-        evidence_reason = (
-            "No documents were retrieved."
-        )
+        evidence_reason = "No documents were retrieved."
 
     elif not enough_documents:
         evidence_reason = (
@@ -1403,18 +1109,14 @@ def retrieval_decision_agent(
 
     else:
         evidence_reason = (
-            "Retrieved evidence satisfies the "
-            "minimum quality requirements."
+            "Retrieved evidence satisfies the " "minimum quality requirements."
         )
 
     # -----------------------------------------------------------------
     # 5. Decide whether another retrieval is allowed
     # -----------------------------------------------------------------
 
-    retry_allowed = (
-        not enough_evidence
-        and current_attempt < MAX_RETRIEVAL_ATTEMPTS
-    )
+    retry_allowed = not enough_evidence and current_attempt < MAX_RETRIEVAL_ATTEMPTS
 
     # -----------------------------------------------------------------
     # 6. Select retry strategy
@@ -1433,9 +1135,7 @@ def retrieval_decision_agent(
         )
 
         original_query = (
-            retrieval_metadata.get(
-                "original_query"
-            )
+            retrieval_metadata.get("original_query")
             or state.get(
                 "cleaned_ticket",
                 "",
@@ -1443,36 +1143,24 @@ def retrieval_decision_agent(
             or ""
         )
 
-        normalized_query = (
-            retrieval_metadata.get(
-                "normalized_query"
-            )
-            or current_query
-        )
+        normalized_query = retrieval_metadata.get("normalized_query") or current_query
 
         # -------------------------------------------------------------
         # Strategy 1: Existing query rewrite was not sufficient
         # -------------------------------------------------------------
 
-        if rewrite_needed and (
-            current_query.strip()
-            != original_query.strip()
-        ):
+        if rewrite_needed and (current_query.strip() != original_query.strip()):
             retry_strategy = "broaden"
 
             next_query = (
-                f"{normalized_query} "
-                f"troubleshooting solution "
-                f"resolution"
+                f"{normalized_query} " f"troubleshooting solution " f"resolution"
             )
 
         # -------------------------------------------------------------
         # Strategy 2: Query is already reasonably specific
         # -------------------------------------------------------------
 
-        elif len(
-            normalized_query.split()
-        ) >= 8:
+        elif len(normalized_query.split()) >= 8:
 
             retry_strategy = "narrow"
 
@@ -1480,9 +1168,7 @@ def retrieval_decision_agent(
 
             # Keep the most informative portion while
             # preventing an empty query.
-            next_query = " ".join(
-                words[: min(8, len(words))]
-            )
+            next_query = " ".join(words[: min(8, len(words))])
 
         # -------------------------------------------------------------
         # Strategy 3: Short / ambiguous query
@@ -1491,14 +1177,9 @@ def retrieval_decision_agent(
         else:
             retry_strategy = "rewrite"
 
-            next_query = (
-                f"{normalized_query} "
-                f"IT support issue"
-            )
+            next_query = f"{normalized_query} " f"IT support issue"
 
-        next_query = " ".join(
-            next_query.split()
-        ).strip()
+        next_query = " ".join(next_query.split()).strip()
 
         if not next_query:
             retry_strategy = "none"
@@ -1512,10 +1193,7 @@ def retrieval_decision_agent(
     if enough_evidence:
         decision = "continue"
 
-        termination_reason = (
-            "Sufficient retrieval evidence "
-            "was found."
-        )
+        termination_reason = "Sufficient retrieval evidence " "was found."
 
     elif retry_allowed:
         decision = "retry"
@@ -1536,10 +1214,7 @@ def retrieval_decision_agent(
         )
 
         if current_attempt >= MAX_RETRIEVAL_ATTEMPTS:
-            warnings.append(
-                "retrieval_agent: maximum retrieval "
-                "attempts reached"
-            )
+            warnings.append("retrieval_agent: maximum retrieval " "attempts reached")
 
     # -----------------------------------------------------------------
     # 8. Build retrieval loop metadata
@@ -1548,25 +1223,19 @@ def retrieval_decision_agent(
     retrieval_metadata.update(
         {
             "retrieval_attempt": current_attempt,
-            "max_retrieval_attempts": (
-                MAX_RETRIEVAL_ATTEMPTS
-            ),
+            "max_retrieval_attempts": (MAX_RETRIEVAL_ATTEMPTS),
             "document_count": document_count,
             "top_score": top_score_value,
             "score_gap": score_gap_value,
             "enough_documents": enough_documents,
-            "sufficient_top_score": (
-                sufficient_top_score
-            ),
+            "sufficient_top_score": (sufficient_top_score),
             "enough_evidence": enough_evidence,
             "evidence_reason": evidence_reason,
             "retry_allowed": retry_allowed,
             "retry_strategy": retry_strategy,
             "next_query": next_query,
             "retrieval_decision": decision,
-            "termination_reason": (
-                termination_reason
-            ),
+            "termination_reason": (termination_reason),
         }
     )
 
@@ -1576,39 +1245,21 @@ def retrieval_decision_agent(
 
     updated_metadata = dict(metadata)
 
-    updated_metadata[
-        "last_stage"
-    ] = "retrieval_decision_agent"
+    updated_metadata["last_stage"] = "retrieval_decision_agent"
 
-    updated_metadata[
-        "retrieval_attempt"
-    ] = current_attempt
+    updated_metadata["retrieval_attempt"] = current_attempt
 
-    updated_metadata[
-        "retrieval_decision"
-    ] = decision
+    updated_metadata["retrieval_decision"] = decision
 
-    updated_metadata[
-        "retrieval_evidence_sufficient"
-    ] = enough_evidence
+    updated_metadata["retrieval_evidence_sufficient"] = enough_evidence
 
-    updated_metadata[
-        "retrieval_retry_strategy"
-    ] = retry_strategy
+    updated_metadata["retrieval_retry_strategy"] = retry_strategy
 
-    updated_metadata[
-        "retrieval_next_query"
-    ] = next_query
+    updated_metadata["retrieval_next_query"] = next_query
 
-    updated_metadata[
-        "retrieval_termination_reason"
-    ] = termination_reason
+    updated_metadata["retrieval_termination_reason"] = termination_reason
 
-    updated_metadata[
-        "updated_at"
-    ] = datetime.now(
-        timezone.utc
-    ).isoformat()
+    updated_metadata["updated_at"] = datetime.now(timezone.utc).isoformat()
 
     # -----------------------------------------------------------------
     # 10. Logging / Observability

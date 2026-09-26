@@ -38,9 +38,7 @@ def test_resolution_service_uses_graph():
         "errors": [],
     }
 
-    with patch(
-        "app.services.resolution_service.TicketRepository"
-    ) as repo_cls:
+    with patch("app.services.resolution_service.TicketRepository") as repo_cls:
 
         repo = repo_cls.return_value
         repo.get_by_id.return_value = ticket
@@ -52,17 +50,9 @@ def test_resolution_service_uses_graph():
 
             service = ResolutionService(db)
 
-            result = __import__(
-                "asyncio"
-            ).run(
-                service.resolve(
-                    ticket_id=1
-                )
-            )
+            result = __import__("asyncio").run(service.resolve(ticket_id=1))
 
-    execute_graph.assert_called_once_with(
-        ticket=ticket
-    )
+    execute_graph.assert_called_once_with(ticket=ticket)
 
     assert result.ticket_id == 1
     assert result.category == "network"
@@ -70,9 +60,7 @@ def test_resolution_service_uses_graph():
     assert result.auto_resolved is True
     assert result.escalated_to_human is False
 
-    assert ticket.solution == (
-        "Restart the VPN client."
-    )
+    assert ticket.solution == ("Restart the VPN client.")
     assert ticket.status is not None
 
 
@@ -92,9 +80,7 @@ def test_resolution_service_escalates_graph_human_review():
         "errors": [],
     }
 
-    with patch(
-        "app.services.resolution_service.TicketRepository"
-    ) as repo_cls:
+    with patch("app.services.resolution_service.TicketRepository") as repo_cls:
 
         repo = repo_cls.return_value
         repo.get_by_id.return_value = ticket
@@ -114,22 +100,12 @@ def test_resolution_service_escalates_graph_human_review():
                     "category": "network",
                 }
 
-                service = ResolutionService(
-                    object()
-                )
+                service = ResolutionService(object())
 
-                result = __import__(
-                    "asyncio"
-                ).run(
-                    service.resolve(
-                        ticket_id=1
-                    )
-                )
+                result = __import__("asyncio").run(service.resolve(ticket_id=1))
 
     assert result.auto_resolved is False
     assert result.escalated_to_human is True
 
     assert ticket.assigned_resolver_id == 5
-    assert ticket.assigned_resolver_name == (
-        "Network Expert"
-    )
+    assert ticket.assigned_resolver_name == ("Network Expert")

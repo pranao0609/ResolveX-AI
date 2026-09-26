@@ -37,7 +37,6 @@ from ai.llm.solution_generator import generate_solution
 from ai.confidence.confidence_engine import compute_confidence
 from ai.explainability.explainer import explain
 
-
 hybrid_retriever = HybridRetriever(
     bm25_weight=BM25_WEIGHT,
     dense_weight=DENSE_WEIGHT,
@@ -85,39 +84,25 @@ async def run_pipeline(
 
     start_time = time.time()
 
-    logger.info(
-        f"[Pipeline] Starting for ticket_id={ticket.id}"
-    )
+    logger.info(f"[Pipeline] Starting for ticket_id={ticket.id}")
 
     # ── Step 1: Preprocessing ────────────────────────────────────────────────
 
     t0 = time.time()
 
-    cleaned_text = clean_text(
-        ticket.description
-    )
+    cleaned_text = clean_text(ticket.description)
 
     # Append any extracted text from attached files
     # (OCR / PDF parsing).
     if ticket.attachment_paths:
-        paths = [
-            p.strip()
-            for p in ticket.attachment_paths.split(",")
-            if p.strip()
-        ]
+        paths = [p.strip() for p in ticket.attachment_paths.split(",") if p.strip()]
 
         extracted = parse_attachments(paths)
 
         if extracted:
-            cleaned_text = (
-                f"{cleaned_text}\n\n"
-                f"[Attachments]\n"
-                f"{extracted}"
-            )
+            cleaned_text = f"{cleaned_text}\n\n" f"[Attachments]\n" f"{extracted}"
 
-    preprocess_ms = (
-        time.time() - t0
-    ) * 1000
+    preprocess_ms = (time.time() - t0) * 1000
 
     logger.info(
         f"ticket_id={ticket.id} "
@@ -131,13 +116,9 @@ async def run_pipeline(
 
     t0 = time.time()
 
-    category, classification_score = classify_ticket(
-        cleaned_text
-    )
+    category, classification_score = classify_ticket(cleaned_text)
 
-    classify_ms = (
-        time.time() - t0
-    ) * 1000
+    classify_ms = (time.time() - t0) * 1000
 
     logger.info(
         f"ticket_id={ticket.id} "
@@ -151,13 +132,9 @@ async def run_pipeline(
 
     t0 = time.time()
 
-    embedding = generate_embedding(
-        cleaned_text
-    )
+    embedding = generate_embedding(cleaned_text)
 
-    embed_ms = (
-        time.time() - t0
-    ) * 1000
+    embed_ms = (time.time() - t0) * 1000
 
     logger.info(
         f"ticket_id={ticket.id} "
@@ -175,12 +152,10 @@ async def run_pipeline(
 
     if RETRIEVAL_STRATEGY == "hybrid":
 
-        retrieval_candidates = (
-            hybrid_retriever.retrieve(
-                query=cleaned_text,
-                top_k=RETRIEVAL_TOP_K,
-                candidate_k=RETRIEVAL_CANDIDATE_K,
-            )
+        retrieval_candidates = hybrid_retriever.retrieve(
+            query=cleaned_text,
+            top_k=RETRIEVAL_TOP_K,
+            candidate_k=RETRIEVAL_CANDIDATE_K,
         )
 
     elif RETRIEVAL_STRATEGY == "bm25":
@@ -211,10 +186,7 @@ async def run_pipeline(
 
     else:
 
-        raise ValueError(
-            f"Unsupported RETRIEVAL_STRATEGY: "
-            f"{RETRIEVAL_STRATEGY}"
-        )
+        raise ValueError(f"Unsupported RETRIEVAL_STRATEGY: " f"{RETRIEVAL_STRATEGY}")
 
     # Convert retrieval candidates into actual
     # knowledge-base documents.
@@ -222,33 +194,23 @@ async def run_pipeline(
 
         for candidate in retrieval_candidates:
 
-            document = doc_store.get_chunk(
-                candidate.index_id
-            )
+            document = doc_store.get_chunk(candidate.index_id)
 
             if document is None:
                 continue
 
             doc_data = document.model_dump()
 
-            doc_data["score"] = float(
-                candidate.score
-            )
+            doc_data["score"] = float(candidate.score)
 
-            doc_data["retriever"] = (
-                candidate.retriever
-            )
+            doc_data["retriever"] = candidate.retriever
 
             # Preserve the internal index ID so the
             # evaluation system can map it back to
             # the KB document ID.
-            doc_data["index_id"] = (
-                candidate.index_id
-            )
+            doc_data["index_id"] = candidate.index_id
 
-            context_docs.append(
-                doc_data
-            )
+            context_docs.append(doc_data)
 
     context_text = "\n\n---\n\n".join(
         (
@@ -259,9 +221,7 @@ async def run_pipeline(
         for d in context_docs
     )
 
-    retrieve_ms = (
-        time.time() - t0
-    ) * 1000
+    retrieve_ms = (time.time() - t0) * 1000
 
     logger.info(
         f"ticket_id={ticket.id} "
@@ -281,9 +241,7 @@ async def run_pipeline(
         prompt_version=prompt_version,
     )
 
-    llm_ms = (
-        time.time() - t0
-    ) * 1000
+    llm_ms = (time.time() - t0) * 1000
 
     # The LLM confidence is now supplied by the
     # validated ResolutionResult instead of the
@@ -304,9 +262,7 @@ async def run_pipeline(
 
     t0 = time.time()
 
-    similarity_score = _compute_similarity_score(
-        context_docs
-    )
+    similarity_score = _compute_similarity_score(context_docs)
 
     confidence = compute_confidence(
         similarity_score=similarity_score,
@@ -314,9 +270,7 @@ async def run_pipeline(
         classification_score=classification_score,
     )
 
-    confidence_ms = (
-        time.time() - t0
-    ) * 1000
+    confidence_ms = (time.time() - t0) * 1000
 
     logger.info(
         f"ticket_id={ticket.id} "
@@ -330,9 +284,7 @@ async def run_pipeline(
 
     # Preserve the existing explainability interface by
     # passing a readable solution representation.
-    solution_text = _format_solution(
-        resolution
-    )
+    solution_text = _format_solution(resolution)
 
     explanation = explain(
         ticket_text=cleaned_text,
@@ -344,9 +296,7 @@ async def run_pipeline(
 
     # ── Pipeline Completion ──────────────────────────────────────────────────
 
-    elapsed_ms = (
-        time.time() - start_time
-    ) * 1000
+    elapsed_ms = (time.time() - start_time) * 1000
 
     logger.info(
         f"ticket_id={ticket.id} "
@@ -361,7 +311,6 @@ async def run_pipeline(
     result = {
         # Backward-compatible human-readable solution.
         "solution": solution_text,
-
         # Structured LLM output.
         "diagnosis": resolution.diagnosis,
         "root_cause": resolution.root_cause,
@@ -369,10 +318,8 @@ async def run_pipeline(
         "evidence": resolution.evidence,
         "llm_confidence": resolution.confidence,
         "requires_human": resolution.requires_human,
-        
         # ResolveX composite confidence.
         "confidence": confidence,
-
         "category": category,
         "explanation": explanation,
         "fallback_used": fallback_used,
@@ -421,10 +368,7 @@ def _format_solution(
     )
 
     evidence = (
-        "\n".join(
-            f"- {item}"
-            for item in resolution.evidence
-        )
+        "\n".join(f"- {item}" for item in resolution.evidence)
         if resolution.evidence
         else "No specific evidence cited."
     )
@@ -466,8 +410,4 @@ def _compute_similarity_score(
         if isinstance(d, dict)
     ]
 
-    return (
-        float(max(scores))
-        if scores
-        else 0.0
-    )
+    return float(max(scores)) if scores else 0.0

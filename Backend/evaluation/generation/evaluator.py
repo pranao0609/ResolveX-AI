@@ -17,22 +17,11 @@ from evaluation.metrics.generation_metrics import (
     evaluate_generation_case,
 )
 
-
 BACKEND_ROOT = Path(__file__).resolve().parents[2]
 
-CASES_PATH = (
-    BACKEND_ROOT
-    / "data"
-    / "evaluation"
-    / "generation_cases.json"
-)
+CASES_PATH = BACKEND_ROOT / "data" / "evaluation" / "generation_cases.json"
 
-RESULTS_PATH = (
-    BACKEND_ROOT
-    / "data"
-    / "evaluation"
-    / "generation_results.json"
-)
+RESULTS_PATH = BACKEND_ROOT / "data" / "evaluation" / "generation_results.json"
 
 
 class GenerationEvaluator:
@@ -55,9 +44,7 @@ class GenerationEvaluator:
             cases = json.load(file)
 
         if not isinstance(cases, list):
-            raise ValueError(
-                "Generation evaluation dataset must be a JSON list."
-            )
+            raise ValueError("Generation evaluation dataset must be a JSON list.")
 
         return cases
 
@@ -118,31 +105,15 @@ class GenerationEvaluator:
             "case_id": case["case_id"],
             "prompt_version": prompt_version,
             "ticket": case["ticket"],
-            "relevant_documents": case[
-                "relevant_documents"
-            ],
-            "expected_answer": case[
-                "expected_answer"
-            ],
-            "required_evidence": case[
-                "required_evidence"
-            ],
-            "generated_answer": result[
-                "solution"
-            ],
+            "relevant_documents": case["relevant_documents"],
+            "expected_answer": case["expected_answer"],
+            "required_evidence": case["required_evidence"],
+            "generated_answer": result["solution"],
             "retrieved_documents": retrieved_documents,
-            "category": result[
-                "category"
-            ],
-            "confidence": result[
-                "confidence"
-            ],
-            "fallback_used": result[
-                "fallback_used"
-            ],
-            "retrieval_strategy": evaluation_data.get(
-                "retrieval_strategy"
-            ),
+            "category": result["category"],
+            "confidence": result["confidence"],
+            "fallback_used": result["fallback_used"],
+            "retrieval_strategy": evaluation_data.get("retrieval_strategy"),
             "metrics": metrics,
         }
 
@@ -151,10 +122,10 @@ class GenerationEvaluator:
         prompt_version: int = 1,
     ) -> list[dict]:
         """Run the complete generation evaluation dataset."""
-    
+
         cases = self.load_cases()
         results = []
-    
+
         for index, case in enumerate(
             cases,
             start=1,
@@ -164,45 +135,36 @@ class GenerationEvaluator:
                 f"Evaluating {case['case_id']} "
                 f"with prompt V{prompt_version}..."
             )
-    
+
             try:
                 result = await self.evaluate_case(
                     case=case,
                     ticket_id=900000 + index,
                     prompt_version=prompt_version,
                 )
-    
+
                 results.append(result)
-    
+
                 print(
                     f"    fallback={result['fallback_used']} "
                     f"retrieved={len(result['retrieved_documents'])}"
                 )
-    
+
             except Exception as exc:
-                print(
-                    f"    ERROR: "
-                    f"{type(exc).__name__}: {exc}"
-                )
-    
+                print(f"    ERROR: " f"{type(exc).__name__}: {exc}")
+
                 results.append(
                     {
                         "case_id": case["case_id"],
                         "prompt_version": prompt_version,
                         "ticket": case["ticket"],
-                        "relevant_documents": case[
-                            "relevant_documents"
-                        ],
-                        "expected_answer": case[
-                            "expected_answer"
-                        ],
-                        "required_evidence": case[
-                            "required_evidence"
-                        ],
+                        "relevant_documents": case["relevant_documents"],
+                        "expected_answer": case["expected_answer"],
+                        "required_evidence": case["required_evidence"],
                         "error": str(exc),
                     }
                 )
-    
+
         return results
 
     def save_results(

@@ -32,10 +32,10 @@ def create_retriever(monkeypatch):
     )
 
     monkeypatch.setattr(
-    hybrid_module,
-    "retrieve_context",
-    FakeDenseRetriever().retrieve_context,
-)
+        hybrid_module,
+        "retrieve_context",
+        FakeDenseRetriever().retrieve_context,
+    )
 
     return hybrid_module.HybridRetriever()
 
@@ -52,8 +52,7 @@ def test_hybrid_retriever_returns_results(monkeypatch):
     assert len(results) == 3
 
     assert all(
-        isinstance(result, hybrid_module.RetrievalCandidate)
-        for result in results
+        isinstance(result, hybrid_module.RetrievalCandidate) for result in results
     )
 
 
@@ -80,10 +79,7 @@ def test_hybrid_retriever_uses_hybrid_label(monkeypatch):
         candidate_k=3,
     )
 
-    assert all(
-        result.retriever == "hybrid"
-        for result in results
-    )
+    assert all(result.retriever == "hybrid" for result in results)
 
 
 def test_hybrid_retriever_results_are_sorted(monkeypatch):

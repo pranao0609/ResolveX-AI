@@ -20,6 +20,14 @@ from ai.config.ai_config import FAISS_DOCSTORE_PATH
 from ai.rag.models import ChunkMetadata
 
 
+def _resolve_path(path: str) -> str:
+    if os.path.isabs(path):
+        return path
+    from app.config import PROJECT_ROOT
+
+    return str(PROJECT_ROOT / path)
+
+
 class DocumentStore:
     """Persistent JSON-backed chunk metadata store."""
 
@@ -30,25 +38,23 @@ class DocumentStore:
     def _load(self) -> None:
         """Load chunk metadata from disk."""
 
-        if not os.path.exists(FAISS_DOCSTORE_PATH):
-            logger.info(
-                "No existing doc store found — starting fresh"
-            )
+        resolved_path = _resolve_path(FAISS_DOCSTORE_PATH)
+
+        if not os.path.exists(resolved_path):
+            logger.info("No existing doc store found — starting fresh")
             self.documents = []
             return
 
         try:
             with open(
-                FAISS_DOCSTORE_PATH,
+                resolved_path,
                 "r",
                 encoding="utf-8",
             ) as file:
                 data = json.load(file)
 
             if not isinstance(data, list):
-                logger.warning(
-                    "Doc store file invalid — resetting"
-                )
+                logger.warning("Doc store file invalid — resetting")
                 self.documents = []
                 return
 
@@ -71,9 +77,8 @@ class DocumentStore:
         """Persist chunk metadata to disk."""
 
         try:
-            directory = os.path.dirname(
-                FAISS_DOCSTORE_PATH
-            )
+            resolved_path = _resolve_path(FAISS_DOCSTORE_PATH)
+            directory = os.path.dirname(resolved_path)
 
             if directory:
                 os.makedirs(
@@ -82,7 +87,7 @@ class DocumentStore:
                 )
 
             with open(
-                FAISS_DOCSTORE_PATH,
+                resolved_path,
                 "w",
                 encoding="utf-8",
             ) as file:
@@ -172,9 +177,7 @@ class DocumentStore:
             # of the ChunkMetadata model.
             document.pop("index_id", None)
 
-            return ChunkMetadata.model_validate(
-                document
-            )
+            return ChunkMetadata.model_validate(document)
 
         except Exception as exc:
             logger.error(

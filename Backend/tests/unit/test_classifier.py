@@ -9,9 +9,9 @@ without needing the transformers zero-shot model or Groq API.
 import pytest
 from unittest.mock import patch, MagicMock
 
-
 # ── Helper: import classifier with transformers pipeline mocked ───────────────
 # The module-level `pipeline(...)` call downloads a model; we mock it early.
+
 
 @pytest.fixture(autouse=True)
 def mock_transformers_pipeline():
@@ -49,17 +49,23 @@ class TestPatternMatching:
     def test_phishing_classified_as_security(self):
         # Use pure security vocabulary that doesn't overlap with other patterns.
         # 'phishing' and 'ransomware' only match the security_error pattern.
-        result, confidence = classify_ticket("ransomware detected on the system, possible security breach")
+        result, confidence = classify_ticket(
+            "ransomware detected on the system, possible security breach"
+        )
         assert result == "security"
         assert confidence >= 0.90
 
     def test_login_classified_as_access_permission(self):
-        result, confidence = classify_ticket("password reset not working, access denied")
+        result, confidence = classify_ticket(
+            "password reset not working, access denied"
+        )
         assert result == "access_permission"
         assert confidence >= 0.90
 
     def test_billing_classified_as_other(self):
-        result, confidence = classify_ticket("incorrect charge on my invoice this month")
+        result, confidence = classify_ticket(
+            "incorrect charge on my invoice this month"
+        )
         assert result == "other"
         assert confidence >= 0.90
 
@@ -69,7 +75,9 @@ class TestPatternMatching:
         assert confidence >= 0.90
 
     def test_network_wifi_classified_correctly(self):
-        result, confidence = classify_ticket("wifi drops out constantly, internet not working")
+        result, confidence = classify_ticket(
+            "wifi drops out constantly, internet not working"
+        )
         assert result == "network"
         assert confidence >= 0.90
 
@@ -127,9 +135,9 @@ class TestCategoryMap:
 
     def test_category_map_values_are_non_empty_strings(self):
         for internal, final in CATEGORY_MAP.items():
-            assert isinstance(final, str) and len(final) > 0, (
-                f"CATEGORY_MAP['{internal}'] must be a non-empty string"
-            )
+            assert (
+                isinstance(final, str) and len(final) > 0
+            ), f"CATEGORY_MAP['{internal}'] must be a non-empty string"
 
 
 class TestLLMFallback:
@@ -148,7 +156,9 @@ class TestLLMFallback:
         mock_client.chat.completions.create.return_value.choices[0].message.content = (
             "login_error,0.88"
         )
-        with patch("ai.classification.classifier._get_groq_client", return_value=mock_client):
+        with patch(
+            "ai.classification.classifier._get_groq_client", return_value=mock_client
+        ):
             result, confidence = llm_classify_fallback("I cannot log in to my account")
         assert result == "access_permission"
         assert abs(confidence - 0.88) < 1e-6
@@ -159,7 +169,9 @@ class TestLLMFallback:
         mock_client.chat.completions.create.return_value.choices[0].message.content = (
             "this is not valid format"
         )
-        with patch("ai.classification.classifier._get_groq_client", return_value=mock_client):
+        with patch(
+            "ai.classification.classifier._get_groq_client", return_value=mock_client
+        ):
             result, confidence = llm_classify_fallback("some ticket text")
         assert result == "software"
         assert confidence == 0.80
@@ -168,7 +180,9 @@ class TestLLMFallback:
         """When Groq call raises, fallback returns safe default."""
         mock_client = MagicMock()
         mock_client.chat.completions.create.side_effect = Exception("Groq timeout")
-        with patch("ai.classification.classifier._get_groq_client", return_value=mock_client):
+        with patch(
+            "ai.classification.classifier._get_groq_client", return_value=mock_client
+        ):
             result, confidence = llm_classify_fallback("some ticket text")
         assert result == "software"
         assert confidence == 0.75

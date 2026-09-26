@@ -32,29 +32,20 @@ class ScoreNormalizer:
         if not candidates:
             return []
 
-        scores = [
-            candidate.score
-            for candidate in candidates
-        ]
+        scores = [candidate.score for candidate in candidates]
 
         min_score = min(scores)
         max_score = max(scores)
 
         if max_score == min_score:
             return [
-                candidate.model_copy(
-                    update={"score": 1.0}
-                )
-                for candidate in candidates
+                candidate.model_copy(update={"score": 1.0}) for candidate in candidates
             ]
 
         return [
             candidate.model_copy(
                 update={
-                    "score": (
-                        candidate.score - min_score
-                    )
-                    / (max_score - min_score)
+                    "score": (candidate.score - min_score) / (max_score - min_score)
                 }
             )
             for candidate in candidates

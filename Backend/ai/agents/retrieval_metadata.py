@@ -42,30 +42,18 @@ def _score_statistics(documents: list[dict[str, Any]]) -> dict[str, Any]:
 
     top_score = ordered_scores[0]
 
-    second_score = (
-        ordered_scores[1]
-        if len(ordered_scores) > 1
-        else None
-    )
+    second_score = ordered_scores[1] if len(ordered_scores) > 1 else None
 
-    score_gap = (
-        round(top_score - second_score, 6)
-        if second_score is not None
-        else None
-)
+    score_gap = round(top_score - second_score, 6) if second_score is not None else None
 
     return {
-    "top_score": round(top_score, 6),
-    "second_score": (
-        round(second_score, 6)
-        if second_score is not None
-        else None
-    ),
-    "score_gap": score_gap,
-    "mean_score": round(mean(scores), 6),
-    "min_score": round(min(scores), 6),
-    "max_score": round(max(scores), 6),
-}
+        "top_score": round(top_score, 6),
+        "second_score": (round(second_score, 6) if second_score is not None else None),
+        "score_gap": score_gap,
+        "mean_score": round(mean(scores), 6),
+        "min_score": round(min(scores), 6),
+        "max_score": round(max(scores), 6),
+    }
 
 
 def build_retrieval_metadata(
@@ -151,8 +139,6 @@ def build_retrieval_metadata(
         )
 
     else:
-        metadata["decision_reason"] = (
-            "Retrieval completed with an unclassified status."
-        )
+        metadata["decision_reason"] = "Retrieval completed with an unclassified status."
 
     return metadata

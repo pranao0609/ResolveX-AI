@@ -23,6 +23,7 @@ from ai.confidence.confidence_engine import compute_confidence
 from ai.explainability.explainer import explain
 
 from ai.graph.graph import resolvex_graph
+from ai.observability import get_langgraph_config
 
 
 def execute_resolvex_graph(
@@ -48,8 +49,7 @@ def execute_resolvex_graph(
     ticket_id = getattr(ticket, "id", None)
 
     logger.info(
-        f"[GraphExecutor] Starting graph execution "
-        f"for ticket_id={ticket_id}"
+        f"[GraphExecutor] Starting graph execution " f"for ticket_id={ticket_id}"
     )
 
     ticket_text = _build_ticket_text(ticket)
@@ -70,11 +70,16 @@ def execute_resolvex_graph(
     }
 
     # ------------------------------------------------------------------
-    # Execute LangGraph
+    # Execute LangGraph with Observability Config
     # ------------------------------------------------------------------
 
+    run_config = get_langgraph_config(
+        ticket_id=ticket_id,
+    )
+
     graph_state = resolvex_graph.invoke(
-        initial_state
+        initial_state,
+        config=run_config,
     )
 
     logger.info(
@@ -201,9 +206,7 @@ def execute_resolvex_graph(
         or []
     )
 
-    similarity_score = _compute_similarity_score(
-        context_docs
-    )
+    similarity_score = _compute_similarity_score(context_docs)
 
     confidence = compute_confidence(
         similarity_score=similarity_score,
@@ -267,7 +270,6 @@ def execute_resolvex_graph(
         "category": category,
         "explanation": explanation,
         "fallback_used": fallback_used,
-
         # Graph-specific decision information
         "decision": decision,
         "auto_resolved": auto_resolved,
@@ -276,26 +278,19 @@ def execute_resolvex_graph(
             "escalation_reason",
             "",
         ),
-
         # Agent confidence signals
         "category_confidence": category_confidence,
         "diagnosis_confidence": diagnosis_confidence,
         "resolution_confidence": resolution_confidence,
         "verification_confidence": verification_confidence,
         "verification_passed": verification_passed,
-
         # Graph execution metadata
-        "request_id": graph_state.get(
-            "request_id"
-        ),
-        "graph_run_id": graph_state.get(
-            "graph_run_id"
-        ),
+        "request_id": graph_state.get("request_id"),
+        "graph_run_id": graph_state.get("graph_run_id"),
         "graph_metadata": graph_state.get(
             "metadata",
             {},
         ),
-
         # Reliability information
         "errors": errors,
         "warnings": warnings,
@@ -322,12 +317,8 @@ def execute_resolvex_graph(
             "verification_confidence": verification_confidence,
             "verification_passed": verification_passed,
             "decision": decision,
-            "request_id": graph_state.get(
-                "request_id"
-            ),
-            "graph_run_id": graph_state.get(
-                "graph_run_id"
-            ),
+            "request_id": graph_state.get("request_id"),
+            "graph_run_id": graph_state.get("graph_run_id"),
             "graph_metadata": graph_state.get(
                 "metadata",
                 {},
@@ -350,17 +341,23 @@ def _build_ticket_text(ticket: Any) -> str:
     contextual information used by the application layer.
     """
 
-    title = getattr(
-        ticket,
-        "title",
-        "",
-    ) or ""
+    title = (
+        getattr(
+            ticket,
+            "title",
+            "",
+        )
+        or ""
+    )
 
-    description = getattr(
-        ticket,
-        "description",
-        "",
-    ) or ""
+    description = (
+        getattr(
+            ticket,
+            "description",
+            "",
+        )
+        or ""
+    )
 
     if title and description:
         return f"{title}\n\n{description}"
@@ -391,10 +388,7 @@ def _format_solution(
         steps = "No resolution steps generated."
 
     evidence_text = (
-        "\n".join(
-            f"- {item}"
-            for item in evidence
-        )
+        "\n".join(f"- {item}" for item in evidence)
         if evidence
         else "No specific evidence cited."
     )
@@ -459,8 +453,7 @@ def _build_explanation(
 
     except Exception as exc:
         logger.exception(
-            "[GraphExecutor] Explainability failed: "
-            f"{type(exc).__name__}: {exc}"
+            "[GraphExecutor] Explainability failed: " f"{type(exc).__name__}: {exc}"
         )
 
         return (

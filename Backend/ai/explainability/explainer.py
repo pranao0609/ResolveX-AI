@@ -46,9 +46,13 @@ def explain(
     # ── RAG context summary ───────────────────────────────────────────────────
     lines.append("")
     if context_docs:
-        lines.append(f"**Supporting Context**: {len(context_docs)} similar past ticket(s) were used.")
+        lines.append(
+            f"**Supporting Context**: {len(context_docs)} similar past ticket(s) were used."
+        )
     else:
-        lines.append("**Supporting Context**: No similar past tickets found in the knowledge base.")
+        lines.append(
+            "**Supporting Context**: No similar past tickets found in the knowledge base."
+        )
 
     # ── Ticket keywords (placeholder for LIME/SHAP in production) ────────────
     keywords = _extract_keywords(ticket_text)
@@ -70,10 +74,25 @@ def _extract_keywords(text: str) -> List[str]:
     Extract simple top keywords from the ticket text.
     Placeholder: replace with TF-IDF or KeyBERT in production.
     """
-    stop_words = {"the", "a", "an", "is", "it", "i", "we", "to", "of", "and", "for", "in", "on"}
+    stop_words = {
+        "the",
+        "a",
+        "an",
+        "is",
+        "it",
+        "i",
+        "we",
+        "to",
+        "of",
+        "and",
+        "for",
+        "in",
+        "on",
+    }
     words = [w.strip(".,!?;:\"'") for w in text.split()]
     keywords = [w for w in words if len(w) > 4 and w not in stop_words]
     # Return top 5 most frequent (simple frequency count)
     from collections import Counter
+
     counter = Counter(keywords)
     return [word for word, _ in counter.most_common(5)]

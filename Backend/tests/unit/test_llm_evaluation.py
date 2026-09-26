@@ -11,6 +11,7 @@ from evaluation.metrics.llm_metrics import (
     structured_output_validity,
 )
 
+
 def test_correctness_identical_text():
     text = "Restart the application and try again."
 
@@ -107,6 +108,7 @@ def test_instruction_adherence():
 
     assert score == 1.0
 
+
 def test_instruction_adherence_accepts_dict():
     output = {
         "diagnosis": "User cannot access email",
@@ -126,6 +128,7 @@ def test_instruction_adherence_accepts_dict():
 
     assert score == 1.0
 
+
 def test_evaluate_llm_output():
     result = ResolutionResult(
         diagnosis="Application crash",
@@ -143,17 +146,12 @@ def test_evaluate_llm_output():
     metrics = evaluate_llm_output(
         ticket="The application crashes on startup.",
         generated_answer=(
-            "The application crashes on startup. "
-            "Restart the application."
+            "The application crashes on startup. " "Restart the application."
         ),
         expected_resolution=(
-            "The application crashes on startup. "
-            "Restart the application."
+            "The application crashes on startup. " "Restart the application."
         ),
-        retrieved_context=(
-            "Crash on Startup: "
-            "Restart the application."
-        ),
+        retrieved_context=("Crash on Startup: " "Restart the application."),
         structured_output=result,
     )
 

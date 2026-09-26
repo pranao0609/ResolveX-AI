@@ -51,7 +51,7 @@ class TestCleanText:
 
     def test_preserves_punctuation(self):
         result = clean_text("Can't log in. Reset password failed!")
-        assert "'" in result or "can" in result   # content preserved
+        assert "'" in result or "can" in result  # content preserved
 
     def test_handles_mixed_html_and_text(self):
         result = clean_text("<br/>VPN <b>disconnected</b> after update")

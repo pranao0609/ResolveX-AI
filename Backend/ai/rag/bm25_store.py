@@ -88,9 +88,7 @@ class BM25Store:
         self._document_count = 0
 
         if not documents:
-            logger.warning(
-                "Cannot build BM25 index — DocumentStore is empty"
-            )
+            logger.warning("Cannot build BM25 index — DocumentStore is empty")
             return
 
         for document in documents:
@@ -136,56 +134,50 @@ class BM25Store:
     ) -> List[Dict]:
         """
         Search the BM25 index and return ranked document IDs/scores.
-    
+
         If the BM25 index has not been built yet, it is automatically
         built from the current persistent DocumentStore.
         """
-    
+
         if self.bm25 is None:
-            logger.info(
-                "BM25 index is not built — building from DocumentStore"
-            )
-    
+            logger.info("BM25 index is not built — building from DocumentStore")
+
             self.build()
-    
+
         if self.bm25 is None:
-            logger.warning(
-                "BM25 index could not be built — returning no results"
-            )
+            logger.warning("BM25 index could not be built — returning no results")
             return []
-    
+
         if not self.validate_alignment():
-            logger.warning(
-                "Skipping BM25 search due to index misalignment"
-            )
+            logger.warning("Skipping BM25 search due to index misalignment")
             return []
-    
+
         if not isinstance(query, str):
             raise TypeError("BM25 query must be a string")
-    
+
         query = query.strip()
-    
+
         if not query:
             raise ValueError("BM25 query must not be empty")
-    
+
         if top_k <= 0:
             return []
-    
+
         query_tokens = self._tokenize(query)
-    
+
         if not query_tokens:
             return []
-    
+
         scores = self.bm25.get_scores(query_tokens)
-    
+
         ranked_indices = sorted(
             range(len(scores)),
             key=lambda index: scores[index],
             reverse=True,
         )[:top_k]
-    
+
         results = []
-    
+
         for index in ranked_indices:
             results.append(
                 {
@@ -193,7 +185,7 @@ class BM25Store:
                     "score": float(scores[index]),
                 }
             )
-    
+
         return results
 
     @property

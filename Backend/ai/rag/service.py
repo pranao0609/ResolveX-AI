@@ -28,16 +28,12 @@ class RAGIngestionService:
         ingest them through the canonical RAG pipeline.
         """
 
-        logger.info(
-            "Starting database-backed RAG knowledge-base ingestion"
-        )
+        logger.info("Starting database-backed RAG knowledge-base ingestion")
 
         documents = self.loader.load_all()
 
         if not documents:
-            logger.warning(
-                "Knowledge-base ingestion aborted: no documents loaded"
-            )
+            logger.warning("Knowledge-base ingestion aborted: no documents loaded")
 
             return IngestionResult(
                 documents_received=0,

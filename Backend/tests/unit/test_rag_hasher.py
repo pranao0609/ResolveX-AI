@@ -36,10 +36,7 @@ def test_hash_is_sha256():
     content_hash = DocumentHasher.compute_hash(document)
 
     assert len(content_hash) == 64
-    assert all(
-        character in "0123456789abcdef"
-        for character in content_hash
-    )
+    assert all(character in "0123456789abcdef" for character in content_hash)
 
 
 def test_identical_documents_have_same_hash():
@@ -53,13 +50,9 @@ def test_identical_documents_have_same_hash():
 
 
 def test_different_content_has_different_hash():
-    document_one = make_document(
-        content="Restart the router."
-    )
+    document_one = make_document(content="Restart the router.")
 
-    document_two = make_document(
-        content="Restart the computer."
-    )
+    document_two = make_document(content="Restart the computer.")
 
     hash_one = DocumentHasher.compute_hash(document_one)
     hash_two = DocumentHasher.compute_hash(document_two)
@@ -68,13 +61,9 @@ def test_different_content_has_different_hash():
 
 
 def test_different_title_has_different_hash():
-    document_one = make_document(
-        title="Network Troubleshooting"
-    )
+    document_one = make_document(title="Network Troubleshooting")
 
-    document_two = make_document(
-        title="Network Connectivity"
-    )
+    document_two = make_document(title="Network Connectivity")
 
     hash_one = DocumentHasher.compute_hash(document_one)
     hash_two = DocumentHasher.compute_hash(document_two)
@@ -125,23 +114,15 @@ def test_attach_hashes_processes_all_documents():
 
 
 def test_duplicate_documents_are_detected():
-    document_one = DocumentHasher.attach_hash(
-        make_document(document_id="kb:1")
-    )
+    document_one = DocumentHasher.attach_hash(make_document(document_id="kb:1"))
 
-    document_two = DocumentHasher.attach_hash(
-        make_document(document_id="kb:2")
-    )
+    document_two = DocumentHasher.attach_hash(make_document(document_id="kb:2"))
 
-    duplicates = DocumentDeduplicator.find_duplicates(
-        [document_one, document_two]
-    )
+    duplicates = DocumentDeduplicator.find_duplicates([document_one, document_two])
 
     assert len(duplicates) == 1
 
-    duplicate_document_ids = next(
-        iter(duplicates.values())
-    )
+    duplicate_document_ids = next(iter(duplicates.values()))
 
     assert duplicate_document_ids == ["kb:1", "kb:2"]
 
@@ -161,21 +142,15 @@ def test_unique_documents_are_not_reported_as_duplicates():
         )
     )
 
-    duplicates = DocumentDeduplicator.find_duplicates(
-        [document_one, document_two]
-    )
+    duplicates = DocumentDeduplicator.find_duplicates([document_one, document_two])
 
     assert duplicates == {}
 
 
 def test_remove_duplicates_preserves_first_document():
-    document_one = DocumentHasher.attach_hash(
-        make_document(document_id="kb:1")
-    )
+    document_one = DocumentHasher.attach_hash(make_document(document_id="kb:1"))
 
-    document_two = DocumentHasher.attach_hash(
-        make_document(document_id="kb:2")
-    )
+    document_two = DocumentHasher.attach_hash(make_document(document_id="kb:2"))
 
     unique_documents = DocumentDeduplicator.remove_duplicates(
         [document_one, document_two]

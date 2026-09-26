@@ -10,7 +10,6 @@ from transformers import pipeline
 from app.config import settings
 from app.core.logger import logger
 
-
 load_dotenv()
 
 
@@ -57,10 +56,7 @@ def _get_groq_client():
     Create the Groq client when a valid API key is configured.
     """
 
-    if (
-        not settings.GROQ_API_KEY
-        or settings.GROQ_API_KEY == "your-groq-api-key-here"
-    ):
+    if not settings.GROQ_API_KEY or settings.GROQ_API_KEY == "your-groq-api-key-here":
         return None
 
     try:
@@ -365,9 +361,7 @@ def classify_ticket(text: str) -> Tuple[str, float]:
     # Groq fallback
     # -----------------------------------------------------------------------
 
-    logger.info(
-        "Using Groq LLM fallback for classification"
-    )
+    logger.info("Using Groq LLM fallback for classification")
 
     return llm_classify_fallback(text)
 
@@ -405,23 +399,17 @@ def reclassify_with_zero_shot(
     """
 
     if not isinstance(text, str):
-        raise TypeError(
-            "Reclassification input must be a string"
-        )
+        raise TypeError("Reclassification input must be a string")
 
     cleaned_text = text.strip()
 
     if len(cleaned_text) < 5:
-        raise ValueError(
-            "Reclassification input must contain at least 5 characters"
-        )
+        raise ValueError("Reclassification input must contain at least 5 characters")
 
     classifier = _get_zero_shot_classifier()
 
     if classifier is None:
-        raise RuntimeError(
-            "Zero-shot classifier is unavailable"
-        )
+        raise RuntimeError("Zero-shot classifier is unavailable")
 
     try:
         result = classifier(
@@ -433,22 +421,16 @@ def reclassify_with_zero_shot(
         scores = result.get("scores")
 
         if not labels or not scores:
-            raise RuntimeError(
-                "Zero-shot classifier returned an invalid result"
-            )
+            raise RuntimeError("Zero-shot classifier returned an invalid result")
 
         raw_category = labels[0]
         raw_confidence = float(scores[0])
 
         if raw_category not in IT_CATEGORIES:
-            raise RuntimeError(
-                f"Invalid zero-shot category: {raw_category}"
-            )
+            raise RuntimeError(f"Invalid zero-shot category: {raw_category}")
 
         if not 0.0 <= raw_confidence <= 1.0:
-            raise RuntimeError(
-                "Zero-shot confidence outside [0, 1]"
-            )
+            raise RuntimeError("Zero-shot confidence outside [0, 1]")
 
         final_category = CATEGORY_MAP.get(
             raw_category,
@@ -461,8 +443,7 @@ def reclassify_with_zero_shot(
         )
 
         logger.info(
-            "Zero-shot reclassification: "
-            "%s -> %s (raw=%.3f calibrated=%.3f)",
+            "Zero-shot reclassification: " "%s -> %s (raw=%.3f calibrated=%.3f)",
             raw_category,
             final_category,
             raw_confidence,
@@ -478,6 +459,4 @@ def reclassify_with_zero_shot(
         raise
 
     except Exception as exc:
-        raise RuntimeError(
-            f"Zero-shot reclassification failed: {exc}"
-        ) from exc
+        raise RuntimeError(f"Zero-shot reclassification failed: {exc}") from exc

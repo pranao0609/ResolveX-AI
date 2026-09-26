@@ -9,7 +9,6 @@ import json
 import sys
 from pathlib import Path
 
-
 BACKEND_ROOT = Path(__file__).resolve().parents[1]
 
 sys.path.insert(
@@ -22,19 +21,10 @@ from evaluation.metrics.generation_metrics import (
     evaluate_generation_case,
 )
 
-
-INPUT_PATH = (
-    BACKEND_ROOT
-    / "data"
-    / "evaluation"
-    / "generation_results.json"
-)
+INPUT_PATH = BACKEND_ROOT / "data" / "evaluation" / "generation_results.json"
 
 OUTPUT_PATH = (
-    BACKEND_ROOT
-    / "data"
-    / "evaluation"
-    / "generation_results_with_metrics.json"
+    BACKEND_ROOT / "data" / "evaluation" / "generation_results_with_metrics.json"
 )
 
 
@@ -57,18 +47,10 @@ def main():
 
         metrics = evaluate_generation_case(
             ticket=result["ticket"],
-            generated_answer=result[
-                "generated_answer"
-            ],
-            expected_answer=result[
-                "expected_answer"
-            ],
-            retrieved_documents=result[
-                "retrieved_documents"
-            ],
-            required_evidence=result[
-                "required_evidence"
-            ],
+            generated_answer=result["generated_answer"],
+            expected_answer=result["expected_answer"],
+            retrieved_documents=result["retrieved_documents"],
+            required_evidence=result["required_evidence"],
         )
 
         # IMPORTANT:
@@ -95,10 +77,7 @@ def main():
     print("RESOLVEX GENERATION METRICS")
     print("=" * 100)
 
-    print(
-        f"Evaluation cases: "
-        f"{len(successful_results)}"
-    )
+    print(f"Evaluation cases: " f"{len(successful_results)}")
 
     metric_names = [
         "faithfulness",
@@ -112,26 +91,14 @@ def main():
 
     for metric in metric_names:
 
-        values = [
-            result["metrics"][metric]
-            for result in successful_results
-        ]
+        values = [result["metrics"][metric] for result in successful_results]
 
-        average = (
-            sum(values) / len(values)
-            if values
-            else 0.0
-        )
+        average = sum(values) / len(values) if values else 0.0
 
-        print(
-            f"{metric:<25} "
-            f"{average:.4f}"
-        )
+        print(f"{metric:<25} " f"{average:.4f}")
 
     print()
-    print(
-        "Detailed results saved to:"
-    )
+    print("Detailed results saved to:")
     print(OUTPUT_PATH)
 
     print("=" * 100)

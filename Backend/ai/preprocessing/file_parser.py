@@ -11,6 +11,7 @@ from ai.preprocessing.ocr_processor import extract_text_from_image
 
 try:
     import PyPDF2
+
     PDF_AVAILABLE = True
 except ImportError:
     PDF_AVAILABLE = False

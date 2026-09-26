@@ -75,10 +75,12 @@ def test_lazy_classifier_loader():
 def test_vector_store_alignment_check(monkeypatch):
     """Verify alignment check catches length mismatches."""
     from ai.rag import retriever, vector_store
-    
+
     doc_store = retriever.get_doc_store()
     doc_store.documents = [{"id": 1}, {"id": 2}]
-    
-    monkeypatch.setattr(vector_store.VectorStore, "total_vectors", property(lambda self: 1))
-    
+
+    monkeypatch.setattr(
+        vector_store.VectorStore, "total_vectors", property(lambda self: 1)
+    )
+
     assert not retriever.validate_store_alignment()

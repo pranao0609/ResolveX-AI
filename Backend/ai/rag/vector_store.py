@@ -13,10 +13,19 @@ from ai.config.ai_config import FAISS_INDEX_PATH, EMBEDDING_DIMENSION
 
 try:
     import faiss
+
     FAISS_AVAILABLE = True
 except ImportError:
     FAISS_AVAILABLE = False
     logger.warning("faiss-cpu not installed — vector search unavailable")
+
+
+def _resolve_path(path: str) -> str:
+    if os.path.isabs(path):
+        return path
+    from app.config import PROJECT_ROOT
+
+    return str(PROJECT_ROOT / path)
 
 
 class VectorStore:
@@ -31,9 +40,10 @@ class VectorStore:
         if not FAISS_AVAILABLE:
             return
 
-        if os.path.exists(FAISS_INDEX_PATH):
+        resolved_path = _resolve_path(FAISS_INDEX_PATH)
+        if os.path.exists(resolved_path):
             try:
-                self.index = faiss.read_index(FAISS_INDEX_PATH)
+                self.index = faiss.read_index(resolved_path)
                 logger.info(
                     f"FAISS index loaded from {FAISS_INDEX_PATH} ({self.index.ntotal} vectors)"
                 )
@@ -69,7 +79,9 @@ class VectorStore:
         self.index.add(embeddings)
         logger.debug(f"Added {len(embeddings)} vectors. Total: {self.index.ntotal}")
 
-    def search(self, query_vector: np.ndarray, top_k: int = 5) -> Tuple[np.ndarray, np.ndarray]:
+    def search(
+        self, query_vector: np.ndarray, top_k: int = 5
+    ) -> Tuple[np.ndarray, np.ndarray]:
         """
         Search for the top-k most similar vectors.
 
@@ -99,8 +111,9 @@ class VectorStore:
         if self.index is None:
             return
 
-        os.makedirs(os.path.dirname(FAISS_INDEX_PATH), exist_ok=True)
-        faiss.write_index(self.index, FAISS_INDEX_PATH)
+        resolved_path = _resolve_path(FAISS_INDEX_PATH)
+        os.makedirs(os.path.dirname(resolved_path), exist_ok=True)
+        faiss.write_index(self.index, resolved_path)
         logger.info(f"FAISS index saved to {FAISS_INDEX_PATH}")
 
     def reset(self) -> None:
@@ -143,9 +156,7 @@ class VectorStore:
             return
 
         if not hasattr(self.index, "reconstruct_n"):
-            raise RuntimeError(
-                "FAISS index does not support vector reconstruction"
-            )
+            raise RuntimeError("FAISS index does not support vector reconstruction")
 
         existing_vectors = self.index.reconstruct_n(
             0,
@@ -155,9 +166,7 @@ class VectorStore:
         self.index = self._create_index()
 
         if self.index is None:
-            raise RuntimeError(
-                "FAISS index unavailable while restoring previous state"
-            )
+            raise RuntimeError("FAISS index unavailable while restoring previous state")
 
         self.index.add(
             np.asarray(
@@ -171,6 +180,8 @@ class VectorStore:
             current_count,
             vector_count,
         )
+
+
 _vector_store: Optional[VectorStore] = None
 
 

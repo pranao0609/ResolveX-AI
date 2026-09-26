@@ -91,9 +91,7 @@ def _build_verification_context(
     parts: list[str] = []
 
     if retrieved_context and retrieved_context.strip():
-        parts.append(
-            f"=== Current Retrieved Evidence ===\n{retrieved_context.strip()}"
-        )
+        parts.append(f"=== Current Retrieved Evidence ===\n{retrieved_context.strip()}")
 
     if hist_text and hist_text.strip():
         parts.append(
@@ -101,9 +99,7 @@ def _build_verification_context(
         )
 
     if conv_text and conv_text.strip():
-        parts.append(
-            f"=== Conversation Context ===\n{conv_text.strip()}"
-        )
+        parts.append(f"=== Conversation Context ===\n{conv_text.strip()}")
 
     return "\n\n".join(parts) if parts else retrieved_context
 
@@ -120,33 +116,17 @@ def verification_agent(
     verification to pass.
     """
 
-    ticket_text = (
-        state.get("cleaned_ticket", "")
-        or state.get("ticket_text", "")
-        or ""
-    )
+    ticket_text = state.get("cleaned_ticket", "") or state.get("ticket_text", "") or ""
 
-    diagnosis = (
-        state.get("diagnosis", "")
-        or state.get("diagnosis_problem", "")
-        or ""
-    )
+    diagnosis = state.get("diagnosis", "") or state.get("diagnosis_problem", "") or ""
 
     root_cause = (
-        state.get("root_cause", "")
-        or state.get("diagnosis_root_cause", "")
-        or ""
+        state.get("root_cause", "") or state.get("diagnosis_root_cause", "") or ""
     )
 
-    resolution_steps = (
-        state.get("resolution_steps", [])
-        or []
-    )
+    resolution_steps = state.get("resolution_steps", []) or []
 
-    retrieved_context = (
-        state.get("retrieved_context", "")
-        or ""
-    )
+    retrieved_context = state.get("retrieved_context", "") or ""
 
     conversation_history = state.get(
         "conversation_history",
@@ -183,10 +163,7 @@ def verification_agent(
             )
         )
 
-        combined_fallback = (
-            existing_fallback
-            or fallback_used
-        )
+        combined_fallback = existing_fallback or fallback_used
 
         metadata = _stage_metadata(
             state,
@@ -226,16 +203,9 @@ def verification_agent(
             # ----------------------------------------------------------
             # Existing compatibility fields
             # ----------------------------------------------------------
-            "verification_passed": bool(
-                verification_result.verification_passed
-            ),
-            "verification_reason": (
-                verification_result.verification_reason
-            ),
-            "verification_confidence": float(
-                verification_result.confidence
-            ),
-
+            "verification_passed": bool(verification_result.verification_passed),
+            "verification_reason": (verification_result.verification_reason),
+            "verification_confidence": float(verification_result.confidence),
             # ----------------------------------------------------------
             # Detailed verification dimensions
             # ----------------------------------------------------------
@@ -245,21 +215,13 @@ def verification_agent(
             "verification_hallucination_detected": bool(
                 verification_result.hallucination_detected
             ),
-            "verification_complete": bool(
-                verification_result.complete
-            ),
-            "verification_policy_compliant": bool(
-                verification_result.policy_compliant
-            ),
+            "verification_complete": bool(verification_result.complete),
+            "verification_policy_compliant": bool(verification_result.policy_compliant),
             "verification_resolution_correct": bool(
                 verification_result.resolution_correct
             ),
-
             # Full structured result for observability/evaluation.
-            "verification_result": (
-                verification_result.model_dump()
-            ),
-
+            "verification_result": (verification_result.model_dump()),
             "fallback_used": combined_fallback,
             "metadata": metadata,
         }
@@ -299,18 +261,15 @@ def verification_agent(
             # Existing compatibility fields
             "verification_passed": False,
             "verification_reason": (
-                "Resolution verification failed. "
-                "Human review is required."
+                "Resolution verification failed. " "Human review is required."
             ),
             "verification_confidence": 0.0,
-
             # Fail closed for every detailed verification dimension.
             "verification_supported_by_evidence": False,
             "verification_hallucination_detected": True,
             "verification_complete": False,
             "verification_policy_compliant": False,
             "verification_resolution_correct": False,
-
             "verification_result": {
                 "supported_by_evidence": False,
                 "hallucination_detected": True,
@@ -320,11 +279,9 @@ def verification_agent(
                 "confidence": 0.0,
                 "verification_passed": False,
                 "verification_reason": (
-                    "Resolution verification failed. "
-                    "Human review is required."
+                    "Resolution verification failed. " "Human review is required."
                 ),
             },
-
             "fallback_used": True,
             "errors": errors,
             "metadata": metadata,

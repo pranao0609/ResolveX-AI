@@ -35,17 +35,11 @@ def test_search_memory_returns_normalized_records() -> None:
         }
     ]
 
-    with patch(
-        "ai.graph.tools.memory_tools.TicketMemoryStore"
-    ) as memory_class:
+    with patch("ai.graph.tools.memory_tools.TicketMemoryStore") as memory_class:
         memory = memory_class.return_value
 
         search_result = MagicMock()
-        search_result.records = [
-            MagicMock(
-                to_dict=lambda: records[0]
-            )
-        ]
+        search_result.records = [MagicMock(to_dict=lambda: records[0])]
 
         memory.search.return_value = search_result
 

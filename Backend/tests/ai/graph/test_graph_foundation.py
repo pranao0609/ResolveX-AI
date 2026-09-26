@@ -12,9 +12,7 @@ def test_resolvex_state_accepts_ticket_input():
     }
 
     assert state["ticket_id"] == 1
-    assert state["ticket_text"] == (
-        "unable to access email"
-    )
+    assert state["ticket_text"] == ("unable to access email")
 
 
 def test_graph_builds_successfully():
@@ -63,9 +61,7 @@ def test_graph_executes_basic_workflow():
 
     result = graph.invoke(state)
 
-    assert result["cleaned_ticket"] == (
-        "unable to access email"
-    )
+    assert result["cleaned_ticket"] == ("unable to access email")
 
     assert result["decision"] in {
         "auto_resolve",
@@ -111,9 +107,7 @@ def test_ticket_analyzer_cleans_ticket_text():
 def test_ticket_analyzer_processes_attachments(monkeypatch):
     import importlib
 
-    ticket_analyzer_module = importlib.import_module(
-        "ai.graph.nodes.ticket_analyzer"
-    )
+    ticket_analyzer_module = importlib.import_module("ai.graph.nodes.ticket_analyzer")
 
     monkeypatch.setattr(
         ticket_analyzer_module,
@@ -218,10 +212,7 @@ def test_retrieval_agent_metadata_matches_documents():
 
     assert metadata["result_count"] == len(documents)
 
-    assert metadata["index_ids"] == [
-        document["index_id"]
-        for document in documents
-    ]
+    assert metadata["index_ids"] == [document["index_id"] for document in documents]
 
 
 def test_graph_retrieval_agent_populates_state():

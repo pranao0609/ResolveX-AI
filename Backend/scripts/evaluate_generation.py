@@ -6,7 +6,6 @@ import asyncio
 import sys
 from pathlib import Path
 
-
 BACKEND_ROOT = Path(__file__).resolve().parents[1]
 
 sys.path.insert(
@@ -30,9 +29,7 @@ async def main():
 
     cases = evaluator.load_cases()
 
-    print(
-        f"Evaluation cases: {len(cases)}"
-    )
+    print(f"Evaluation cases: {len(cases)}")
     print()
 
     results = await evaluator.evaluate_all()
@@ -42,17 +39,9 @@ async def main():
         RESULTS_PATH,
     )
 
-    successful = [
-        result
-        for result in results
-        if "error" not in result
-    ]
+    successful = [result for result in results if "error" not in result]
 
-    failed = [
-        result
-        for result in results
-        if "error" in result
-    ]
+    failed = [result for result in results if "error" in result]
 
     fallback_count = sum(
         result.get(
@@ -67,26 +56,16 @@ async def main():
     print("GENERATION EVALUATION SUMMARY")
     print("=" * 100)
 
-    print(
-        f"Total cases:       {len(results)}"
-    )
+    print(f"Total cases:       {len(results)}")
 
-    print(
-        f"Successful:        {len(successful)}"
-    )
+    print(f"Successful:        {len(successful)}")
 
-    print(
-        f"Errors:            {len(failed)}"
-    )
+    print(f"Errors:            {len(failed)}")
 
-    print(
-        f"LLM fallbacks:     {fallback_count}"
-    )
+    print(f"LLM fallbacks:     {fallback_count}")
 
     print()
-    print(
-        f"Results saved to:"
-    )
+    print("Results saved to:")
     print(RESULTS_PATH)
 
     print("=" * 100)

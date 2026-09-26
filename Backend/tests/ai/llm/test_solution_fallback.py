@@ -57,6 +57,7 @@ def test_placeholder_solution_does_not_claim_specific_root_cause():
     assert result.confidence == 0.0
     assert result.requires_human is True
 
+
 from unittest.mock import patch
 
 from ai.llm.errors import LLMTimeoutError
@@ -64,15 +65,11 @@ from ai.llm.solution_generator import generate_solution
 
 
 def test_generate_solution_uses_safe_fallback_on_llm_failure():
-    with patch(
-        "ai.llm.solution_generator._get_gateway"
-    ) as mock_get_gateway:
+    with patch("ai.llm.solution_generator._get_gateway") as mock_get_gateway:
 
         gateway = mock_get_gateway.return_value
 
-        gateway.generate.side_effect = LLMTimeoutError(
-            "LLM request timed out"
-        )
+        gateway.generate.side_effect = LLMTimeoutError("LLM request timed out")
 
         resolution, fallback_used = generate_solution(
             ticket_text="Unable to login to email",

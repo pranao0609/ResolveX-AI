@@ -23,23 +23,16 @@ def ticket_analyzer(
         4. Write validated results into graph state.
     """
 
-    ticket_text = (
-        state.get("ticket_text", "")
-        or ""
-    )
+    ticket_text = state.get("ticket_text", "") or ""
 
-    attachment_paths = state.get(
-        "attachment_paths"
-    )
+    attachment_paths = state.get("attachment_paths")
 
     try:
         # -----------------------------------------------------------
         # Step 1: Text preprocessing
         # -----------------------------------------------------------
 
-        cleaned_text = clean_text(
-            ticket_text
-        )
+        cleaned_text = clean_text(ticket_text)
 
         # -----------------------------------------------------------
         # Step 2: Attachment extraction
@@ -52,30 +45,20 @@ def ticket_analyzer(
                 str,
             ):
                 paths = [
-                    path.strip()
-                    for path in attachment_paths.split(
-                        ","
-                    )
-                    if path.strip()
+                    path.strip() for path in attachment_paths.split(",") if path.strip()
                 ]
 
             else:
                 paths = [
-                    str(path).strip()
-                    for path in attachment_paths
-                    if str(path).strip()
+                    str(path).strip() for path in attachment_paths if str(path).strip()
                 ]
 
             if paths:
-                extracted = parse_attachments(
-                    paths
-                )
+                extracted = parse_attachments(paths)
 
                 if extracted:
                     cleaned_text = (
-                        f"{cleaned_text}\n\n"
-                        f"[Attachments]\n"
-                        f"{extracted}"
+                        f"{cleaned_text}\n\n" f"[Attachments]\n" f"{extracted}"
                     )
 
         # -----------------------------------------------------------
@@ -127,15 +110,9 @@ def ticket_analyzer(
         result: dict[str, Any] = {
             "cleaned_ticket": cleaned_text,
             "category": category,
-            "category_confidence": float(
-                classification_score
-            ),
-            "classification_confidence_level": (
-                classification_confidence_level
-            ),
-            "classification_requires_review": (
-                classification_requires_review
-            ),
+            "category_confidence": float(classification_score),
+            "classification_confidence_level": (classification_confidence_level),
+            "classification_requires_review": (classification_requires_review),
             "classification_requires_reclassification": (
                 classification_requires_reclassification
             ),
@@ -164,8 +141,7 @@ def ticket_analyzer(
     except Exception as exc:
 
         logger.exception(
-            f"Ticket analyzer failed for "
-            f"ticket_id={state.get('ticket_id')}: {exc}"
+            f"Ticket analyzer failed for " f"ticket_id={state.get('ticket_id')}: {exc}"
         )
 
         metadata = _stage_metadata(
@@ -180,11 +156,7 @@ def ticket_analyzer(
         )
 
         return {
-            "cleaned_ticket": (
-                cleaned_text
-                if "cleaned_text" in locals()
-                else ""
-            ),
+            "cleaned_ticket": (cleaned_text if "cleaned_text" in locals() else ""),
             "category": "software",
             "category_confidence": 0.0,
             "errors": errors,

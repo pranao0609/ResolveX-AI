@@ -20,9 +20,7 @@ def test_graph_contains_all_phase_14_nodes():
 
     actual_nodes = set(graph.nodes.keys())
 
-    assert expected_nodes.issubset(
-        actual_nodes
-    )
+    assert expected_nodes.issubset(actual_nodes)
 
 
 def test_graph_contains_terminal_nodes():

@@ -44,7 +44,4 @@ def search_memory(
 
     result = memory.search(search_query)
 
-    return [
-        record.to_dict()
-        for record in result.records
-    ]
+    return [record.to_dict() for record in result.records]

@@ -20,16 +20,23 @@ class KBRepository:
         return entry
 
     def get_by_id(self, entry_id: int) -> Optional[KnowledgeBaseEntry]:
-        return self.db.query(KnowledgeBaseEntry).filter(KnowledgeBaseEntry.id == entry_id).first()
+        return (
+            self.db.query(KnowledgeBaseEntry)
+            .filter(KnowledgeBaseEntry.id == entry_id)
+            .first()
+        )
 
     def list_by_category(self, category: str) -> List[KnowledgeBaseEntry]:
-        return self.db.query(KnowledgeBaseEntry).filter(
-            KnowledgeBaseEntry.category == category
-        ).all()
+        return (
+            self.db.query(KnowledgeBaseEntry)
+            .filter(KnowledgeBaseEntry.category == category)
+            .all()
+        )
 
     def list_all(self, skip: int = 0, limit: int = 100) -> List[KnowledgeBaseEntry]:
         return self.db.query(KnowledgeBaseEntry).offset(skip).limit(limit).all()
 
     def count(self) -> int:
         from sqlalchemy import func
+
         return self.db.query(func.count(KnowledgeBaseEntry.id)).scalar()

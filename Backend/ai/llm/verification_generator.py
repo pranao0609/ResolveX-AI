@@ -23,7 +23,6 @@ from ai.llm.gateway import LLMGateway
 from ai.llm.prompt_loader import load_prompt
 from ai.llm.providers.groq_provider import GroqProvider
 
-
 DEFAULT_VERIFICATION_PROMPT_VERSION = 1
 
 # Minimum confidence required for verification to pass.
@@ -83,9 +82,7 @@ class VerificationResult(BaseModel):
         ...,
         ge=0.0,
         le=1.0,
-        description=(
-            "Confidence in the verification assessment."
-        ),
+        description=("Confidence in the verification assessment."),
     )
 
     # ------------------------------------------------------------------
@@ -103,9 +100,7 @@ class VerificationResult(BaseModel):
 
     verification_reason: str = Field(
         default="",
-        description=(
-            "Explanation supporting the overall verification decision."
-        ),
+        description=("Explanation supporting the overall verification decision."),
     )
 
     def model_post_init(self, __context) -> None:
@@ -122,16 +117,13 @@ class VerificationResult(BaseModel):
             and self.complete
             and self.policy_compliant
             and self.resolution_correct
-            and self.confidence
-            >= VERIFICATION_CONFIDENCE_THRESHOLD
+            and self.confidence >= VERIFICATION_CONFIDENCE_THRESHOLD
         )
 
         reasons: list[str] = []
 
         if not self.supported_by_evidence:
-            reasons.append(
-                "Resolution is not sufficiently supported by evidence."
-            )
+            reasons.append("Resolution is not sufficiently supported by evidence.")
 
         if self.hallucination_detected:
             reasons.append(
@@ -139,14 +131,10 @@ class VerificationResult(BaseModel):
             )
 
         if not self.complete:
-            reasons.append(
-                "Resolution is incomplete."
-            )
+            reasons.append("Resolution is incomplete.")
 
         if not self.policy_compliant:
-            reasons.append(
-                "Resolution does not satisfy policy requirements."
-            )
+            reasons.append("Resolution does not satisfy policy requirements.")
 
         if not self.resolution_correct:
             reasons.append(
@@ -155,14 +143,10 @@ class VerificationResult(BaseModel):
             )
 
         if self.confidence < VERIFICATION_CONFIDENCE_THRESHOLD:
-            reasons.append(
-                "Verification confidence is below the required threshold."
-            )
+            reasons.append("Verification confidence is below the required threshold.")
 
         if not reasons:
-            reasons.append(
-                "Resolution passed all verification checks."
-            )
+            reasons.append("Resolution passed all verification checks.")
 
         self.verification_reason = " ".join(reasons)
 
@@ -205,8 +189,7 @@ def _render_verification_prompt(
     user_prompt = user_prompt.replace(
         "{resolution_steps}",
         "\n".join(
-            f"{index + 1}. {step}"
-            for index, step in enumerate(resolution_steps)
+            f"{index + 1}. {step}" for index, step in enumerate(resolution_steps)
         ),
     )
 
@@ -271,35 +254,15 @@ def verify_resolution(
         prompt_version,
     )
 
-    clean_ticket = (
-        ticket_text[:4000]
-        if ticket_text
-        else ""
-    )
+    clean_ticket = ticket_text[:4000] if ticket_text else ""
 
-    clean_diagnosis = (
-        diagnosis.strip()
-        if diagnosis
-        else "No diagnosis available."
-    )
+    clean_diagnosis = diagnosis.strip() if diagnosis else "No diagnosis available."
 
-    clean_root_cause = (
-        root_cause.strip()
-        if root_cause
-        else "No root cause available."
-    )
+    clean_root_cause = root_cause.strip() if root_cause else "No root cause available."
 
-    clean_context = (
-        context.strip()
-        if context
-        else "No context available."
-    )
+    clean_context = context.strip() if context else "No context available."
 
-    clean_steps = [
-        str(step).strip()
-        for step in resolution_steps
-        if str(step).strip()
-    ]
+    clean_steps = [str(step).strip() for step in resolution_steps if str(step).strip()]
 
     system_prompt, user_prompt = _render_verification_prompt(
         prompt,
@@ -320,10 +283,7 @@ def verify_resolution(
         GROQ_TEMPERATURE,
     )
 
-    model = (
-        settings.GROQ_MODEL
-        or prompt_model
-    )
+    model = settings.GROQ_MODEL or prompt_model
 
     temperature = prompt_temperature
 
@@ -331,10 +291,7 @@ def verify_resolution(
         gateway = _get_gateway()
 
     except ValueError as exc:
-        logger.warning(
-            "Verification LLM provider unavailable: "
-            f"{exc}"
-        )
+        logger.warning("Verification LLM provider unavailable: " f"{exc}")
 
         return _placeholder_verification(), True
 
@@ -349,9 +306,7 @@ def verify_resolution(
             max_retries=settings.LLM_MAX_RETRIES,
         )
 
-        verification = VerificationResult.model_validate_json(
-            response.content
-        )
+        verification = VerificationResult.model_validate_json(response.content)
 
         logger.info(
             "Structured resolution verification generated "
@@ -384,8 +339,7 @@ def verify_resolution(
 
     except Exception as exc:
         logger.exception(
-            "Unexpected verification failure: "
-            f"{type(exc).__name__}: {exc}"
+            "Unexpected verification failure: " f"{type(exc).__name__}: {exc}"
         )
 
         return _placeholder_verification(), True

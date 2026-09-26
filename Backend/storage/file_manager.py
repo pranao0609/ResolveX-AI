@@ -41,5 +41,7 @@ class FileManager:
 
     def exists(self, path: str) -> bool:
         return self.backend.exists(path)
+
+
 # Global instance for __init__.py import (used throughout app)
 file_manager = FileManager()

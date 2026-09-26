@@ -13,9 +13,7 @@ class LLMUsageRecord:
     Provider-independent usage record for one LLM request.
     """
 
-    request_id: str = field(
-        default_factory=lambda: str(uuid4())
-    )
+    request_id: str = field(default_factory=lambda: str(uuid4()))
 
     model: str = ""
 
@@ -29,9 +27,7 @@ class LLMUsageRecord:
 
     success: bool = True
 
-    timestamp: datetime = field(
-        default_factory=lambda: datetime.now(timezone.utc)
-    )
+    timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
     error_type: str | None = None
 

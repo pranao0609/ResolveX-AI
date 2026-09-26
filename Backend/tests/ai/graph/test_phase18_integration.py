@@ -18,48 +18,23 @@ def test_graph_contains_all_phase18_terminal_nodes():
 
 
 def test_route_auto_resolve():
-    assert (
-        route_decision(
-            {"decision": "auto_resolve"}
-        )
-        == "auto_resolve"
-    )
+    assert route_decision({"decision": "auto_resolve"}) == "auto_resolve"
 
 
 def test_route_ask_clarification():
-    assert (
-        route_decision(
-            {"decision": "ask_clarification"}
-        )
-        == "ask_clarification"
-    )
+    assert route_decision({"decision": "ask_clarification"}) == "ask_clarification"
 
 
 def test_route_human_review():
-    assert (
-        route_decision(
-            {"decision": "human_review"}
-        )
-        == "human_review"
-    )
+    assert route_decision({"decision": "human_review"}) == "human_review"
 
 
 def test_route_escalate():
-    assert (
-        route_decision(
-            {"decision": "escalate"}
-        )
-        == "escalate"
-    )
+    assert route_decision({"decision": "escalate"}) == "escalate"
 
 
 def test_route_unknown_defaults_to_human_review():
-    assert (
-        route_decision(
-            {"decision": "unknown_decision"}
-        )
-        == "human_review"
-    )
+    assert route_decision({"decision": "unknown_decision"}) == "human_review"
 
 
 def test_auto_resolve_terminal_node():

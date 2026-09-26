@@ -127,11 +127,7 @@ def _build_keyword_query(text: str) -> str:
         text,
     )
 
-    filtered = [
-        token
-        for token in tokens
-        if token.lower() not in stop_words
-    ]
+    filtered = [token for token in tokens if token.lower() not in stop_words]
 
     return " ".join(filtered).strip()
 
@@ -151,13 +147,9 @@ def analyze_query(query: str) -> QueryAnalysis:
 
     original_query = query or ""
 
-    normalized_query = _normalize_whitespace(
-        original_query
-    )
+    normalized_query = _normalize_whitespace(original_query)
 
-    cleaned_query = _remove_ticket_noise(
-        normalized_query
-    )
+    cleaned_query = _remove_ticket_noise(normalized_query)
 
     if not cleaned_query:
         return QueryAnalysis(
@@ -169,17 +161,11 @@ def analyze_query(query: str) -> QueryAnalysis:
             rewrite_reason="Query contains no retrievable text.",
         )
 
-    too_short = _looks_too_short(
-        cleaned_query
-    )
+    too_short = _looks_too_short(cleaned_query)
 
-    error_query = _looks_like_error_query(
-        cleaned_query
-    )
+    error_query = _looks_like_error_query(cleaned_query)
 
-    keyword_query = _build_keyword_query(
-        cleaned_query
-    )
+    keyword_query = _build_keyword_query(cleaned_query)
 
     if too_short and keyword_query:
         return QueryAnalysis(
@@ -213,7 +199,5 @@ def analyze_query(query: str) -> QueryAnalysis:
         retrieval_query=cleaned_query,
         rewrite_needed=False,
         rewrite_strategy="none",
-        rewrite_reason=(
-            "The normalized ticket text is suitable for retrieval."
-        ),
+        rewrite_reason=("The normalized ticket text is suitable for retrieval."),
     )

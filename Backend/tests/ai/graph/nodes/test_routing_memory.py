@@ -120,7 +120,11 @@ def test_graph_state_preserves_previous_tickets_through_routing():
 
 def test_graph_state_preserves_tool_calls_through_routing():
     initial_tool_calls = [
-        {"agent": "retrieval_agent", "tool": "search_knowledge_base", "status": "success"}
+        {
+            "agent": "retrieval_agent",
+            "tool": "search_knowledge_base",
+            "status": "success",
+        }
     ]
     state: ResolveXState = {
         "ticket_id": 807,

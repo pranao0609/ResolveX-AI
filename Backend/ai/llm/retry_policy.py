@@ -72,18 +72,12 @@ class RetryPolicy:
         if isinstance(error, LLMError):
             return RetryDecision(
                 retryable=False,
-                reason=(
-                    f"{type(error).__name__} is an unclassified "
-                    "LLM error"
-                ),
+                reason=(f"{type(error).__name__} is an unclassified " "LLM error"),
             )
 
         return RetryDecision(
             retryable=False,
-            reason=(
-                f"{type(error).__name__} is not an LLM "
-                "retryable error"
-            ),
+            reason=(f"{type(error).__name__} is not an LLM " "retryable error"),
         )
 
     @staticmethod

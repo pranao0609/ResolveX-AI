@@ -34,10 +34,7 @@ def test_benchmark_case_ids_are_unique():
 
     cases = benchmark.load_dataset()
 
-    case_ids = [
-        case["case_id"]
-        for case in cases
-    ]
+    case_ids = [case["case_id"] for case in cases]
 
     assert len(case_ids) == len(set(case_ids))
 
@@ -45,10 +42,7 @@ def test_benchmark_case_ids_are_unique():
 def test_benchmark_save_results(tmp_path: Path):
     benchmark = LLMBenchmark()
 
-    output_path = (
-        tmp_path
-        / "llm_results.json"
-    )
+    output_path = tmp_path / "llm_results.json"
 
     results = [
         {

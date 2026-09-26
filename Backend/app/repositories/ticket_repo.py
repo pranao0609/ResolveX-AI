@@ -40,7 +40,9 @@ class TicketRepository:
             query = query.filter(Ticket.category == category)
         return query.offset(skip).limit(limit).all()
 
-    def count(self, status: Optional[str] = None, category: Optional[str] = None) -> int:
+    def count(
+        self, status: Optional[str] = None, category: Optional[str] = None
+    ) -> int:
         """Return total count for pagination."""
         query = self.db.query(func.count(Ticket.id))
         if status:
@@ -62,12 +64,20 @@ class TicketRepository:
 
     def get_status_counts(self) -> dict:
         """Return a dict of {status: count} for all tickets."""
-        rows = self.db.query(Ticket.status, func.count(Ticket.id)).group_by(Ticket.status).all()
+        rows = (
+            self.db.query(Ticket.status, func.count(Ticket.id))
+            .group_by(Ticket.status)
+            .all()
+        )
         return {status: count for status, count in rows}
 
     def get_category_counts(self) -> dict:
         """Return a dict of {category: count}."""
-        rows = self.db.query(Ticket.category, func.count(Ticket.id)).group_by(Ticket.category).all()
+        rows = (
+            self.db.query(Ticket.category, func.count(Ticket.id))
+            .group_by(Ticket.category)
+            .all()
+        )
         return {cat or "uncategorised": count for cat, count in rows}
 
     def get_average_confidence(self) -> float:

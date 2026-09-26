@@ -2,7 +2,6 @@ import asyncio
 import sys
 from pathlib import Path
 
-
 # ---------------------------------------------------------------------------
 # Paths / imports
 # ---------------------------------------------------------------------------
@@ -15,13 +14,7 @@ if str(BACKEND_ROOT) not in sys.path:
 
 from evaluation.generation.evaluator import GenerationEvaluator
 
-
-OUTPUT_DIR = (
-    BACKEND_ROOT
-    / "data"
-    / "evaluation"
-    / "prompt_experiments"
-)
+OUTPUT_DIR = BACKEND_ROOT / "data" / "evaluation" / "prompt_experiments"
 
 
 # ---------------------------------------------------------------------------
@@ -43,14 +36,9 @@ async def main() -> None:
         print(f"PROMPT VERSION {prompt_version} EVALUATION")
         print("=" * 80)
 
-        results = await evaluator.evaluate_all(
-            prompt_version=prompt_version
-        )
+        results = await evaluator.evaluate_all(prompt_version=prompt_version)
 
-        output_path = (
-            OUTPUT_DIR
-            / f"prompt_v{prompt_version}_results.json"
-        )
+        output_path = OUTPUT_DIR / f"prompt_v{prompt_version}_results.json"
 
         print(f"Saving results to: {output_path}")
 
@@ -59,10 +47,7 @@ async def main() -> None:
             output_path=output_path,
         )
 
-        print(
-            f"Completed prompt version {prompt_version}: "
-            f"{len(results)} cases"
-        )
+        print(f"Completed prompt version {prompt_version}: " f"{len(results)} cases")
 
 
 if __name__ == "__main__":

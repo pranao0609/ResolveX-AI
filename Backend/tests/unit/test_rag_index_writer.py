@@ -206,6 +206,7 @@ def test_index_chunks_rejects_embedding_count_mismatch(monkeypatch):
     except ValueError as exc:
         assert "Chunk/embedding count mismatch" in str(exc)
 
+
 def test_index_chunks_rejects_preexisting_store_misalignment(
     monkeypatch,
 ):

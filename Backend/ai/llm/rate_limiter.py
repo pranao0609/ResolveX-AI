@@ -25,14 +25,10 @@ class RateLimiter:
         window_seconds: float,
     ) -> None:
         if max_requests <= 0:
-            raise ValueError(
-                "max_requests must be greater than 0"
-            )
+            raise ValueError("max_requests must be greater than 0")
 
         if window_seconds <= 0:
-            raise ValueError(
-                "window_seconds must be greater than 0"
-            )
+            raise ValueError("window_seconds must be greater than 0")
 
         self.max_requests = max_requests
         self.window_seconds = window_seconds
@@ -56,9 +52,7 @@ class RateLimiter:
             self._remove_expired(now)
 
             if len(self._timestamps) >= self.max_requests:
-                raise LLMRateLimitError(
-                    "LLM request rate limit exceeded"
-                )
+                raise LLMRateLimitError("LLM request rate limit exceeded")
 
             self._timestamps.append(now)
 
@@ -68,10 +62,7 @@ class RateLimiter:
     ) -> None:
         cutoff = now - self.window_seconds
 
-        while (
-            self._timestamps
-            and self._timestamps[0] <= cutoff
-        ):
+        while self._timestamps and self._timestamps[0] <= cutoff:
             self._timestamps.popleft()
 
     def reset(self) -> None:

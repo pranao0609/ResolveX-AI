@@ -39,13 +39,22 @@ class TicketService:
         # Input validation
         clean_cat = category.strip().lower() if category else ""
         if clean_cat not in CATEGORIES:
-            raise ResolveXException(status_code=400, detail=f"Invalid category '{category}'. Allowed: {', '.join(CATEGORIES)}")
+            raise ResolveXException(
+                status_code=400,
+                detail=f"Invalid category '{category}'. Allowed: {', '.join(CATEGORIES)}",
+            )
 
         if not (3 <= len(title.strip()) <= 255):
-            raise ResolveXException(status_code=400, detail="Title length must be between 3 and 255 characters.")
+            raise ResolveXException(
+                status_code=400,
+                detail="Title length must be between 3 and 255 characters.",
+            )
 
         if not (10 <= len(description.strip()) <= 10000):
-            raise ResolveXException(status_code=400, detail="Description length must be between 10 and 10,000 characters.")
+            raise ResolveXException(
+                status_code=400,
+                detail="Description length must be between 10 and 10,000 characters.",
+            )
 
         saved_path = None
         if image and image.filename:
@@ -53,23 +62,27 @@ class TicketService:
             if ext not in ALLOWED_EXTENSIONS:
                 raise ResolveXException(
                     status_code=400,
-                    detail=f"Unsupported file type '{ext}'. Allowed extensions: {', '.join(sorted(ALLOWED_EXTENSIONS))}"
+                    detail=f"Unsupported file type '{ext}'. Allowed extensions: {', '.join(sorted(ALLOWED_EXTENSIONS))}",
                 )
 
             contents = await image.read()
             if len(contents) == 0:
-                raise ResolveXException(status_code=400, detail="Uploaded attachment file is empty.")
+                raise ResolveXException(
+                    status_code=400, detail="Uploaded attachment file is empty."
+                )
             if len(contents) > settings.MAX_FILE_SIZE_MB * 1024 * 1024:
                 raise ResolveXException(
                     status_code=400,
-                    detail=f"Attachment file size ({len(contents) / (1024*1024):.2f}MB) exceeds maximum limit of {settings.MAX_FILE_SIZE_MB}MB."
+                    detail=f"Attachment file size ({len(contents) / (1024*1024):.2f}MB) exceeds maximum limit of {settings.MAX_FILE_SIZE_MB}MB.",
                 )
 
             # Reset file pointer or write using file_manager
             image.file.seek(0)
             saved_path = await self.file_manager.save(image)
 
-        logger.info(f"Creating ticket: '{title}' category='{clean_cat}' attachment='{saved_path}'")
+        logger.info(
+            f"Creating ticket: '{title}' category='{clean_cat}' attachment='{saved_path}'"
+        )
 
         ticket = Ticket(
             title=title.strip(),
@@ -99,7 +112,9 @@ class TicketService:
     ) -> TicketListResponse:
         """Return a paginated list of tickets."""
         skip = (page - 1) * page_size
-        tickets = self.repo.list_all(skip=skip, limit=page_size, status=status, category=category)
+        tickets = self.repo.list_all(
+            skip=skip, limit=page_size, status=status, category=category
+        )
         total = self.repo.count(status=status, category=category)
         return TicketListResponse(
             total=total,

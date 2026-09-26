@@ -94,9 +94,7 @@ def escalate(
     """
 
     logger.warning(
-        f"ticket_id={state.get('ticket_id')} "
-        f"stage=escalate "
-        f"decision=escalate"
+        f"ticket_id={state.get('ticket_id')} " f"stage=escalate " f"decision=escalate"
     )
 
     metadata = _stage_metadata(

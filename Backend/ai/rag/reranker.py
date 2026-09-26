@@ -14,7 +14,6 @@ from ai.rag.doc_store import get_doc_store
 from ai.rag.retrieval_models import RetrievalCandidate
 from app.core.logger import logger
 
-
 DEFAULT_RERANKER_MODEL = "cross-encoder/ms-marco-MiniLM-L-6-v2"
 
 

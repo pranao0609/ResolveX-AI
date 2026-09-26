@@ -34,8 +34,7 @@ class MetadataBuilder:
 
         if not chunk.content_hash:
             raise ValueError(
-                "DocumentChunk must have content_hash "
-                "before metadata can be created"
+                "DocumentChunk must have content_hash " "before metadata can be created"
             )
 
         return ChunkMetadata(
@@ -59,7 +58,4 @@ class MetadataBuilder:
     ) -> List[ChunkMetadata]:
         """Convert multiple document chunks into metadata records."""
 
-        return [
-            cls.build(chunk)
-            for chunk in chunks
-        ]
+        return [cls.build(chunk) for chunk in chunks]

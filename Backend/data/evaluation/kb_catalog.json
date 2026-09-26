@@ -1006,5 +1006,75 @@
     "category": "security",
     "source": "knowledge_base",
     "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:145",
+    "title": "Standard Password Reset Procedure",
+    "category": "access_permission",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:146",
+    "title": "Standard VPN Connection Procedure",
+    "category": "network",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:147",
+    "title": "Clear Browser Cache Procedure",
+    "category": "software",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:148",
+    "title": "Standard MFA Enrollment Procedure",
+    "category": "access_permission",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:149",
+    "title": "Standard Account Unlock Procedure",
+    "category": "access_permission",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:150",
+    "title": "Standard Email Account Configuration Procedure",
+    "category": "software",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:151",
+    "title": "Standard Application Restart Procedure",
+    "category": "software",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:152",
+    "title": "Password Reset Email Not Received",
+    "category": "access_permission",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:153",
+    "title": "Standard PostgreSQL Application Connection Procedure",
+    "category": "software",
+    "source": "knowledge_base",
+    "faiss_index_id": null
+  },
+  {
+    "document_id": "kb:154",
+    "title": "Standard Network Connectivity Check",
+    "category": "network",
+    "source": "knowledge_base",
+    "faiss_index_id": null
   }
 ]

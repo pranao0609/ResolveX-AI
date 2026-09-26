@@ -82,9 +82,7 @@ def test_provider_error_is_retried_then_succeeds():
 def test_authentication_error_is_not_retried():
     provider = Mock()
 
-    provider.generate.side_effect = LLMAuthenticationError(
-        "invalid API key"
-    )
+    provider.generate.side_effect = LLMAuthenticationError("invalid API key")
 
     gateway = make_gateway(provider)
 
@@ -102,9 +100,7 @@ def test_authentication_error_is_not_retried():
 def test_retry_exhaustion_raises_last_error():
     provider = Mock()
 
-    provider.generate.side_effect = LLMTimeoutError(
-        "timeout"
-    )
+    provider.generate.side_effect = LLMTimeoutError("timeout")
 
     gateway = make_gateway(provider)
 

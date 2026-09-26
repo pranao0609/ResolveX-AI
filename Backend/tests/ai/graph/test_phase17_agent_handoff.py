@@ -8,9 +8,7 @@ def test_diagnosis_to_resolution_handoff():
     diagnosis_result = DiagnosisResult(
         problem="Email authentication failure",
         possible_root_cause="Invalid credentials",
-        evidence=[
-            "Users must use valid credentials."
-        ],
+        evidence=["Users must use valid credentials."],
         missing_information=[],
         confidence=0.88,
     )
@@ -25,9 +23,7 @@ def test_diagnosis_to_resolution_handoff():
                 "Verify the account credentials.",
                 "Retry authentication.",
             ],
-            "evidence": [
-                "Users must use valid credentials."
-            ],
+            "evidence": ["Users must use valid credentials."],
             "confidence": 0.91,
             "requires_human": False,
         },
@@ -36,9 +32,7 @@ def test_diagnosis_to_resolution_handoff():
     state = {
         "ticket_id": 301,
         "cleaned_ticket": "Unable to login to email",
-        "retrieved_context": (
-            "Users must use valid credentials."
-        ),
+        "retrieved_context": ("Users must use valid credentials."),
         "category": "authentication",
         "fallback_used": False,
     }
@@ -51,17 +45,11 @@ def test_diagnosis_to_resolution_handoff():
 
     state.update(diagnosis_output)
 
-    assert state["diagnosis_problem"] == (
-        "Email authentication failure"
-    )
+    assert state["diagnosis_problem"] == ("Email authentication failure")
 
-    assert state["diagnosis_root_cause"] == (
-        "Invalid credentials"
-    )
+    assert state["diagnosis_root_cause"] == ("Invalid credentials")
 
-    assert state["diagnosis_evidence"] == [
-        "Users must use valid credentials."
-    ]
+    assert state["diagnosis_evidence"] == ["Users must use valid credentials."]
 
     with patch(
         "ai.graph.nodes.resolution.generate_solution",
@@ -70,39 +58,37 @@ def test_diagnosis_to_resolution_handoff():
         resolution_output = resolution_agent(state)
 
     mock_generate.assert_called_once_with(
-    ticket_text="Unable to login to email",
-    context="Users must use valid credentials.",
-    diagnosis="Email authentication failure",
-    root_cause="Invalid credentials",
-    classification="authentication",
-    conversation_history=[
-        {
-            "role": "user",
-            "content": "Unable to login to email",
-            "metadata": {
-                "ticket_id": 301,
+        ticket_text="Unable to login to email",
+        context="Users must use valid credentials.",
+        diagnosis="Email authentication failure",
+        root_cause="Invalid credentials",
+        classification="authentication",
+        conversation_history=[
+            {
+                "role": "user",
+                "content": "Unable to login to email",
+                "metadata": {
+                    "ticket_id": 301,
+                },
             },
-        },
-        {
-            "role": "assistant",
-            "content": "Email authentication failure",
-            "metadata": {
-                "ticket_id": 301,
-                "root_cause": "Invalid credentials",
-                "confidence": 0.88,
+            {
+                "role": "assistant",
+                "content": "Email authentication failure",
+                "metadata": {
+                    "ticket_id": 301,
+                    "root_cause": "Invalid credentials",
+                    "confidence": 0.88,
+                },
             },
-        },
-    ],
-)
+        ],
+    )
 
     assert resolution_output["resolution_steps"] == [
         "Verify the account credentials.",
         "Retry authentication.",
     ]
 
-    assert resolution_output["evidence"] == [
-        "Users must use valid credentials."
-    ]
+    assert resolution_output["evidence"] == ["Users must use valid credentials."]
 
     assert resolution_output["resolution_confidence"] == 0.91
     assert resolution_output["requires_human"] is False

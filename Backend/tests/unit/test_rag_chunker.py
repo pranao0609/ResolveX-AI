@@ -21,9 +21,7 @@ def make_document(content):
 
 
 def test_short_document_produces_one_chunk():
-    document = make_document(
-        "Restart the router and check the network connection."
-    )
+    document = make_document("Restart the router and check the network connection.")
 
     chunker = DocumentChunker(
         chunk_size=100,
@@ -54,9 +52,7 @@ def test_multiple_paragraphs_are_preserved():
 
     assert len(chunks) >= 2
 
-    combined = "\n\n".join(
-        chunk.content for chunk in chunks
-    )
+    combined = "\n\n".join(chunk.content for chunk in chunks)
 
     assert "First paragraph" in combined
     assert "Second paragraph" in combined
@@ -83,9 +79,7 @@ def test_long_sentence_is_split():
 
 
 def test_chunk_ids_are_deterministic():
-    document = make_document(
-        "This is a test document with several words."
-    )
+    document = make_document("This is a test document with several words.")
 
     chunker = DocumentChunker(
         chunk_size=30,
@@ -98,9 +92,7 @@ def test_chunk_ids_are_deterministic():
     assert chunks[0].chunk_id == "kb:42:chunk:0"
 
     for index, chunk in enumerate(chunks):
-        assert chunk.chunk_id == (
-            f"kb:42:chunk:{index}"
-        )
+        assert chunk.chunk_id == (f"kb:42:chunk:{index}")
 
 
 def test_chunk_indices_are_sequential():
@@ -119,16 +111,11 @@ def test_chunk_indices_are_sequential():
 
     chunks = chunker.chunk(document)
 
-    assert [
-        chunk.chunk_index
-        for chunk in chunks
-    ] == list(range(len(chunks)))
+    assert [chunk.chunk_index for chunk in chunks] == list(range(len(chunks)))
 
 
 def test_document_metadata_is_preserved():
-    document = make_document(
-        "Network troubleshooting information."
-    )
+    document = make_document("Network troubleshooting information.")
 
     chunker = DocumentChunker(
         chunk_size=100,
@@ -190,9 +177,7 @@ def test_invalid_chunk_configuration_is_rejected():
 
 
 def test_document_shorter_than_minimum_is_not_discarded():
-    document = make_document(
-        "Short but valid content."
-    )
+    document = make_document("Short but valid content.")
 
     chunker = DocumentChunker(
         chunk_size=100,
@@ -207,10 +192,7 @@ def test_document_shorter_than_minimum_is_not_discarded():
 
 
 def test_chunker_does_not_modify_original_document():
-    original_content = (
-        "First paragraph.\n\n"
-        "Second paragraph."
-    )
+    original_content = "First paragraph.\n\n" "Second paragraph."
 
     document = make_document(original_content)
 

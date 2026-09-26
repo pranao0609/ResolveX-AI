@@ -32,9 +32,7 @@ def build_classification_metadata(
     changing the classification decision itself.
     """
 
-    confidence_delta = (
-        final_confidence - primary_confidence
-    )
+    confidence_delta = final_confidence - primary_confidence
 
     if reclassification_error:
         decision_reason = "reclassification_failed"
@@ -58,33 +56,27 @@ def build_classification_metadata(
 
     return {
         "strategy": strategy,
-
         "primary": {
             "category": primary_category,
             "confidence": primary_confidence,
         },
-
         "alternative": {
             "category": alternative_category,
             "confidence": alternative_confidence,
         },
-
         "final": {
             "category": final_category,
             "confidence": final_confidence,
         },
-
         "reclassification": {
             "triggered": reclassification_triggered,
             "used": reclassification_used,
             "selected": reclassified,
             "error": reclassification_error,
         },
-
         "confidence_delta": round(
             confidence_delta,
             6,
         ),
-
         "decision_reason": decision_reason,
     }

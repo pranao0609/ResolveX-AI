@@ -26,6 +26,7 @@ from ai.config.ai_config import (
     RETRIEVAL_TOP_K,
 )
 
+
 class HybridRetriever:
     """Hybrid BM25 + dense retriever."""
 

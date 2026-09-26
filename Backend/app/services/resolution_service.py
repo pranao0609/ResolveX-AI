@@ -65,21 +65,14 @@ class ResolutionService:
         # Existing-resolution protection
         # ==============================================================
 
-        if (
-            ticket.status == STATUS_AUTO_RESOLVED
-            and not force
-        ):
+        if ticket.status == STATUS_AUTO_RESOLVED and not force:
             logger.info(
-                f"Ticket {ticket_id} already resolved. "
-                f"Skipping graph execution."
+                f"Ticket {ticket_id} already resolved. " f"Skipping graph execution."
             )
 
             return self._build_result(ticket)
 
-        logger.info(
-            f"Starting ResolveX LangGraph "
-            f"for ticket_id={ticket_id}"
-        )
+        logger.info(f"Starting ResolveX LangGraph " f"for ticket_id={ticket_id}")
 
         # ==============================================================
         # Phase 14.9 — LangGraph execution
@@ -163,10 +156,7 @@ class ResolutionService:
 
         if new_status == STATUS_ESCALATED:
 
-            ticket_text = (
-                f"{ticket.title or ''} "
-                f"{ticket.description or ''}"
-            )
+            ticket_text = f"{ticket.title or ''} " f"{ticket.description or ''}"
 
             resolver = get_best_expert_resolver(
                 category,
@@ -176,9 +166,7 @@ class ResolutionService:
             ticket.assigned_resolver_id = resolver["id"]
             ticket.assigned_resolver_name = resolver["name"]
             ticket.assigned_resolver_category = resolver["category"]
-            ticket.assigned_at = datetime.now(
-                timezone.utc
-            )
+            ticket.assigned_at = datetime.now(timezone.utc)
 
             logger.info(
                 f"Assigned expert resolver "
@@ -218,16 +206,12 @@ class ResolutionService:
             escalated_to_human=escalated,
             explanation=explanation,
             assigned_resolver_id=(
-    str(ticket.assigned_resolver_id)
-    if ticket.assigned_resolver_id is not None
-    else None
-),
-            assigned_resolver_name=(
-                ticket.assigned_resolver_name
+                str(ticket.assigned_resolver_id)
+                if ticket.assigned_resolver_id is not None
+                else None
             ),
-            assigned_resolver_category=(
-                ticket.assigned_resolver_category
-            ),
+            assigned_resolver_name=(ticket.assigned_resolver_name),
+            assigned_resolver_category=(ticket.assigned_resolver_category),
         )
 
     # ==================================================================
@@ -269,22 +253,14 @@ class ResolutionService:
             category=ticket.category,
             solution=ticket.solution,
             confidence=confidence,
-            auto_resolved=(
-                ticket.status == STATUS_AUTO_RESOLVED
-            ),
-            escalated_to_human=(
-                ticket.status == STATUS_ESCALATED
-            ),
+            auto_resolved=(ticket.status == STATUS_AUTO_RESOLVED),
+            escalated_to_human=(ticket.status == STATUS_ESCALATED),
             explanation=ticket.explanation,
             assigned_resolver_id=(
-            str(ticket.assigned_resolver_id)
-            if ticket.assigned_resolver_id is not None
-            else None
-        ),
-            assigned_resolver_name=(
-                ticket.assigned_resolver_name
+                str(ticket.assigned_resolver_id)
+                if ticket.assigned_resolver_id is not None
+                else None
             ),
-            assigned_resolver_category=(
-                ticket.assigned_resolver_category
-            ),
+            assigned_resolver_name=(ticket.assigned_resolver_name),
+            assigned_resolver_category=(ticket.assigned_resolver_category),
         )

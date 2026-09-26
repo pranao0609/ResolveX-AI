@@ -10,6 +10,7 @@ from ai.graph.tools.tool_types import (
 from ai.graph.tools.executor import append_tool_call
 from ai.graph.state import ResolveXState
 
+
 def build_test_registry() -> ToolRegistry:
     registry = ToolRegistry()
 
@@ -130,6 +131,7 @@ def test_execute_tool_supports_keyword_arguments() -> None:
         "query": "login failure",
         "top_k": 3,
     }
+
 
 def test_append_tool_call_creates_tool_calls_list() -> None:
     state: ResolveXState = {}

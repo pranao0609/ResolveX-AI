@@ -1,0 +1,54 @@
+name: ResolveX CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  resolvex-ci:
+    name: ResolveX Continuous Integration
+    runs-on: ubuntu-latest
+
+    env:
+      ENVIRONMENT: test
+      DEBUG: "false"
+      PYTHONPATH: Backend
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: "Backend/requirements.txt"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r Backend/requirements.txt
+          pip install black ruff
+
+      - name: Code Formatting Check (Black)
+        run: |
+          black --check Backend
+
+      - name: Code Linting (Ruff)
+        run: |
+          ruff check Backend
+
+      - name: Security Test Suite
+        run: |
+          pytest Backend/tests/security -v
+
+      - name: Complete Test Suite
+        run: |
+          pytest Backend/tests
+
+      - name: Benchmark Engine Smoke Test
+        run: |
+          python Backend/scripts/benchmark_smoke_test.py

@@ -57,10 +57,7 @@ def main():
         )
 
     assert len(reranked) <= 5
-    assert all(
-        candidate.retriever == "reranker"
-        for candidate in reranked
-    )
+    assert all(candidate.retriever == "reranker" for candidate in reranked)
 
     print("\nReranker smoke test passed.")
 

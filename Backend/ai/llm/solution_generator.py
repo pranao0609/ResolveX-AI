@@ -9,7 +9,7 @@ LLM reliability responsibilities are delegated to LLMGateway.
 
 from __future__ import annotations
 
-from typing import Tuple,Any
+from typing import Tuple, Any
 
 from app.config import settings
 from app.core.logger import logger
@@ -50,8 +50,9 @@ try:
 
 except ImportError:
     GROQ_AVAILABLE = False
-    
+
 DEFAULT_PROMPT_VERSION = 1
+
 
 def _parse_resolution(
     response_text: str,
@@ -67,27 +68,15 @@ def _parse_resolution(
     cleaned_response = response_text.strip()
 
     if cleaned_response.startswith("```"):
-        cleaned_response = (
-            cleaned_response
-            .removeprefix("```json")
-            .strip()
-        )
+        cleaned_response = cleaned_response.removeprefix("```json").strip()
 
-        cleaned_response = (
-            cleaned_response
-            .removeprefix("```")
-            .strip()
-        )
+        cleaned_response = cleaned_response.removeprefix("```").strip()
 
         if cleaned_response.endswith("```"):
-            cleaned_response = (
-                cleaned_response[:-3]
-                .strip()
-            )
+            cleaned_response = cleaned_response[:-3].strip()
 
-    return ResolutionResult.model_validate_json(
-        cleaned_response
-    )
+    return ResolutionResult.model_validate_json(cleaned_response)
+
 
 def _get_gateway() -> LLMGateway:
     """
@@ -104,6 +93,7 @@ def _get_gateway() -> LLMGateway:
     return LLMGateway(
         provider=provider,
     )
+
 
 def _fallback_reason(exc: Exception) -> str:
     """
@@ -126,6 +116,7 @@ def _fallback_reason(exc: Exception) -> str:
         return "provider_error"
 
     return "unknown_error"
+
 
 def generate_solution(
     ticket_text: str,
@@ -165,17 +156,9 @@ def generate_solution(
         prompt_version,
     )
 
-    clean_ticket = (
-        ticket_text[:4000]
-        if ticket_text
-        else ""
-    )
+    clean_ticket = ticket_text[:4000] if ticket_text else ""
 
-    clean_context = (
-        context.strip()
-        if context
-        else "No context available."
-    )
+    clean_context = context.strip() if context else "No context available."
 
     system_prompt, user_prompt = render_prompt(
         prompt,
@@ -190,8 +173,7 @@ def generate_solution(
     )
 
     classification_section = (
-        "### Classification\n"
-        f"{classification.strip() or 'Not available'}\n"
+        "### Classification\n" f"{classification.strip() or 'Not available'}\n"
     )
 
     def _format_conversation_history(history: Any) -> str:
@@ -245,10 +227,7 @@ def generate_solution(
         GROQ_TEMPERATURE,
     )
 
-    model = (
-        settings.GROQ_MODEL
-        or prompt_model
-    )
+    model = settings.GROQ_MODEL or prompt_model
 
     temperature = prompt_temperature
 
@@ -260,10 +239,7 @@ def generate_solution(
         gateway = _get_gateway()
 
     except ValueError as exc:
-        logger.warning(
-            "LLM provider unavailable: "
-            f"{exc}"
-        )
+        logger.warning("LLM provider unavailable: " f"{exc}")
 
         return _placeholder_solution(), True
 
@@ -326,27 +302,15 @@ def _placeholder_solution() -> ResolutionResult:
     """
 
     return ResolutionResult(
-        diagnosis=(
-            "The reported support issue requires "
-            "further investigation."
-        ),
+        diagnosis=("The reported support issue requires " "further investigation."),
         root_cause=(
             "No validated root cause could be established "
             "by the automated resolution system."
         ),
         resolution_steps=[
-            (
-                "Review the ticket details and reproduce "
-                "the reported issue."
-            ),
-            (
-                "Collect relevant application, system, "
-                "or service logs."
-            ),
-            (
-                "Escalate the ticket to a support agent "
-                "for further investigation."
-            ),
+            ("Review the ticket details and reproduce " "the reported issue."),
+            ("Collect relevant application, system, " "or service logs."),
+            ("Escalate the ticket to a support agent " "for further investigation."),
         ],
         evidence=[],
         confidence=0.0,

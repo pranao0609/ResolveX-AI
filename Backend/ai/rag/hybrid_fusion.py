@@ -20,19 +20,13 @@ class HybridFusion:
         dense_weight: float = 0.5,
     ):
         if bm25_weight < 0:
-            raise ValueError(
-                "bm25_weight cannot be negative"
-            )
+            raise ValueError("bm25_weight cannot be negative")
 
         if dense_weight < 0:
-            raise ValueError(
-                "dense_weight cannot be negative"
-            )
+            raise ValueError("dense_weight cannot be negative")
 
         if bm25_weight + dense_weight == 0:
-            raise ValueError(
-                "At least one retrieval weight must be greater than zero"
-            )
+            raise ValueError("At least one retrieval weight must be greater than zero")
 
         total_weight = bm25_weight + dense_weight
 
@@ -54,22 +48,16 @@ class HybridFusion:
         if top_k <= 0:
             return []
 
-        normalized_bm25 = ScoreNormalizer.min_max(
-            bm25_candidates
-        )
+        normalized_bm25 = ScoreNormalizer.min_max(bm25_candidates)
 
-        normalized_dense = ScoreNormalizer.min_max(
-            dense_candidates
-        )
+        normalized_dense = ScoreNormalizer.min_max(dense_candidates)
 
         bm25_scores: Dict[int, float] = {
-            candidate.index_id: candidate.score
-            for candidate in normalized_bm25
+            candidate.index_id: candidate.score for candidate in normalized_bm25
         }
 
         dense_scores: Dict[int, float] = {
-            candidate.index_id: candidate.score
-            for candidate in normalized_dense
+            candidate.index_id: candidate.score for candidate in normalized_dense
         }
 
         candidate_ids = set(bm25_scores) | set(dense_scores)
@@ -88,8 +76,7 @@ class HybridFusion:
             )
 
             hybrid_score = (
-                self.bm25_weight * bm25_score
-                + self.dense_weight * dense_score
+                self.bm25_weight * bm25_score + self.dense_weight * dense_score
             )
 
             fused_candidates.append(

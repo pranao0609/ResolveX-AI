@@ -26,9 +26,7 @@ def test_parse_valid_structured_response():
 
     assert isinstance(result, ResolutionResult)
     assert result.diagnosis == "Email client is not synchronizing."
-    assert result.root_cause == (
-        "The synchronization service is unavailable."
-    )
+    assert result.root_cause == ("The synchronization service is unavailable.")
     assert len(result.resolution_steps) == 3
     assert result.confidence == 0.91
     assert result.requires_human is False
@@ -87,13 +85,12 @@ def test_parse_invalid_confidence_raises():
     except Exception:
         pass
 
+
 from unittest.mock import patch
 
 
 def test_default_prompt_version_is_v1():
-    with patch(
-        "ai.llm.solution_generator.load_prompt"
-    ) as mock_load_prompt:
+    with patch("ai.llm.solution_generator.load_prompt") as mock_load_prompt:
 
         mock_load_prompt.return_value = {
             "prompt_id": "resolution_prompt_v1",
@@ -128,9 +125,7 @@ def test_default_prompt_version_is_v1():
 
 
 def test_custom_prompt_version_is_loaded():
-    with patch(
-        "ai.llm.solution_generator.load_prompt"
-    ) as mock_load_prompt:
+    with patch("ai.llm.solution_generator.load_prompt") as mock_load_prompt:
 
         mock_load_prompt.return_value = {
             "prompt_id": "resolution_prompt_v3",

@@ -14,9 +14,7 @@ def test_resolution_agent_returns_structured_resolution():
                 "Verify the account credentials.",
                 "Retry authentication.",
             ],
-            "evidence": [
-                "Users must use valid credentials."
-            ],
+            "evidence": ["Users must use valid credentials."],
             "confidence": 0.91,
             "requires_human": False,
         },
@@ -30,9 +28,7 @@ def test_resolution_agent_returns_structured_resolution():
             {
                 "ticket_id": 201,
                 "cleaned_ticket": "Unable to login to email",
-                "retrieved_context": (
-                    "Users must use valid credentials."
-                ),
+                "retrieved_context": ("Users must use valid credentials."),
                 "diagnosis": "Email authentication failure",
                 "root_cause": "Invalid credentials",
                 "category": "authentication",
@@ -55,9 +51,7 @@ def test_resolution_agent_returns_structured_resolution():
         "Retry authentication.",
     ]
 
-    assert result["evidence"] == [
-        "Users must use valid credentials."
-    ]
+    assert result["evidence"] == ["Users must use valid credentials."]
 
     assert result["resolution_confidence"] == 0.91
     assert result["requires_human"] is False
@@ -75,9 +69,7 @@ def test_resolution_agent_consumes_diagnosis_and_root_cause():
                 "Update the expired credentials.",
                 "Retry authentication.",
             ],
-            "evidence": [
-                "Credentials must remain valid."
-            ],
+            "evidence": ["Credentials must remain valid."],
             "confidence": 0.87,
             "requires_human": False,
         },
@@ -91,15 +83,11 @@ def test_resolution_agent_consumes_diagnosis_and_root_cause():
             {
                 "ticket_id": 202,
                 "cleaned_ticket": "Cannot access email",
-                "retrieved_context": (
-                    "Credentials must remain valid."
-                ),
+                "retrieved_context": ("Credentials must remain valid."),
                 "diagnosis": "Email authentication failure",
                 "root_cause": "Expired credentials",
                 "category": "authentication",
-                "conversation_history": (
-                    "User reported that the issue started today."
-                ),
+                "conversation_history": ("User reported that the issue started today."),
                 "fallback_used": False,
             }
         )
@@ -110,9 +98,7 @@ def test_resolution_agent_consumes_diagnosis_and_root_cause():
         diagnosis="Email authentication failure",
         root_cause="Expired credentials",
         classification="authentication",
-        conversation_history=(
-            "User reported that the issue started today."
-        ),
+        conversation_history=("User reported that the issue started today."),
     )
 
 
@@ -165,12 +151,8 @@ def test_resolution_agent_preserves_confidence():
         {
             "diagnosis": "Email authentication failure",
             "root_cause": "Invalid credentials",
-            "resolution_steps": [
-                "Verify credentials."
-            ],
-            "evidence": [
-                "Authentication failed."
-            ],
+            "resolution_steps": ["Verify credentials."],
+            "evidence": ["Authentication failed."],
             "confidence": 0.74,
             "requires_human": False,
         },
@@ -239,12 +221,9 @@ def test_resolution_agent_handles_fallback():
         (),
         {
             "diagnosis": (
-                "The reported support issue requires "
-                "further investigation."
+                "The reported support issue requires " "further investigation."
             ),
-            "root_cause": (
-                "No validated root cause could be established."
-            ),
+            "root_cause": ("No validated root cause could be established."),
             "resolution_steps": [
                 "Review the ticket details.",
                 "Collect relevant logs.",
@@ -284,9 +263,7 @@ def test_resolution_agent_preserves_previous_fallback():
         {
             "diagnosis": "Email issue",
             "root_cause": "Unknown",
-            "resolution_steps": [
-                "Review the ticket."
-            ],
+            "resolution_steps": ["Review the ticket."],
             "evidence": [],
             "confidence": 0.75,
             "requires_human": False,

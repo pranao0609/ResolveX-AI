@@ -17,6 +17,7 @@ from ai.llm.providers.base import (
 from ai.llm.errors import LLMRateLimitError
 from ai.llm.rate_limiter import RateLimiter
 
+
 class FakeProvider:
     def __init__(
         self,
@@ -50,11 +51,7 @@ def make_response(content: str) -> LLMResponse:
 
 
 def test_gateway_returns_provider_response():
-    provider = FakeProvider(
-        response=make_response(
-            '{"diagnosis":"Test issue"}'
-        )
-    )
+    provider = FakeProvider(response=make_response('{"diagnosis":"Test issue"}'))
 
     gateway = LLMGateway(provider)
 
@@ -65,9 +62,7 @@ def test_gateway_returns_provider_response():
         max_retries=1,
     )
 
-    assert response.content == (
-        '{"diagnosis":"Test issue"}'
-    )
+    assert response.content == ('{"diagnosis":"Test issue"}')
 
     assert provider.calls == 1
 
@@ -77,9 +72,7 @@ def test_gateway_retries_timeout(monkeypatch):
         errors=[
             LLMTimeoutError("timeout"),
         ],
-        response=make_response(
-            '{"diagnosis":"Recovered"}'
-        ),
+        response=make_response('{"diagnosis":"Recovered"}'),
     )
 
     gateway = LLMGateway(provider)
@@ -96,9 +89,7 @@ def test_gateway_retries_timeout(monkeypatch):
         max_retries=2,
     )
 
-    assert response.content == (
-        '{"diagnosis":"Recovered"}'
-    )
+    assert response.content == ('{"diagnosis":"Recovered"}')
 
     assert provider.calls == 2
 
@@ -106,17 +97,13 @@ def test_gateway_retries_timeout(monkeypatch):
 def test_gateway_does_not_retry_authentication_error():
     provider = FakeProvider(
         errors=[
-            LLMAuthenticationError(
-                "invalid key"
-            ),
+            LLMAuthenticationError("invalid key"),
         ]
     )
 
     gateway = LLMGateway(provider)
 
-    with pytest.raises(
-        LLMAuthenticationError
-    ):
+    with pytest.raises(LLMAuthenticationError):
         gateway.generate(
             system_prompt="system",
             user_prompt="user",
@@ -132,8 +119,7 @@ def test_gateway_validates_resolution():
 
     gateway = LLMGateway(provider)
 
-    response = make_response(
-        """
+    response = make_response("""
         {
             "diagnosis": "Email login failure",
             "root_cause": "Invalid credentials",
@@ -146,16 +132,11 @@ def test_gateway_validates_resolution():
             "confidence": 0.9,
             "requires_human": false
         }
-        """
-    )
+        """)
 
-    result = gateway.validate_resolution(
-        response
-    )
+    result = gateway.validate_resolution(response)
 
-    assert result.diagnosis == (
-        "Email login failure"
-    )
+    assert result.diagnosis == ("Email login failure")
 
     assert result.confidence == 0.9
     assert result.requires_human is False
@@ -166,23 +147,14 @@ def test_gateway_rejects_invalid_resolution():
 
     gateway = LLMGateway(provider)
 
-    response = make_response(
-        '{"diagnosis": ""}'
-    )
+    response = make_response('{"diagnosis": ""}')
 
-    with pytest.raises(
-        LLMInvalidResponseError
-    ):
-        gateway.validate_resolution(
-            response
-        )
+    with pytest.raises(LLMInvalidResponseError):
+        gateway.validate_resolution(response)
+
 
 def test_gateway_uses_rate_limiter():
-    provider = FakeProvider(
-        response=make_response(
-            '{"diagnosis":"Test issue"}'
-        )
-    )
+    provider = FakeProvider(response=make_response('{"diagnosis":"Test issue"}'))
 
     limiter = RateLimiter(
         max_requests=1,
@@ -211,12 +183,9 @@ def test_gateway_uses_rate_limiter():
 
     assert provider.calls == 1
 
+
 def test_gateway_records_successful_usage():
-    provider = FakeProvider(
-        response=make_response(
-            '{"diagnosis":"Test issue"}'
-        )
-    )
+    provider = FakeProvider(response=make_response('{"diagnosis":"Test issue"}'))
 
     gateway = LLMGateway(
         provider,
@@ -231,29 +200,18 @@ def test_gateway_records_successful_usage():
 
     assert gateway.last_usage is not None
 
-    assert (
-        gateway.last_usage.model
-        == "test-model"
-    )
+    assert gateway.last_usage.model == "test-model"
 
-    assert (
-        gateway.last_usage.prompt_tokens
-        == 100
-    )
+    assert gateway.last_usage.prompt_tokens == 100
 
-    assert (
-        gateway.last_usage.completion_tokens
-        == 50
-    )
+    assert gateway.last_usage.completion_tokens == 50
 
-    assert (
-        gateway.last_usage.total_tokens
-        == 150
-    )
+    assert gateway.last_usage.total_tokens == 150
 
     assert gateway.last_usage.success is True
     assert gateway.last_usage.latency_ms >= 0
     assert gateway.last_usage.request_id
+
 
 def test_gateway_records_failed_usage():
     provider = FakeProvider(
@@ -276,16 +234,10 @@ def test_gateway_records_failed_usage():
 
     assert gateway.last_usage is not None
 
-    assert (
-        gateway.last_usage.model
-        == "test-model"
-    )
+    assert gateway.last_usage.model == "test-model"
 
     assert gateway.last_usage.success is False
 
-    assert (
-        gateway.last_usage.error_type
-        == "LLMTimeoutError"
-    )
+    assert gateway.last_usage.error_type == "LLMTimeoutError"
 
     assert gateway.last_usage.latency_ms >= 0

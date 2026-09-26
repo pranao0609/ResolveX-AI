@@ -6,9 +6,7 @@ def _make_ticket():
     return SimpleNamespace(
         id=101,
         title="VPN connection failure",
-        description=(
-            "The VPN disconnects immediately after login."
-        ),
+        description=("The VPN disconnects immediately after login."),
         attachment_paths=None,
     )
 
@@ -20,8 +18,7 @@ def _mock_graph_state(
     return {
         "ticket_id": 101,
         "cleaned_ticket": (
-            "VPN connection failure. "
-            "The VPN disconnects immediately after login."
+            "VPN connection failure. " "The VPN disconnects immediately after login."
         ),
         "category": "network",
         "category_confidence": 0.95,
@@ -48,9 +45,7 @@ def _mock_graph_state(
             "Clear the existing VPN session.",
             "Authenticate again.",
         ],
-        "evidence": [
-            "VPN troubleshooting documentation."
-        ],
+        "evidence": ["VPN troubleshooting documentation."],
         "resolution_confidence": 0.90,
         "verification_passed": True,
         "verification_reason": "Resolution is supported by evidence.",
@@ -74,9 +69,7 @@ def test_graph_executor_invokes_langgraph():
 
     ticket = _make_ticket()
 
-    with patch(
-        "ai.graph.executor.resolvex_graph.invoke"
-    ) as mock_invoke:
+    with patch("ai.graph.executor.resolvex_graph.invoke") as mock_invoke:
 
         mock_invoke.return_value = _mock_graph_state()
 
@@ -97,9 +90,7 @@ def test_graph_executor_maps_human_review():
 
     ticket = _make_ticket()
 
-    with patch(
-        "ai.graph.executor.resolvex_graph.invoke"
-    ) as mock_invoke:
+    with patch("ai.graph.executor.resolvex_graph.invoke") as mock_invoke:
 
         mock_invoke.return_value = _mock_graph_state(
             decision="human_review",
@@ -118,9 +109,7 @@ def test_graph_executor_maps_escalation():
 
     ticket = _make_ticket()
 
-    with patch(
-        "ai.graph.executor.resolvex_graph.invoke"
-    ) as mock_invoke:
+    with patch("ai.graph.executor.resolvex_graph.invoke") as mock_invoke:
 
         mock_invoke.return_value = _mock_graph_state(
             decision="escalate",
@@ -142,9 +131,7 @@ def test_graph_executor_preserves_fallback():
     state = _mock_graph_state()
     state["fallback_used"] = True
 
-    with patch(
-        "ai.graph.executor.resolvex_graph.invoke"
-    ) as mock_invoke:
+    with patch("ai.graph.executor.resolvex_graph.invoke") as mock_invoke:
 
         mock_invoke.return_value = state
 
@@ -165,23 +152,16 @@ def test_graph_executor_preserves_errors():
         requires_human=True,
     )
 
-    state["errors"] = [
-        "retrieval_agent: RuntimeError: retrieval failed"
-    ]
+    state["errors"] = ["retrieval_agent: RuntimeError: retrieval failed"]
 
-    with patch(
-        "ai.graph.executor.resolvex_graph.invoke"
-    ) as mock_invoke:
+    with patch("ai.graph.executor.resolvex_graph.invoke") as mock_invoke:
 
         mock_invoke.return_value = state
 
         result = execute_resolvex_graph(ticket)
 
     assert result["errors"]
-    assert (
-        "retrieval_agent"
-        in result["errors"][0]
-    )
+    assert "retrieval_agent" in result["errors"][0]
     assert result["auto_resolved"] is False
 
 
@@ -190,9 +170,7 @@ def test_graph_executor_includes_evaluation_details():
 
     ticket = _make_ticket()
 
-    with patch(
-        "ai.graph.executor.resolvex_graph.invoke"
-    ) as mock_invoke:
+    with patch("ai.graph.executor.resolvex_graph.invoke") as mock_invoke:
 
         mock_invoke.return_value = _mock_graph_state()
 

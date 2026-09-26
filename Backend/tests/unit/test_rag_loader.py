@@ -28,9 +28,7 @@ def test_load_all_converts_kb_entries_to_documents():
 
     entry = make_kb_entry()
 
-    db.query.return_value.order_by.return_value.all.return_value = [
-        entry
-    ]
+    db.query.return_value.order_by.return_value.all.return_value = [entry]
 
     loader = KnowledgeBaseLoader(db)
 

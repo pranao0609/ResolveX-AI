@@ -15,18 +15,10 @@ def make_state(
         "ticket_id": "TEST-16-2",
         "request_id": "request-16-2",
         "graph_run_id": "graph-16-2",
-        "cleaned_ticket": (
-            "VPN connection fails after password reset"
-        ),
-        "retrieved_documents": (
-            documents or []
-        ),
-        "retrieval_metadata": (
-            retrieval_metadata or {}
-        ),
-        "metadata": (
-            metadata or {}
-        ),
+        "cleaned_ticket": ("VPN connection fails after password reset"),
+        "retrieved_documents": (documents or []),
+        "retrieval_metadata": (retrieval_metadata or {}),
+        "metadata": (metadata or {}),
         "errors": [],
         "warnings": [],
     }
@@ -49,25 +41,15 @@ def test_retrieval_decision_continues_with_sufficient_evidence():
         },
     )
 
-    result = retrieval_decision_agent(
-        state
-    )
+    result = retrieval_decision_agent(state)
 
-    metadata = result[
-        "retrieval_metadata"
-    ]
+    metadata = result["retrieval_metadata"]
 
-    assert metadata[
-        "enough_evidence"
-    ] is True
+    assert metadata["enough_evidence"] is True
 
-    assert metadata[
-        "retrieval_decision"
-    ] == "continue"
+    assert metadata["retrieval_decision"] == "continue"
 
-    assert metadata[
-        "retry_allowed"
-    ] is False
+    assert metadata["retry_allowed"] is False
 
 
 def test_retrieval_decision_retries_when_evidence_is_insufficient():
@@ -86,37 +68,23 @@ def test_retrieval_decision_retries_when_evidence_is_insufficient():
         },
     )
 
-    result = retrieval_decision_agent(
-        state
-    )
+    result = retrieval_decision_agent(state)
 
-    metadata = result[
-        "retrieval_metadata"
-    ]
+    metadata = result["retrieval_metadata"]
 
-    assert metadata[
-        "enough_evidence"
-    ] is False
+    assert metadata["enough_evidence"] is False
 
-    assert metadata[
-        "retrieval_decision"
-    ] == "retry"
+    assert metadata["retrieval_decision"] == "retry"
 
-    assert metadata[
-        "retry_allowed"
-    ] is True
+    assert metadata["retry_allowed"] is True
 
-    assert metadata[
-        "retry_strategy"
-    ] in {
+    assert metadata["retry_strategy"] in {
         "broaden",
         "narrow",
         "rewrite",
     }
 
-    assert metadata[
-        "next_query"
-    ]
+    assert metadata["next_query"]
 
 
 def test_retrieval_decision_stops_after_max_attempts():
@@ -137,25 +105,15 @@ def test_retrieval_decision_stops_after_max_attempts():
         },
     )
 
-    result = retrieval_decision_agent(
-        state
-    )
+    result = retrieval_decision_agent(state)
 
-    metadata = result[
-        "retrieval_metadata"
-    ]
+    metadata = result["retrieval_metadata"]
 
-    assert metadata[
-        "retrieval_attempt"
-    ] == 2
+    assert metadata["retrieval_attempt"] == 2
 
-    assert metadata[
-        "retry_allowed"
-    ] is False
+    assert metadata["retry_allowed"] is False
 
-    assert metadata[
-        "retrieval_decision"
-    ] == "continue"
+    assert metadata["retrieval_decision"] == "continue"
 
 
 def test_retrieval_decision_handles_empty_context():
@@ -171,25 +129,15 @@ def test_retrieval_decision_handles_empty_context():
         },
     )
 
-    result = retrieval_decision_agent(
-        state
-    )
+    result = retrieval_decision_agent(state)
 
-    metadata = result[
-        "retrieval_metadata"
-    ]
+    metadata = result["retrieval_metadata"]
 
-    assert metadata[
-        "enough_evidence"
-    ] is False
+    assert metadata["enough_evidence"] is False
 
-    assert metadata[
-        "retrieval_decision"
-    ] == "retry"
+    assert metadata["retrieval_decision"] == "retry"
 
-    assert metadata[
-        "retry_allowed"
-    ] is True
+    assert metadata["retry_allowed"] is True
 
 
 def test_retrieval_decision_handles_failure():
@@ -205,55 +153,28 @@ def test_retrieval_decision_handles_failure():
         },
     )
 
-    result = retrieval_decision_agent(
-        state
-    )
+    result = retrieval_decision_agent(state)
 
-    metadata = result[
-        "retrieval_metadata"
-    ]
+    metadata = result["retrieval_metadata"]
 
-    assert metadata[
-        "enough_evidence"
-    ] is False
+    assert metadata["enough_evidence"] is False
 
-    assert metadata[
-        "evidence_reason"
-    ] == "Retrieval failed."
+    assert metadata["evidence_reason"] == "Retrieval failed."
 
 
 def test_route_retrieval_decision_retry():
-    state = {
-        "retrieval_metadata": {
-            "retrieval_decision": "retry"
-        }
-    }
+    state = {"retrieval_metadata": {"retrieval_decision": "retry"}}
 
-    assert (
-        route_retrieval_decision(state)
-        == "retry"
-    )
+    assert route_retrieval_decision(state) == "retry"
 
 
 def test_route_retrieval_decision_continue():
-    state = {
-        "retrieval_metadata": {
-            "retrieval_decision": "continue"
-        }
-    }
+    state = {"retrieval_metadata": {"retrieval_decision": "continue"}}
 
-    assert (
-        route_retrieval_decision(state)
-        == "continue"
-    )
+    assert route_retrieval_decision(state) == "continue"
 
 
 def test_route_defaults_to_continue():
-    state = {
-        "retrieval_metadata": {}
-    }
+    state = {"retrieval_metadata": {}}
 
-    assert (
-        route_retrieval_decision(state)
-        == "continue"
-    )
+    assert route_retrieval_decision(state) == "continue"

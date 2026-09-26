@@ -38,7 +38,9 @@ class HITLService:
         # Verify agent exists
         agent = self.user_repo.get_by_id(payload.agent_id)
         if not agent:
-            raise ResolveXException(status_code=404, detail=f"Agent {payload.agent_id} not found")
+            raise ResolveXException(
+                status_code=404, detail=f"Agent {payload.agent_id} not found"
+            )
 
         # Update ticket with human solution
         ticket.solution = payload.agent_solution

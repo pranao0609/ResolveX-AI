@@ -78,9 +78,7 @@ class RAGIndexWriter:
 
                 index_id = doc_store.add_chunk(metadata)
 
-                expected_index = (
-                    initial_document_count + len(index_ids)
-                )
+                expected_index = initial_document_count + len(index_ids)
 
                 if index_id != expected_index:
                     raise RuntimeError(
@@ -130,26 +128,21 @@ class RAGIndexWriter:
             # Roll back DocumentStore
             # ---------------------------------------------------------
             if doc_store.total_chunks > initial_document_count:
-                del doc_store.documents[
-                    initial_document_count:
-                ]
+                del doc_store.documents[initial_document_count:]
 
             # ---------------------------------------------------------
             # Roll back FAISS
             # ---------------------------------------------------------
             if vector_store.total_vectors > initial_vector_count:
                 try:
-                    vector_store.rollback_to(
-                        initial_vector_count
-                    )
+                    vector_store.rollback_to(initial_vector_count)
                 except Exception as rollback_exc:
                     logger.critical(
                         "FAISS rollback failed: %s",
                         rollback_exc,
                     )
                     raise RuntimeError(
-                        "RAG indexing failed and FAISS rollback "
-                        "also failed"
+                        "RAG indexing failed and FAISS rollback " "also failed"
                     ) from rollback_exc
 
             raise
@@ -175,9 +168,7 @@ class RAGIndexWriter:
         """
 
         if embeddings.ndim != 2:
-            raise ValueError(
-                "Embeddings must be a 2D array"
-            )
+            raise ValueError("Embeddings must be a 2D array")
 
         if len(chunks) != embeddings.shape[0]:
             raise ValueError(
@@ -187,6 +178,4 @@ class RAGIndexWriter:
             )
 
         if not np.isfinite(embeddings).all():
-            raise ValueError(
-                "Embeddings contain NaN or infinite values"
-            )
+            raise ValueError("Embeddings contain NaN or infinite values")

@@ -12,6 +12,7 @@ from ai.config.ai_config import EMBEDDING_MODEL_NAME
 
 _model = None  # lazy singleton
 
+
 def _get_model():
     """Load the embedding model once and cache it."""
     global _model
@@ -19,9 +20,11 @@ def _get_model():
         logger.info(f"Loading embedding model: {EMBEDDING_MODEL_NAME}")
         try:
             from transformers import logging
+
             logging.set_verbosity_error()
 
             from sentence_transformers import SentenceTransformer
+
             _model = SentenceTransformer(EMBEDDING_MODEL_NAME)
 
             logger.info("Embedding model loaded successfully")
@@ -66,6 +69,9 @@ def generate_batch_embeddings(texts: List[str]) -> np.ndarray:
     model = _get_model()
     if model is None:
         from ai.config.ai_config import EMBEDDING_DIMENSION
+
         return np.zeros((len(texts), EMBEDDING_DIMENSION), dtype=np.float32)
 
-    return model.encode(texts, normalize_embeddings=True, show_progress_bar=True).astype(np.float32)
+    return model.encode(
+        texts, normalize_embeddings=True, show_progress_bar=True
+    ).astype(np.float32)

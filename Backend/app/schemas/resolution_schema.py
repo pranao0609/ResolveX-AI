@@ -8,12 +8,14 @@ from typing import Optional
 
 class ResolutionRequest(BaseModel):
     """Trigger AI pipeline resolution for a ticket."""
+
     ticket_id: int
-    force: bool = False   # force re-run even if already resolved
+    force: bool = False  # force re-run even if already resolved
 
 
 class ResolutionResult(BaseModel):
     """Result of an AI resolution attempt."""
+
     ticket_id: int
     category: Optional[str] = None
     solution: Optional[str] = None
@@ -28,6 +30,7 @@ class ResolutionResult(BaseModel):
 
 class HITLReviewRequest(BaseModel):
     """Payload when a human agent reviews an escalated ticket."""
+
     ticket_id: int
     agent_id: int
     agent_solution: str

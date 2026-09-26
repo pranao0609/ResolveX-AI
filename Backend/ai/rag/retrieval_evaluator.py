@@ -42,9 +42,7 @@ class RetrievalEvaluator:
 
         # Production retriever remains configurable through the
         # normal application configuration.
-        self.hybrid_retriever = (
-            hybrid_retriever or HybridRetriever()
-        )
+        self.hybrid_retriever = hybrid_retriever or HybridRetriever()
 
         # Controlled experimental retriever used only for
         # Phase 8 evaluation.
@@ -74,10 +72,7 @@ class RetrievalEvaluator:
         format used by the evaluation dataset.
         """
 
-        retrieved_ids = [
-            f"kb:{index_id + 1}"
-            for index_id in retrieved
-        ]
+        retrieved_ids = [f"kb:{index_id + 1}" for index_id in retrieved]
 
         return recall_at_k(
             retrieved_ids=retrieved_ids,
@@ -98,10 +93,7 @@ class RetrievalEvaluator:
         format used by the evaluation dataset.
         """
 
-        retrieved_ids = [
-            f"kb:{index_id + 1}"
-            for index_id in retrieved
-        ]
+        retrieved_ids = [f"kb:{index_id + 1}" for index_id in retrieved]
 
         return precision_at_k(
             retrieved_ids=retrieved_ids,
@@ -116,10 +108,7 @@ class RetrievalEvaluator:
     ) -> float:
         """Mean Reciprocal Rank for one query."""
 
-        retrieved_ids = [
-            f"kb:{index_id + 1}"
-            for index_id in retrieved
-        ]
+        retrieved_ids = [f"kb:{index_id + 1}" for index_id in retrieved]
 
         return reciprocal_rank(
             retrieved_ids=retrieved_ids,
@@ -142,10 +131,7 @@ class RetrievalEvaluator:
             relevance = 0
         """
 
-        retrieved_ids = [
-            f"kb:{index_id + 1}"
-            for index_id in retrieved
-        ]
+        retrieved_ids = [f"kb:{index_id + 1}" for index_id in retrieved]
 
         return ndcg_at_k(
             retrieved_ids=retrieved_ids,
@@ -163,10 +149,7 @@ class RetrievalEvaluator:
     ) -> List[int]:
         """Extract internal document IDs from BM25 results."""
 
-        return [
-            int(result["index_id"])
-            for result in results
-        ]
+        return [int(result["index_id"]) for result in results]
 
     @staticmethod
     def _extract_dense_ids(
@@ -186,10 +169,7 @@ class RetrievalEvaluator:
     ) -> List[int]:
         """Extract internal document IDs from hybrid results."""
 
-        return [
-            int(result.index_id)
-            for result in results
-        ]
+        return [int(result.index_id) for result in results]
 
     @staticmethod
     def _extract_reranker_ids(
@@ -197,10 +177,7 @@ class RetrievalEvaluator:
     ) -> List[int]:
         """Extract internal document IDs from reranker results."""
 
-        return [
-            int(result.index_id)
-            for result in results
-        ]
+        return [int(result.index_id) for result in results]
 
     # ------------------------------------------------------------------
     # Evaluation
@@ -214,20 +191,11 @@ class RetrievalEvaluator:
     ) -> Dict:
         """Evaluate one retrieval strategy."""
 
-        all_recall = {
-            k: []
-            for k in k_values
-        }
+        all_recall = {k: [] for k in k_values}
 
-        all_precision = {
-            k: []
-            for k in k_values
-        }
+        all_precision = {k: [] for k in k_values}
 
-        all_ndcg = {
-            k: []
-            for k in k_values
-        }
+        all_ndcg = {k: [] for k in k_values}
 
         reciprocal_ranks = []
 
@@ -238,9 +206,7 @@ class RetrievalEvaluator:
         for item in evaluation_queries:
             query = item["query"]
 
-            relevant = set(
-                item["relevant_document_ids"]
-            )
+            relevant = set(item["relevant_document_ids"])
 
             # ----------------------------------------------------------
             # BM25
@@ -252,9 +218,7 @@ class RetrievalEvaluator:
                     top_k=max_k,
                 )
 
-                retrieved_ids = (
-                    self._extract_bm25_ids(results)
-                )
+                retrieved_ids = self._extract_bm25_ids(results)
 
             # ----------------------------------------------------------
             # Dense FAISS
@@ -267,38 +231,30 @@ class RetrievalEvaluator:
                     score_threshold=-1.0,
                 )
 
-                retrieved_ids = (
-                    self._extract_dense_ids(results)
-                )
+                retrieved_ids = self._extract_dense_ids(results)
 
             # ----------------------------------------------------------
             # Experimental 50/50 Hybrid
             # ----------------------------------------------------------
 
             elif retriever_name == "hybrid":
-                results = (
-                    self.experimental_hybrid_retriever.retrieve(
-                        query=query,
-                        top_k=max_k,
-                        candidate_k=20,
-                    )
+                results = self.experimental_hybrid_retriever.retrieve(
+                    query=query,
+                    top_k=max_k,
+                    candidate_k=20,
                 )
 
-                retrieved_ids = (
-                    self._extract_hybrid_ids(results)
-                )
+                retrieved_ids = self._extract_hybrid_ids(results)
 
             # ----------------------------------------------------------
             # Experimental 50/50 Hybrid + Cross Encoder
             # ----------------------------------------------------------
 
             elif retriever_name == "hybrid_reranker":
-                candidates = (
-                    self.experimental_hybrid_retriever.retrieve(
-                        query=query,
-                        top_k=20,
-                        candidate_k=20,
-                    )
+                candidates = self.experimental_hybrid_retriever.retrieve(
+                    query=query,
+                    top_k=20,
+                    candidate_k=20,
                 )
 
                 results = self.reranker.rerank(
@@ -307,14 +263,10 @@ class RetrievalEvaluator:
                     top_k=max_k,
                 )
 
-                retrieved_ids = (
-                    self._extract_reranker_ids(results)
-                )
+                retrieved_ids = self._extract_reranker_ids(results)
 
             else:
-                raise ValueError(
-                    f"Unknown retriever: {retriever_name}"
-                )
+                raise ValueError(f"Unknown retriever: {retriever_name}")
 
             # ----------------------------------------------------------
             # Per-query result container
@@ -353,17 +305,11 @@ class RetrievalEvaluator:
                 all_precision[k].append(precision)
                 all_ndcg[k].append(ndcg)
 
-                query_metrics[
-                    f"recall@{k}"
-                ] = recall
+                query_metrics[f"recall@{k}"] = recall
 
-                query_metrics[
-                    f"precision@{k}"
-                ] = precision
+                query_metrics[f"precision@{k}"] = precision
 
-                query_metrics[
-                    f"ndcg@{k}"
-                ] = ndcg
+                query_metrics[f"ndcg@{k}"] = ndcg
 
             # ----------------------------------------------------------
             # MRR
@@ -374,13 +320,9 @@ class RetrievalEvaluator:
                 relevant=relevant,
             )
 
-            reciprocal_ranks.append(
-                reciprocal_rank_score
-            )
+            reciprocal_ranks.append(reciprocal_rank_score)
 
-            query_metrics["reciprocal_rank"] = (
-                reciprocal_rank_score
-            )
+            query_metrics["reciprocal_rank"] = reciprocal_rank_score
 
             per_query.append(query_metrics)
 
@@ -393,32 +335,16 @@ class RetrievalEvaluator:
         metrics = {
             "retriever": retriever_name,
             "queries": count,
-            "mrr": (
-                sum(reciprocal_ranks) / count
-                if count
-                else 0.0
-            ),
+            "mrr": (sum(reciprocal_ranks) / count if count else 0.0),
             "per_query": per_query,
         }
 
         for k in k_values:
-            metrics[f"recall@{k}"] = (
-                sum(all_recall[k]) / count
-                if count
-                else 0.0
-            )
+            metrics[f"recall@{k}"] = sum(all_recall[k]) / count if count else 0.0
 
-            metrics[f"precision@{k}"] = (
-                sum(all_precision[k]) / count
-                if count
-                else 0.0
-            )
+            metrics[f"precision@{k}"] = sum(all_precision[k]) / count if count else 0.0
 
-            metrics[f"ndcg@{k}"] = (
-                sum(all_ndcg[k]) / count
-                if count
-                else 0.0
-            )
+            metrics[f"ndcg@{k}"] = sum(all_ndcg[k]) / count if count else 0.0
 
         return metrics
 

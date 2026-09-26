@@ -177,4 +177,4 @@ def test_valid_categories_are_fixed():
         "access_permission",
         "security",
         "other",
-    }   
+    }

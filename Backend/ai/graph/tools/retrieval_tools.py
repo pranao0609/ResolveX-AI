@@ -51,8 +51,7 @@ def build_retrieval_tool_registry() -> ToolRegistry:
         ToolDefinition(
             name="rerank_documents",
             description=(
-                "Rerank retrieved documents using the "
-                "configured relevance reranker."
+                "Rerank retrieved documents using the " "configured relevance reranker."
             ),
             category=ToolCategory.READ,
             handler=rerank_documents,
@@ -62,9 +61,7 @@ def build_retrieval_tool_registry() -> ToolRegistry:
     return registry
 
 
-retrieval_tool_registry = (
-    build_retrieval_tool_registry()
-)
+retrieval_tool_registry = build_retrieval_tool_registry()
 
 
 __all__ = [

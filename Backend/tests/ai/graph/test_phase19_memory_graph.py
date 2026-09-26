@@ -14,6 +14,7 @@ def test_graph_contains_memory_compatible_nodes():
     assert "verification_agent" in nodes
     assert "decision_agent" in nodes
 
+
 def test_diagnosis_memory_output_is_resolution_compatible(
     monkeypatch,
 ):
@@ -25,27 +26,15 @@ def test_diagnosis_memory_output_is_resolution_compatible(
         "DiagnosisResult",
         (),
         {
-            "problem": (
-                "Keyboard hardware failure"
-            ),
-            "possible_root_cause": (
-                "Keyboard driver failure"
-            ),
-            "evidence": [
-                "Historical ticket matched"
-            ],
+            "problem": ("Keyboard hardware failure"),
+            "possible_root_cause": ("Keyboard driver failure"),
+            "evidence": ["Historical ticket matched"],
             "missing_information": [],
             "confidence": 0.91,
             "model_dump": lambda self: {
-                "problem": (
-                    "Keyboard hardware failure"
-                ),
-                "possible_root_cause": (
-                    "Keyboard driver failure"
-                ),
-                "evidence": [
-                    "Historical ticket matched"
-                ],
+                "problem": ("Keyboard hardware failure"),
+                "possible_root_cause": ("Keyboard driver failure"),
+                "evidence": ["Historical ticket matched"],
                 "missing_information": [],
                 "confidence": 0.91,
             },
@@ -73,14 +62,10 @@ def test_diagnosis_memory_output_is_resolution_compatible(
                     {
                         "ticket_id": 400,
                         "title": "Keyboard failure",
-                        "description": (
-                            "Keyboard stopped responding."
-                        ),
+                        "description": ("Keyboard stopped responding."),
                         "category": "hardware",
                         "status": "closed",
-                        "solution": (
-                            "Reinstall keyboard driver."
-                        ),
+                        "solution": ("Reinstall keyboard driver."),
                         "confidence": 0.93,
                         "explanation": None,
                         "submitted_by": "user400",
@@ -115,13 +100,9 @@ def test_diagnosis_memory_output_is_resolution_compatible(
 
     state = {
         "ticket_id": 500,
-        "cleaned_ticket": (
-            "Laptop keyboard stopped working"
-        ),
+        "cleaned_ticket": ("Laptop keyboard stopped working"),
         "category": "hardware",
-        "retrieved_context": (
-            "Keyboard troubleshooting evidence."
-        ),
+        "retrieved_context": ("Keyboard troubleshooting evidence."),
         "conversation_history": [],
         "previous_tickets": [],
         "tool_calls": [],
@@ -132,38 +113,20 @@ def test_diagnosis_memory_output_is_resolution_compatible(
     result = diagnosis_agent(state)
 
     # Diagnosis contract
-    assert result[
-        "diagnosis_problem"
-    ] == "Keyboard hardware failure"
+    assert result["diagnosis_problem"] == "Keyboard hardware failure"
 
-    assert result[
-        "diagnosis_root_cause"
-    ] == "Keyboard driver failure"
+    assert result["diagnosis_root_cause"] == "Keyboard driver failure"
 
-    assert result[
-        "diagnosis_confidence"
-    ] == 0.91
+    assert result["diagnosis_confidence"] == 0.91
 
     # Memory contract
-    assert len(
-        result["previous_tickets"]
-    ) == 1
+    assert len(result["previous_tickets"]) == 1
 
-    assert result[
-        "previous_tickets"
-    ][0]["ticket_id"] == 400
+    assert result["previous_tickets"][0]["ticket_id"] == 400
 
-    assert len(
-        result["conversation_history"]
-    ) == 2
+    assert len(result["conversation_history"]) == 2
 
-    assert len(
-        result["tool_calls"]
-    ) == 1
+    assert len(result["tool_calls"]) == 1
 
     # Observability contract
-    assert result[
-        "metadata"
-    ]["memory"][
-        "historical_ticket_count"
-    ] == 1
+    assert result["metadata"]["memory"]["historical_ticket_count"] == 1

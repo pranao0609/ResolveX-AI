@@ -61,7 +61,4 @@ def test_llm_error_hierarchy():
         LLMInvalidResponseError(),
     ]
 
-    assert all(
-        isinstance(error, LLMError)
-        for error in errors
-    )
+    assert all(isinstance(error, LLMError) for error in errors)

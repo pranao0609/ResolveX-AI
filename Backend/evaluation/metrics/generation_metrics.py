@@ -17,7 +17,6 @@ import re
 import numpy as np
 from sentence_transformers import SentenceTransformer
 
-
 MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 
 _model = None
@@ -62,11 +61,7 @@ def _sentences(text: str) -> list[str]:
         text.strip(),
     )
 
-    return [
-        sentence.strip()
-        for sentence in sentences
-        if sentence.strip()
-    ]
+    return [sentence.strip() for sentence in sentences if sentence.strip()]
 
 
 def _cosine_similarity(
@@ -75,22 +70,20 @@ def _cosine_similarity(
 ) -> float:
     """Calculate cosine similarity."""
 
-    denominator = (
-        np.linalg.norm(vector_a)
-        * np.linalg.norm(vector_b)
-    )
+    denominator = np.linalg.norm(vector_a) * np.linalg.norm(vector_b)
 
     if denominator == 0:
         return 0.0
 
-    score = np.dot(
-        vector_a,
-        vector_b,
-    ) / denominator
-
-    return float(
-        np.clip(score, 0.0, 1.0)
+    score = (
+        np.dot(
+            vector_a,
+            vector_b,
+        )
+        / denominator
     )
+
+    return float(np.clip(score, 0.0, 1.0))
 
 
 def _semantic_similarity(
@@ -214,9 +207,7 @@ def faithfulness(
         for document in retrieved_documents
     )
 
-    generated_sentences = _sentences(
-        generated_answer
-    )
+    generated_sentences = _sentences(generated_answer)
 
     if not generated_sentences:
         return 0.0
@@ -251,9 +242,7 @@ def faithfulness(
             )
         )
 
-    return float(
-        np.mean(scores)
-    )
+    return float(np.mean(scores))
 
 
 def evidence_support(
@@ -313,9 +302,7 @@ def evidence_support(
         if best_score >= 0.55:
             supported += 1
 
-    return supported / len(
-        required_evidence
-    )
+    return supported / len(required_evidence)
 
 
 def evaluate_generation_case(

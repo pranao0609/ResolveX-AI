@@ -2,7 +2,6 @@ from pathlib import Path
 
 import yaml
 
-
 PROMPTS_DIR = Path(__file__).resolve().parents[2] / "prompts"
 
 
@@ -14,16 +13,10 @@ def load_prompt(prompt_type: str, version: int) -> dict:
         load_prompt("resolution", 1)
     """
 
-    prompt_path = (
-        PROMPTS_DIR
-        / prompt_type
-        / f"{prompt_type}_prompt_v{version}.yaml"
-    )
+    prompt_path = PROMPTS_DIR / prompt_type / f"{prompt_type}_prompt_v{version}.yaml"
 
     if not prompt_path.exists():
-        raise FileNotFoundError(
-            f"Prompt not found: {prompt_path}"
-        )
+        raise FileNotFoundError(f"Prompt not found: {prompt_path}")
 
     with prompt_path.open(
         "r",
@@ -45,8 +38,7 @@ def load_prompt(prompt_type: str, version: int) -> dict:
 
     if missing:
         raise ValueError(
-            f"Prompt {prompt_path} is missing fields: "
-            f"{sorted(missing)}"
+            f"Prompt {prompt_path} is missing fields: " f"{sorted(missing)}"
         )
 
     return prompt

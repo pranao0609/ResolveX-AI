@@ -43,11 +43,7 @@ def _normalize_resolution_steps(value: Any) -> list[str]:
         return [value] if value.strip() else []
 
     if isinstance(value, (list, tuple)):
-        return [
-            str(item)
-            for item in value
-            if str(item).strip()
-        ]
+        return [str(item) for item in value if str(item).strip()]
 
     return [str(value)]
 
@@ -105,10 +101,7 @@ def _build_resolution_context(
 
 def resolution_agent(state: ResolveXState) -> dict[str, Any]:
     try:
-        ticket_text = (
-            state.get("cleaned_ticket")
-            or state.get("ticket_text", "")
-        )
+        ticket_text = state.get("cleaned_ticket") or state.get("ticket_text", "")
 
         retrieved_context = state.get(
             "retrieved_context",
@@ -232,10 +225,7 @@ def resolution_agent(state: ResolveXState) -> dict[str, Any]:
             )
         )
 
-        fallback_used = (
-            previous_fallback_used
-            or bool(generator_fallback_used)
-        )
+        fallback_used = previous_fallback_used or bool(generator_fallback_used)
 
         metadata = _stage_metadata(
             state,
@@ -245,23 +235,15 @@ def resolution_agent(state: ResolveXState) -> dict[str, Any]:
         metadata.update(
             {
                 "memory": {
-                    "historical_ticket_count": len(
-                        previous_tickets
-                    ),
-                    "historical_memory_used": bool(
-                        previous_tickets
-                    ),
+                    "historical_ticket_count": len(previous_tickets),
+                    "historical_memory_used": bool(previous_tickets),
                     "conversation_memory_count": (
                         len(conversation_history)
                         if isinstance(
                             conversation_history,
                             (list, tuple),
                         )
-                        else (
-                            1
-                            if conversation_history
-                            else 0
-                        )
+                        else (1 if conversation_history else 0)
                     ),
                 }
             }
@@ -282,31 +264,24 @@ def resolution_agent(state: ResolveXState) -> dict[str, Any]:
                     conversation_history,
                     (list, tuple),
                 )
-                else (
-                    1
-                    if conversation_history
-                    else 0
-                )
+                else (1 if conversation_history else 0)
             ),
         )
 
         return {
             # Structured result
             "resolution_result": resolution,
-
             # Phase 17 canonical fields
             "resolution_steps": resolution_steps,
             "resolution_evidence": resolution_evidence,
             "resolution_confidence": resolution_confidence,
             "requires_human": requires_human,
             "fallback_used": fallback_used,
-
             # Legacy aliases
             "resolution": legacy_resolution,
             "solution": legacy_resolution,
             "evidence": resolution_evidence,
             "confidence": resolution_confidence,
-
             # Metadata
             "metadata": metadata,
         }
@@ -318,27 +293,22 @@ def resolution_agent(state: ResolveXState) -> dict[str, Any]:
             exc=exc,
         )
 
-        logger.exception(
-            "Resolution agent failed"
-        )
+        logger.exception("Resolution agent failed")
 
         metadata = _stage_metadata(state, "resolution")
 
         return {
             "resolution_result": None,
-
             "resolution_steps": [],
             "resolution_evidence": [],
             "resolution_confidence": 0.0,
             "requires_human": True,
             "fallback_used": True,
-
             # Legacy aliases
             "resolution": [],
             "solution": [],
             "evidence": [],
             "confidence": 0.0,
-
             "errors": errors,
             "metadata": metadata,
         }

@@ -82,11 +82,7 @@ def test_candidate_present_in_both_gets_combined_score():
         top_k=3,
     )
 
-    candidate = next(
-        result
-        for result in results
-        if result.index_id == 10
-    )
+    candidate = next(result for result in results if result.index_id == 10)
 
     assert candidate.score == pytest.approx(1.0)
 

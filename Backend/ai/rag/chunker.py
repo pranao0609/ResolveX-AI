@@ -37,19 +37,13 @@ class DocumentChunker:
             raise ValueError("chunk_overlap cannot be negative")
 
         if chunk_overlap >= chunk_size:
-            raise ValueError(
-                "chunk_overlap must be smaller than chunk_size"
-            )
+            raise ValueError("chunk_overlap must be smaller than chunk_size")
 
         if min_chunk_size <= 0:
-            raise ValueError(
-                "min_chunk_size must be positive"
-            )
+            raise ValueError("min_chunk_size must be positive")
 
         if min_chunk_size > chunk_size:
-            raise ValueError(
-                "min_chunk_size cannot exceed chunk_size"
-            )
+            raise ValueError("min_chunk_size cannot exceed chunk_size")
 
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
@@ -74,11 +68,7 @@ class DocumentChunker:
         for paragraph in paragraphs:
             # Paragraph itself fits inside the target chunk.
             if len(paragraph) <= self.chunk_size:
-                candidate = (
-                    paragraph
-                    if not current
-                    else f"{current}\n\n{paragraph}"
-                )
+                candidate = paragraph if not current else f"{current}\n\n{paragraph}"
 
                 if len(candidate) <= self.chunk_size:
                     current = candidate
@@ -95,9 +85,7 @@ class DocumentChunker:
                 chunks.append(current)
                 current = ""
 
-            paragraph_chunks = self._split_long_text(
-                paragraph
-            )
+            paragraph_chunks = self._split_long_text(paragraph)
 
             chunks.extend(paragraph_chunks)
 
@@ -121,11 +109,7 @@ class DocumentChunker:
 
         paragraphs = re.split(r"\n\s*\n", content)
 
-        return [
-            paragraph.strip()
-            for paragraph in paragraphs
-            if paragraph.strip()
-        ]
+        return [paragraph.strip() for paragraph in paragraphs if paragraph.strip()]
 
     def _split_long_text(self, text: str) -> List[str]:
         """
@@ -150,11 +134,7 @@ class DocumentChunker:
             if not sentence:
                 continue
 
-            candidate = (
-                sentence
-                if not current
-                else f"{current} {sentence}"
-            )
+            candidate = sentence if not current else f"{current} {sentence}"
 
             if len(candidate) <= self.chunk_size:
                 current = candidate
@@ -165,9 +145,7 @@ class DocumentChunker:
 
             # A single sentence can itself exceed the limit.
             if len(sentence) > self.chunk_size:
-                chunks.extend(
-                    self._split_by_size(sentence)
-                )
+                chunks.extend(self._split_by_size(sentence))
                 current = ""
             else:
                 current = sentence
@@ -241,8 +219,7 @@ class DocumentChunker:
 
             if (
                 len(chunk) < self.min_chunk_size
-                and len(previous) + 2 + len(chunk)
-                <= self.chunk_size
+                and len(previous) + 2 + len(chunk) <= self.chunk_size
             ):
                 merged[-1] = f"{previous}\n\n{chunk}"
             else:
@@ -258,9 +235,7 @@ class DocumentChunker:
     ) -> DocumentChunk:
         """Create a DocumentChunk while preserving source metadata."""
 
-        chunk_id = (
-            f"{document.document_id}:chunk:{chunk_index}"
-        )
+        chunk_id = f"{document.document_id}:chunk:{chunk_index}"
 
         return DocumentChunk(
             chunk_id=chunk_id,

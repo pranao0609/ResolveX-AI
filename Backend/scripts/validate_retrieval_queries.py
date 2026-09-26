@@ -6,22 +6,11 @@ queries against the current ResolveX KB catalog.
 import json
 from pathlib import Path
 
-
 BACKEND_ROOT = Path(__file__).resolve().parents[1]
 
-CATALOG_PATH = (
-    BACKEND_ROOT
-    / "data"
-    / "evaluation"
-    / "kb_catalog.json"
-)
+CATALOG_PATH = BACKEND_ROOT / "data" / "evaluation" / "kb_catalog.json"
 
-QUERIES_PATH = (
-    BACKEND_ROOT
-    / "data"
-    / "evaluation"
-    / "retrieval_queries.json"
-)
+QUERIES_PATH = BACKEND_ROOT / "data" / "evaluation" / "retrieval_queries.json"
 
 
 def main():
@@ -39,10 +28,7 @@ def main():
     ) as file:
         queries = json.load(file)
 
-    valid_document_ids = {
-        entry["document_id"]
-        for entry in catalog
-    }
+    valid_document_ids = {entry["document_id"] for entry in catalog}
 
     print("=" * 70)
     print("RETRIEVAL EVALUATION DATASET VALIDATION")
@@ -65,33 +51,23 @@ def main():
             continue
 
         if query_id in query_ids:
-            errors.append(
-                f"Duplicate query_id: {query_id}"
-            )
+            errors.append(f"Duplicate query_id: {query_id}")
 
         query_ids.add(query_id)
 
         if not isinstance(query, str) or not query.strip():
-            errors.append(
-                f"{query_id}: invalid query"
-            )
+            errors.append(f"{query_id}: invalid query")
 
         if not isinstance(relevant_ids, list):
-            errors.append(
-                f"{query_id}: relevant_document_ids must be a list"
-            )
+            errors.append(f"{query_id}: relevant_document_ids must be a list")
             continue
 
         if not relevant_ids:
-            errors.append(
-                f"{query_id}: no relevant documents"
-            )
+            errors.append(f"{query_id}: no relevant documents")
 
         for document_id in relevant_ids:
             if document_id not in valid_document_ids:
-                errors.append(
-                    f"{query_id}: unknown document ID {document_id}"
-                )
+                errors.append(f"{query_id}: unknown document ID {document_id}")
 
     print()
 

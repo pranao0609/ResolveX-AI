@@ -12,7 +12,6 @@ from unittest.mock import patch, MagicMock
 
 from ai.rag.retriever import retrieve_context, validate_store_alignment
 
-
 # ── Shared fake document fixture ─────────────────────────────────────────────
 
 FAKE_DOC = {
@@ -45,8 +44,15 @@ class TestRetrieveContext:
     def test_returns_results_when_store_aligned(self):
         query_embedding = np.random.rand(384).astype("float32")
 
-        with patch("ai.rag.retriever.get_vector_store", return_value=_make_fake_vector_store(1)), \
-             patch("ai.rag.retriever.get_doc_store", return_value=_make_fake_doc_store(1)):
+        with (
+            patch(
+                "ai.rag.retriever.get_vector_store",
+                return_value=_make_fake_vector_store(1),
+            ),
+            patch(
+                "ai.rag.retriever.get_doc_store", return_value=_make_fake_doc_store(1)
+            ),
+        ):
             results = retrieve_context(query_embedding, top_k=1, score_threshold=0.3)
 
         assert len(results) == 1
@@ -57,8 +63,12 @@ class TestRetrieveContext:
         query_embedding = np.random.rand(384).astype("float32")
         empty_vs = _make_fake_vector_store(0)
 
-        with patch("ai.rag.retriever.get_vector_store", return_value=empty_vs), \
-             patch("ai.rag.retriever.get_doc_store", return_value=_make_fake_doc_store(0)):
+        with (
+            patch("ai.rag.retriever.get_vector_store", return_value=empty_vs),
+            patch(
+                "ai.rag.retriever.get_doc_store", return_value=_make_fake_doc_store(0)
+            ),
+        ):
             results = retrieve_context(query_embedding)
 
         assert results == []
@@ -69,8 +79,12 @@ class TestRetrieveContext:
         vs = _make_fake_vector_store(1)
         vs.search.return_value = (np.array([0.10]), np.array([0]))  # very low score
 
-        with patch("ai.rag.retriever.get_vector_store", return_value=vs), \
-             patch("ai.rag.retriever.get_doc_store", return_value=_make_fake_doc_store(1)):
+        with (
+            patch("ai.rag.retriever.get_vector_store", return_value=vs),
+            patch(
+                "ai.rag.retriever.get_doc_store", return_value=_make_fake_doc_store(1)
+            ),
+        ):
             results = retrieve_context(query_embedding, score_threshold=0.50)
 
         assert results == []
@@ -81,8 +95,12 @@ class TestRetrieveContext:
         vs = _make_fake_vector_store(1)
         vs.search.return_value = (np.array([0.90]), np.array([-1]))  # invalid index
 
-        with patch("ai.rag.retriever.get_vector_store", return_value=vs), \
-             patch("ai.rag.retriever.get_doc_store", return_value=_make_fake_doc_store(1)):
+        with (
+            patch("ai.rag.retriever.get_vector_store", return_value=vs),
+            patch(
+                "ai.rag.retriever.get_doc_store", return_value=_make_fake_doc_store(1)
+            ),
+        ):
             results = retrieve_context(query_embedding, score_threshold=0.0)
 
         assert results == []
@@ -90,8 +108,15 @@ class TestRetrieveContext:
     def test_result_contains_expected_keys(self):
         query_embedding = np.random.rand(384).astype("float32")
 
-        with patch("ai.rag.retriever.get_vector_store", return_value=_make_fake_vector_store(1)), \
-             patch("ai.rag.retriever.get_doc_store", return_value=_make_fake_doc_store(1)):
+        with (
+            patch(
+                "ai.rag.retriever.get_vector_store",
+                return_value=_make_fake_vector_store(1),
+            ),
+            patch(
+                "ai.rag.retriever.get_doc_store", return_value=_make_fake_doc_store(1)
+            ),
+        ):
             results = retrieve_context(query_embedding, top_k=1, score_threshold=0.0)
 
         assert len(results) == 1
@@ -102,8 +127,15 @@ class TestRetrieveContext:
     def test_score_is_float_type(self):
         query_embedding = np.random.rand(384).astype("float32")
 
-        with patch("ai.rag.retriever.get_vector_store", return_value=_make_fake_vector_store(1)), \
-             patch("ai.rag.retriever.get_doc_store", return_value=_make_fake_doc_store(1)):
+        with (
+            patch(
+                "ai.rag.retriever.get_vector_store",
+                return_value=_make_fake_vector_store(1),
+            ),
+            patch(
+                "ai.rag.retriever.get_doc_store", return_value=_make_fake_doc_store(1)
+            ),
+        ):
             results = retrieve_context(query_embedding, top_k=1, score_threshold=0.0)
 
         assert isinstance(results[0]["score"], float)
@@ -114,8 +146,12 @@ class TestRetrieveContext:
         vs = _make_fake_vector_store(1)
         vs.search.side_effect = RuntimeError("FAISS internal error")
 
-        with patch("ai.rag.retriever.get_vector_store", return_value=vs), \
-             patch("ai.rag.retriever.get_doc_store", return_value=_make_fake_doc_store(1)):
+        with (
+            patch("ai.rag.retriever.get_vector_store", return_value=vs),
+            patch(
+                "ai.rag.retriever.get_doc_store", return_value=_make_fake_doc_store(1)
+            ),
+        ):
             results = retrieve_context(query_embedding)
 
         assert results == []
@@ -128,22 +164,28 @@ class TestValidateStoreAlignment:
         vs = _make_fake_vector_store(5)
         ds = _make_fake_doc_store(5)
 
-        with patch("ai.rag.retriever.get_vector_store", return_value=vs), \
-             patch("ai.rag.retriever.get_doc_store", return_value=ds):
+        with (
+            patch("ai.rag.retriever.get_vector_store", return_value=vs),
+            patch("ai.rag.retriever.get_doc_store", return_value=ds),
+        ):
             assert validate_store_alignment() is True
 
     def test_misaligned_stores_return_false(self):
         vs = _make_fake_vector_store(5)
         ds = _make_fake_doc_store(3)  # mismatch
 
-        with patch("ai.rag.retriever.get_vector_store", return_value=vs), \
-             patch("ai.rag.retriever.get_doc_store", return_value=ds):
+        with (
+            patch("ai.rag.retriever.get_vector_store", return_value=vs),
+            patch("ai.rag.retriever.get_doc_store", return_value=ds),
+        ):
             assert validate_store_alignment() is False
 
     def test_both_empty_stores_are_aligned(self):
         vs = _make_fake_vector_store(0)
         ds = _make_fake_doc_store(0)
 
-        with patch("ai.rag.retriever.get_vector_store", return_value=vs), \
-             patch("ai.rag.retriever.get_doc_store", return_value=ds):
+        with (
+            patch("ai.rag.retriever.get_vector_store", return_value=vs),
+            patch("ai.rag.retriever.get_doc_store", return_value=ds),
+        ):
             assert validate_store_alignment() is True

@@ -99,16 +99,11 @@ def test_build_many_creates_metadata_for_all_chunks():
         ),
     ]
 
-    metadata_list = MetadataBuilder.build_many(
-        chunks
-    )
+    metadata_list = MetadataBuilder.build_many(chunks)
 
     assert len(metadata_list) == 3
 
-    assert [
-        metadata.chunk_id
-        for metadata in metadata_list
-    ] == [
+    assert [metadata.chunk_id for metadata in metadata_list] == [
         "kb:42:chunk:0",
         "kb:42:chunk:1",
         "kb:42:chunk:2",
@@ -131,14 +126,9 @@ def test_build_many_preserves_order():
         ),
     ]
 
-    metadata_list = MetadataBuilder.build_many(
-        chunks
-    )
+    metadata_list = MetadataBuilder.build_many(chunks)
 
-    assert [
-        metadata.chunk_id
-        for metadata in metadata_list
-    ] == [
+    assert [metadata.chunk_id for metadata in metadata_list] == [
         "kb:42:chunk:2",
         "kb:42:chunk:0",
         "kb:42:chunk:1",

@@ -34,7 +34,14 @@ GROQ_MAX_TOKENS = settings.GROQ_MAX_TOKENS
 GROQ_TEMPERATURE = settings.GROQ_TEMPERATURE
 
 # ── Classification ────────────────────────────────────────────────────────────
-SUPPORTED_CATEGORIES = ["billing", "technical", "account", "feature_request", "bug_report", "other"]
+SUPPORTED_CATEGORIES = [
+    "billing",
+    "technical",
+    "account",
+    "feature_request",
+    "bug_report",
+    "other",
+]
 CLASSIFICATION_CONFIDENCE_THRESHOLD = settings.CLASSIFICATION_CONFIDENCE_THRESHOLD
 
 # ── Confidence weights ───────────────────────────────────────────────────────
@@ -46,3 +53,18 @@ CONFIDENCE_WEIGHT_CLASSIFICATION = settings.CONFIDENCE_WEIGHT_CLASSIFICATION
 OCR_LANGUAGE = "eng"
 OCR_ENABLED = True
 
+# ── LangSmith Observability ───────────────────────────────────────────────────
+LANGSMITH_TRACING = settings.LANGSMITH_TRACING
+LANGSMITH_API_KEY = settings.LANGSMITH_API_KEY
+LANGSMITH_PROJECT = settings.LANGSMITH_PROJECT
+LANGSMITH_ENDPOINT = settings.LANGSMITH_ENDPOINT
+
+# ── MLflow MLOps ──────────────────────────────────────────────────────────────
+MLFLOW_ENABLED = settings.MLFLOW_ENABLED
+MLFLOW_TRACKING_URI = settings.MLFLOW_TRACKING_URI
+MLFLOW_EXPERIMENT_NAME = settings.MLFLOW_EXPERIMENT_NAME
+MLFLOW_RUN_NAME = settings.MLFLOW_RUN_NAME
+
+# ── Policy & Decision Thresholds ──────────────────────────────────────────────
+AUTO_RESOLVE_THRESHOLD = getattr(settings, "AUTO_RESOLVE_THRESHOLD", 0.75)
+HITL_THRESHOLD = getattr(settings, "HITL_THRESHOLD", 0.50)

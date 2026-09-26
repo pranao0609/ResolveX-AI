@@ -54,33 +54,23 @@ class RAGDocumentPipeline:
         documents: List[CanonicalDocument],
     ) -> PreparedDocuments:
         if not documents:
-            logger.warning(
-                "RAG document pipeline received no documents"
-            )
+            logger.warning("RAG document pipeline received no documents")
 
             return PreparedDocuments(
                 valid_documents=[],
                 invalid_documents=[],
             )
 
-        cleaned_documents = [
-            DocumentCleaner.clean(document)
-            for document in documents
-        ]
+        cleaned_documents = [DocumentCleaner.clean(document) for document in documents]
 
-        hashed_documents = DocumentHasher.attach_hashes(
-            cleaned_documents
-        )
+        hashed_documents = DocumentHasher.attach_hashes(cleaned_documents)
 
-        valid_documents, invalid_documents = (
-            DocumentValidator.validate_all(
-                hashed_documents
-            )
+        valid_documents, invalid_documents = DocumentValidator.validate_all(
+            hashed_documents
         )
 
         logger.info(
-            "RAG document preparation completed: "
-            "%d valid, %d invalid",
+            "RAG document preparation completed: " "%d valid, %d invalid",
             len(valid_documents),
             len(invalid_documents),
         )

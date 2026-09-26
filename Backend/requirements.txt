@@ -16,6 +16,8 @@ PyPDF2
 alembic
 httpx
 rank-bm25
+# ── MLOps / Experiment Tracking ────────────────────────────────────────────────
+mlflow
 # ── Testing ───────────────────────────────────────────────────────────────────
 pytest
 pytest-cov

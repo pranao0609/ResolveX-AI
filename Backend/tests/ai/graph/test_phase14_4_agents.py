@@ -11,9 +11,7 @@ def test_diagnosis_agent_populates_state():
     mock_result = DiagnosisResult(
         problem="Email authentication failure",
         possible_root_cause="Invalid credentials",
-        evidence=[
-            "Users must use valid credentials."
-        ],
+        evidence=["Users must use valid credentials."],
         missing_information=[],
         confidence=0.88,
     )
@@ -26,53 +24,36 @@ def test_diagnosis_agent_populates_state():
             {
                 "ticket_id": 1,
                 "cleaned_ticket": "Unable to login to email",
-                "retrieved_context": (
-                    "Users must use valid credentials."
-                ),
+                "retrieved_context": ("Users must use valid credentials."),
             }
         )
 
-    assert result["diagnosis"] == (
-        "Email authentication failure"
-    )
+    assert result["diagnosis"] == ("Email authentication failure")
 
-    assert result["root_cause"] == (
-        "Invalid credentials"
-    )
+    assert result["root_cause"] == ("Invalid credentials")
 
     assert result["diagnosis_confidence"] == 0.88
 
     assert result["fallback_used"] is False
 
-    assert result["diagnosis_problem"] == (
-        "Email authentication failure"
-    )
+    assert result["diagnosis_problem"] == ("Email authentication failure")
 
-    assert result["diagnosis_root_cause"] == (
-        "Invalid credentials"
-    )
+    assert result["diagnosis_root_cause"] == ("Invalid credentials")
 
-    assert result["diagnosis_evidence"] == [
-        "Users must use valid credentials."
-    ]
+    assert result["diagnosis_evidence"] == ["Users must use valid credentials."]
 
     assert result["diagnosis_missing_information"] == []
 
 
 def test_diagnosis_agent_handles_fallback():
     mock_result = DiagnosisResult(
-        problem=(
-            "The reported support issue requires "
-            "further investigation."
-        ),
+        problem=("The reported support issue requires " "further investigation."),
         possible_root_cause=(
             "No validated root cause could be "
             "established from the available evidence."
         ),
         evidence=[],
-        missing_information=[
-            "Additional diagnostic information is required."
-        ],
+        missing_information=["Additional diagnostic information is required."],
         confidence=0.0,
     )
 
@@ -101,9 +82,7 @@ def test_resolution_agent_populates_state():
                 "Verify the account credentials.",
                 "Retry authentication.",
             ],
-            "evidence": [
-                "KB: Users must use valid credentials."
-            ],
+            "evidence": ["KB: Users must use valid credentials."],
             "confidence": 0.91,
             "requires_human": False,
         },
@@ -117,9 +96,7 @@ def test_resolution_agent_populates_state():
             {
                 "ticket_id": 3,
                 "cleaned_ticket": "Unable to login",
-                "retrieved_context": (
-                    "Users must use valid credentials."
-                ),
+                "retrieved_context": ("Users must use valid credentials."),
                 "fallback_used": False,
             }
         )
@@ -129,9 +106,7 @@ def test_resolution_agent_populates_state():
         "Retry authentication.",
     ]
 
-    assert result["evidence"] == [
-        "KB: Users must use valid credentials."
-    ]
+    assert result["evidence"] == ["KB: Users must use valid credentials."]
 
     assert result["resolution_confidence"] == 0.91
 

@@ -64,9 +64,7 @@ def test_build_index_resets_stores(monkeypatch):
         lambda: True,
     )
 
-    result = build_index_module.build_index(
-        reset=True
-    )
+    result = build_index_module.build_index(reset=True)
 
     vector_store.reset.assert_called_once()
     doc_store.clear.assert_called_once()
@@ -125,9 +123,7 @@ def test_build_index_no_reset_preserves_stores(monkeypatch):
         lambda: True,
     )
 
-    build_index_module.build_index(
-        reset=False
-    )
+    build_index_module.build_index(reset=False)
 
     vector_store.reset.assert_not_called()
     doc_store.clear.assert_not_called()
@@ -186,8 +182,6 @@ def test_build_index_fails_when_stores_are_misaligned(monkeypatch):
         RuntimeError,
         match="FAISS and DocumentStore are misaligned",
     ):
-        build_index_module.build_index(
-            reset=True
-        )
+        build_index_module.build_index(reset=True)
 
     db.close.assert_called_once()

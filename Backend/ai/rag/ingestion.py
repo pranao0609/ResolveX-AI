@@ -111,9 +111,7 @@ class RAGIngestionPipeline:
         )
 
         if not prepared.valid_documents:
-            logger.warning(
-                "No valid documents available after preparation"
-            )
+            logger.warning("No valid documents available after preparation")
 
             return IngestionResult(
                 documents_received=documents_received,
@@ -139,9 +137,7 @@ class RAGIngestionPipeline:
         )
 
         if not chunks:
-            logger.warning(
-                "No chunks were produced from valid documents"
-            )
+            logger.warning("No chunks were produced from valid documents")
 
             return IngestionResult(
                 documents_received=documents_received,
@@ -165,8 +161,7 @@ class RAGIngestionPipeline:
         get_doc_store().save()
 
         logger.info(
-            "RAG ingestion completed: "
-            "%d documents → %d chunks → %d indexed",
+            "RAG ingestion completed: " "%d documents → %d chunks → %d indexed",
             prepared.valid_count,
             len(chunks),
             chunks_indexed,

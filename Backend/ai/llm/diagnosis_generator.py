@@ -22,7 +22,6 @@ from ai.llm.providers.groq_provider import GroqProvider
 from ai.llm.prompt_loader import load_prompt, render_prompt
 from ai.llm.schemas import DiagnosisResult
 
-
 DEFAULT_DIAGNOSIS_PROMPT_VERSION = 1
 
 
@@ -46,18 +45,13 @@ def _placeholder_diagnosis() -> DiagnosisResult:
     """
 
     return DiagnosisResult(
-        problem=(
-            "The reported support issue requires "
-            "further investigation."
-        ),
+        problem=("The reported support issue requires " "further investigation."),
         possible_root_cause=(
             "No validated root cause could be established "
             "from the available evidence."
         ),
         evidence=[],
-        missing_information=[
-            "Additional diagnostic information is required."
-        ],
+        missing_information=["Additional diagnostic information is required."],
         confidence=0.0,
     )
 
@@ -94,22 +88,14 @@ def generate_diagnosis(
         prompt_version,
     )
 
-    clean_ticket = (
-        ticket_text[:4000]
-        if ticket_text
-        else ""
-    )
+    clean_ticket = ticket_text[:4000] if ticket_text else ""
 
     clean_context = (
-        context.strip()
-        if context
-        else "No retrieved evidence is available."
+        context.strip() if context else "No retrieved evidence is available."
     )
 
     clean_classification = (
-        classification.strip()
-        if classification
-        else "Unknown / unavailable"
+        classification.strip() if classification else "Unknown / unavailable"
     )
 
     system_prompt, user_prompt = render_prompt(
@@ -130,9 +116,7 @@ def generate_diagnosis(
     # --------------------------------------------------------------
 
     user_prompt = (
-        f"{user_prompt}\n\n"
-        "### Ticket Classification\n"
-        f"{clean_classification}\n"
+        f"{user_prompt}\n\n" "### Ticket Classification\n" f"{clean_classification}\n"
     )
 
     # --------------------------------------------------------------
@@ -149,10 +133,7 @@ def generate_diagnosis(
         GROQ_TEMPERATURE,
     )
 
-    model = (
-        settings.GROQ_MODEL
-        or prompt_model
-    )
+    model = settings.GROQ_MODEL or prompt_model
 
     temperature = prompt_temperature
 
@@ -164,10 +145,7 @@ def generate_diagnosis(
         gateway = _get_gateway()
 
     except ValueError as exc:
-        logger.warning(
-            "Diagnosis LLM provider unavailable: "
-            f"{exc}"
-        )
+        logger.warning("Diagnosis LLM provider unavailable: " f"{exc}")
 
         return _placeholder_diagnosis(), True
 
@@ -186,9 +164,7 @@ def generate_diagnosis(
             max_retries=settings.LLM_MAX_RETRIES,
         )
 
-        diagnosis = DiagnosisResult.model_validate_json(
-            response.content
-        )
+        diagnosis = DiagnosisResult.model_validate_json(response.content)
 
         logger.info(
             "Structured diagnosis generated "
@@ -218,8 +194,7 @@ def generate_diagnosis(
 
     except Exception as exc:
         logger.exception(
-            "Unexpected diagnosis generation failure: "
-            f"{type(exc).__name__}: {exc}"
+            "Unexpected diagnosis generation failure: " f"{type(exc).__name__}: {exc}"
         )
 
         return _placeholder_diagnosis(), True

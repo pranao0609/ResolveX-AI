@@ -41,25 +41,23 @@ def test_generate_diagnosis_valid_response():
     gateway = MagicMock()
     gateway.generate.return_value = response
 
-    with patch(
-        "ai.llm.diagnosis_generator._get_gateway",
-        return_value=gateway,
-    ), patch(
-        "ai.llm.diagnosis_generator.load_prompt",
-        return_value={
-            "prompt_id": "diagnosis_prompt_v1",
-            "version": 1,
-            "model": "test-model",
-            "temperature": 0.2,
-            "created_at": "2026-09-25",
-            "system_prompt": "You are a diagnosis agent.",
-            "user_prompt": (
-                "Ticket:\n"
-                "{ticket_text}\n"
-                "Context:\n"
-                "{context}"
-            ),
-        },
+    with (
+        patch(
+            "ai.llm.diagnosis_generator._get_gateway",
+            return_value=gateway,
+        ),
+        patch(
+            "ai.llm.diagnosis_generator.load_prompt",
+            return_value={
+                "prompt_id": "diagnosis_prompt_v1",
+                "version": 1,
+                "model": "test-model",
+                "temperature": 0.2,
+                "created_at": "2026-09-25",
+                "system_prompt": "You are a diagnosis agent.",
+                "user_prompt": ("Ticket:\n" "{ticket_text}\n" "Context:\n" "{context}"),
+            },
+        ),
     ):
 
         result, fallback = generate_diagnosis(
@@ -69,18 +67,10 @@ def test_generate_diagnosis_valid_response():
         )
 
     assert fallback is False
-    assert result.problem == (
-        "Password reset email is not received"
-    )
-    assert result.possible_root_cause == (
-        "Email filtering or delivery blocking"
-    )
-    assert result.evidence == [
-        "Password Reset Email Delivery"
-    ]
-    assert result.missing_information == [
-        "Whether spam folder was checked"
-    ]
+    assert result.problem == ("Password reset email is not received")
+    assert result.possible_root_cause == ("Email filtering or delivery blocking")
+    assert result.evidence == ["Password Reset Email Delivery"]
+    assert result.missing_information == ["Whether spam folder was checked"]
     assert result.confidence == 0.87
 
     gateway.generate.assert_called_once()
@@ -96,26 +86,25 @@ def test_generate_diagnosis_valid_response():
 def test_generate_diagnosis_gateway_failure_uses_fallback():
     gateway = MagicMock()
 
-    gateway.generate.side_effect = RuntimeError(
-        "provider failure"
-    )
+    gateway.generate.side_effect = RuntimeError("provider failure")
 
-    with patch(
-        "ai.llm.diagnosis_generator._get_gateway",
-        return_value=gateway,
-    ), patch(
-        "ai.llm.diagnosis_generator.load_prompt",
-        return_value={
-            "prompt_id": "diagnosis_prompt_v1",
-            "version": 1,
-            "model": "test-model",
-            "temperature": 0.2,
-            "created_at": "2026-09-25",
-            "system_prompt": "Diagnosis agent.",
-            "user_prompt": (
-                "{ticket_text}\n{context}"
-            ),
-        },
+    with (
+        patch(
+            "ai.llm.diagnosis_generator._get_gateway",
+            return_value=gateway,
+        ),
+        patch(
+            "ai.llm.diagnosis_generator.load_prompt",
+            return_value={
+                "prompt_id": "diagnosis_prompt_v1",
+                "version": 1,
+                "model": "test-model",
+                "temperature": 0.2,
+                "created_at": "2026-09-25",
+                "system_prompt": "Diagnosis agent.",
+                "user_prompt": ("{ticket_text}\n{context}"),
+            },
+        ),
     ):
 
         result, fallback = generate_diagnosis(

@@ -25,9 +25,7 @@ class CanonicalDocument(BaseModel):
     category: Optional[str] = None
     source_type: str = "knowledge_base"
 
-    created_at: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc)
-    )
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
     version: str = "1.0"
 

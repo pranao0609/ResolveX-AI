@@ -107,9 +107,7 @@ def test_timeout_retries_then_succeeds():
 
     gateway = make_gateway(provider)
 
-    with patch(
-        "ai.llm.gateway.time.sleep"
-    ) as sleep_mock:
+    with patch("ai.llm.gateway.time.sleep") as sleep_mock:
         response = gateway.generate(
             system_prompt="system",
             user_prompt="user",
@@ -135,9 +133,7 @@ def test_rate_limit_retries_then_succeeds():
 
     gateway = make_gateway(provider)
 
-    with patch(
-        "ai.llm.gateway.time.sleep"
-    ) as sleep_mock:
+    with patch("ai.llm.gateway.time.sleep") as sleep_mock:
         response = gateway.generate(
             system_prompt="system",
             user_prompt="user",
@@ -156,15 +152,11 @@ def test_rate_limit_retries_then_succeeds():
 def test_provider_error_retries_until_exhausted():
     provider = Mock()
 
-    provider.generate.side_effect = LLMProviderError(
-        "temporary provider failure"
-    )
+    provider.generate.side_effect = LLMProviderError("temporary provider failure")
 
     gateway = make_gateway(provider)
 
-    with patch(
-        "ai.llm.gateway.time.sleep"
-    ) as sleep_mock:
+    with patch("ai.llm.gateway.time.sleep") as sleep_mock:
         with pytest.raises(LLMProviderError):
             gateway.generate(
                 system_prompt="system",
@@ -182,18 +174,13 @@ def test_provider_error_retries_until_exhausted():
 
     assert gateway.last_usage is not None
     assert gateway.last_usage.success is False
-    assert (
-        gateway.last_usage.error_type
-        == "LLMProviderError"
-    )
+    assert gateway.last_usage.error_type == "LLMProviderError"
 
 
 def test_authentication_error_is_not_retried():
     provider = Mock()
 
-    provider.generate.side_effect = LLMAuthenticationError(
-        "invalid API key"
-    )
+    provider.generate.side_effect = LLMAuthenticationError("invalid API key")
 
     gateway = make_gateway(provider)
 
@@ -209,10 +196,7 @@ def test_authentication_error_is_not_retried():
 
     assert gateway.last_usage is not None
     assert gateway.last_usage.success is False
-    assert (
-        gateway.last_usage.error_type
-        == "LLMAuthenticationError"
-    )
+    assert gateway.last_usage.error_type == "LLMAuthenticationError"
 
 
 def test_invalid_response_is_not_retried():
@@ -245,6 +229,7 @@ def test_invalid_response_is_not_retried():
     # trigger another provider request.
     assert provider.generate.call_count == 1
 
+
 def test_gateway_rate_limit_applies_once_per_logical_request():
     provider = Mock()
 
@@ -263,9 +248,7 @@ def test_gateway_rate_limit_applies_once_per_logical_request():
         rate_limiter=rate_limiter,
     )
 
-    with patch(
-        "ai.llm.gateway.time.sleep"
-    ):
+    with patch("ai.llm.gateway.time.sleep"):
         response = gateway.generate(
             system_prompt="system",
             user_prompt="user",
@@ -310,13 +293,9 @@ def test_solution_generator_uses_gateway_and_returns_resolution():
 
     mock_gateway = Mock()
 
-    mock_gateway.generate.return_value = (
-        make_llm_response()
-    )
+    mock_gateway.generate.return_value = make_llm_response()
 
-    mock_gateway.validate_resolution.return_value = (
-        resolution
-    )
+    mock_gateway.validate_resolution.return_value = resolution
 
     with patch(
         "ai.llm.solution_generator._get_gateway",
@@ -337,9 +316,7 @@ def test_solution_generator_uses_gateway_and_returns_resolution():
 def test_solution_generator_falls_back_after_gateway_failure():
     mock_gateway = Mock()
 
-    mock_gateway.generate.side_effect = (
-        LLMTimeoutError("LLM timeout")
-    )
+    mock_gateway.generate.side_effect = LLMTimeoutError("LLM timeout")
 
     with patch(
         "ai.llm.solution_generator._get_gateway",
@@ -361,9 +338,7 @@ def test_solution_generator_falls_back_after_gateway_failure():
 def test_groq_provider_maps_timeout_error():
     fake_client = Mock()
 
-    fake_client.chat.completions.create.side_effect = (
-        Exception("Request timed out")
-    )
+    fake_client.chat.completions.create.side_effect = Exception("Request timed out")
 
     with patch(
         "ai.llm.providers.groq_provider.Groq",
@@ -387,8 +362,8 @@ def test_groq_provider_maps_timeout_error():
 def test_groq_provider_maps_rate_limit_error():
     fake_client = Mock()
 
-    fake_client.chat.completions.create.side_effect = (
-        Exception("429 rate limit exceeded")
+    fake_client.chat.completions.create.side_effect = Exception(
+        "429 rate limit exceeded"
     )
 
     with patch(
@@ -413,8 +388,8 @@ def test_groq_provider_maps_rate_limit_error():
 def test_groq_provider_maps_authentication_error():
     fake_client = Mock()
 
-    fake_client.chat.completions.create.side_effect = (
-        Exception("401 authentication failed")
+    fake_client.chat.completions.create.side_effect = Exception(
+        "401 authentication failed"
     )
 
     with patch(
@@ -439,8 +414,8 @@ def test_groq_provider_maps_authentication_error():
 def test_groq_provider_maps_unknown_error():
     fake_client = Mock()
 
-    fake_client.chat.completions.create.side_effect = (
-        Exception("unexpected provider failure")
+    fake_client.chat.completions.create.side_effect = Exception(
+        "unexpected provider failure"
     )
 
     with patch(
@@ -465,13 +440,7 @@ def test_groq_provider_maps_unknown_error():
 def test_groq_provider_maps_successful_response():
     fake_completion = Mock()
 
-    fake_completion.choices = [
-        Mock(
-            message=Mock(
-                content="test response"
-            )
-        )
-    ]
+    fake_completion.choices = [Mock(message=Mock(content="test response"))]
 
     fake_completion.usage = Mock(
         prompt_tokens=100,
@@ -481,9 +450,7 @@ def test_groq_provider_maps_successful_response():
 
     fake_client = Mock()
 
-    fake_client.chat.completions.create.return_value = (
-        fake_completion
-    )
+    fake_client.chat.completions.create.return_value = fake_completion
 
     with patch(
         "ai.llm.providers.groq_provider.Groq",

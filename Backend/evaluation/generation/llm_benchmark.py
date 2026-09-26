@@ -7,15 +7,9 @@ from types import SimpleNamespace
 from ai.pipeline.ticket_pipeline import run_pipeline
 from evaluation.metrics.llm_metrics import evaluate_llm_output
 
-
 BACKEND_ROOT = Path(__file__).resolve().parents[2]
 
-DATASET_PATH = (
-    BACKEND_ROOT
-    / "evaluation"
-    / "datasets"
-    / "evaluation_dataset.jsonl"
-)
+DATASET_PATH = BACKEND_ROOT / "evaluation" / "datasets" / "evaluation_dataset.jsonl"
 
 
 class LLMBenchmark:
@@ -45,9 +39,7 @@ class LLMBenchmark:
                 try:
                     case = json.loads(line)
                 except json.JSONDecodeError as exc:
-                    raise ValueError(
-                        f"Invalid JSON on line {line_number}"
-                    ) from exc
+                    raise ValueError(f"Invalid JSON on line {line_number}") from exc
 
                 cases.append(case)
 
@@ -84,9 +76,7 @@ class LLMBenchmark:
             content = document.get("content", "")
 
             parts.append(
-                f"Title: {title}\n"
-                f"Category: {category}\n"
-                f"Content: {content}"
+                f"Title: {title}\n" f"Category: {category}\n" f"Content: {content}"
             )
 
         return "\n\n".join(parts)
@@ -120,18 +110,14 @@ class LLMBenchmark:
             [],
         )
 
-        retrieved_context = self._build_context(
-            context_docs
-        )
+        retrieved_context = self._build_context(context_docs)
 
         generated_answer = pipeline_result.get(
             "solution",
             "",
         )
 
-        structured_output = pipeline_result.get(
-            "structured_output"
-        )
+        structured_output = pipeline_result.get("structured_output")
 
         metrics = evaluate_llm_output(
             ticket=case["ticket"],
@@ -148,17 +134,10 @@ class LLMBenchmark:
             )
         )
 
-        retrieved_ids = {
-            document.get("document_id")
-            for document in context_docs
-        }
+        retrieved_ids = {document.get("document_id") for document in context_docs}
 
         expected_context_recall = (
-            len(
-                expected_context
-                & retrieved_ids
-            )
-            / len(expected_context)
+            len(expected_context & retrieved_ids) / len(expected_context)
             if expected_context
             else 0.0
         )
@@ -167,27 +146,15 @@ class LLMBenchmark:
             "case_id": case["case_id"],
             "prompt_version": prompt_version,
             "ticket": case["ticket"],
-            "expected_category": case[
-                "expected_category"
-            ],
-            "actual_category": pipeline_result.get(
-                "category"
-            ),
-            "expected_context": case[
-                "expected_context"
-            ],
+            "expected_category": case["expected_category"],
+            "actual_category": pipeline_result.get("category"),
+            "expected_context": case["expected_context"],
             "retrieved_documents": context_docs,
             "context_recall": expected_context_recall,
-            "expected_resolution": case[
-                "expected_resolution"
-            ],
+            "expected_resolution": case["expected_resolution"],
             "generated_answer": generated_answer,
-            "expected_escalation": case[
-                "expected_escalation"
-            ],
-            "actual_escalation": pipeline_result.get(
-                "requires_human"
-            ),
+            "expected_escalation": case["expected_escalation"],
+            "actual_escalation": pipeline_result.get("requires_human"),
             "structured_output": structured_output,
             "metrics": metrics,
             "pipeline_confidence": pipeline_result.get(
@@ -204,9 +171,7 @@ class LLMBenchmark:
             ),
             "retrieval_strategy": pipeline_result.get(
                 "retrieval_strategy",
-                evaluation.get(
-                    "retrieval_strategy"
-                ),
+                evaluation.get("retrieval_strategy"),
             ),
         }
 
@@ -262,9 +227,7 @@ class LLMBenchmark:
                     }
                 )
 
-                print(
-                    f"    ERROR: {exc}"
-                )
+                print(f"    ERROR: {exc}")
 
         return results
 
@@ -291,7 +254,4 @@ class LLMBenchmark:
                 ensure_ascii=False,
             )
 
-        print(
-            f"Saved benchmark results to: "
-            f"{output_path}"
-        )
+        print(f"Saved benchmark results to: " f"{output_path}")

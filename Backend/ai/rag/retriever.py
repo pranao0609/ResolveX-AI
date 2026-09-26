@@ -41,8 +41,7 @@ def register_chunk(
     index_id = store.add_chunk(metadata)
 
     logger.debug(
-        "Registered RAG chunk index=%s chunk_id=%s "
-        "document_id=%s",
+        "Registered RAG chunk index=%s chunk_id=%s " "document_id=%s",
         index_id,
         metadata.chunk_id,
         metadata.document_id,
@@ -163,9 +162,7 @@ def _embed_query(
         embedding = query
 
     else:
-        raise TypeError(
-            "Query must be either a string or a numpy.ndarray"
-        )
+        raise TypeError("Query must be either a string or a numpy.ndarray")
 
     embedding = np.asarray(
         embedding,
@@ -173,14 +170,10 @@ def _embed_query(
     )
 
     if embedding.ndim != 1:
-        raise ValueError(
-            f"Query embedding must be 1D, got shape={embedding.shape}"
-        )
+        raise ValueError(f"Query embedding must be 1D, got shape={embedding.shape}")
 
     if not np.isfinite(embedding).all():
-        raise ValueError(
-            "Query embedding contains NaN or infinite values"
-        )
+        raise ValueError("Query embedding contains NaN or infinite values")
 
     return embedding
 
@@ -203,15 +196,11 @@ def retrieve_context(
     doc_store = get_doc_store()
 
     if vector_store.total_vectors == 0:
-        logger.warning(
-            "FAISS index is empty — no context retrieved"
-        )
+        logger.warning("FAISS index is empty — no context retrieved")
         return []
 
     if not validate_store_alignment():
-        logger.warning(
-            "Skipping retrieval due to FAISS/doc store mismatch"
-        )
+        logger.warning("Skipping retrieval due to FAISS/doc store mismatch")
         return []
 
     try:
@@ -237,17 +226,14 @@ def retrieve_context(
 
         if float(score) < score_threshold:
             logger.debug(
-                "Rejected chunk idx=%s score=%.4f "
-                "below threshold=%.4f",
+                "Rejected chunk idx=%s score=%.4f " "below threshold=%.4f",
                 idx,
                 score,
                 score_threshold,
             )
             continue
 
-        metadata = doc_store.get_document(
-            int(idx)
-        )
+        metadata = doc_store.get_document(int(idx))
 
         if not metadata:
             continue
@@ -260,8 +246,7 @@ def retrieve_context(
         results.append(result)
 
         logger.debug(
-            "Retrieved chunk idx=%s score=%.4f "
-            "chunk_id=%s",
+            "Retrieved chunk idx=%s score=%.4f " "chunk_id=%s",
             idx,
             score,
             metadata.get("chunk_id", ""),

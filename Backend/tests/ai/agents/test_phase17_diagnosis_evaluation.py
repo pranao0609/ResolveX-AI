@@ -8,9 +8,7 @@ def test_diagnosis_agent_returns_structured_diagnosis():
     mock_result = DiagnosisResult(
         problem="Email authentication failure",
         possible_root_cause="Invalid credentials",
-        evidence=[
-            "Users must use valid credentials."
-        ],
+        evidence=["Users must use valid credentials."],
         missing_information=[],
         confidence=0.88,
     )
@@ -23,23 +21,15 @@ def test_diagnosis_agent_returns_structured_diagnosis():
             {
                 "ticket_id": 101,
                 "cleaned_ticket": "Unable to login to email",
-                "retrieved_context": (
-                    "Users must use valid credentials."
-                ),
+                "retrieved_context": ("Users must use valid credentials."),
             }
         )
 
-    assert result["diagnosis_problem"] == (
-        "Email authentication failure"
-    )
+    assert result["diagnosis_problem"] == ("Email authentication failure")
 
-    assert result["diagnosis_root_cause"] == (
-        "Invalid credentials"
-    )
+    assert result["diagnosis_root_cause"] == ("Invalid credentials")
 
-    assert result["diagnosis_evidence"] == [
-        "Users must use valid credentials."
-    ]
+    assert result["diagnosis_evidence"] == ["Users must use valid credentials."]
 
     assert result["diagnosis_missing_information"] == []
 
@@ -51,12 +41,8 @@ def test_diagnosis_agent_returns_structured_diagnosis():
 def test_diagnosis_separates_problem_from_root_cause():
     mock_result = DiagnosisResult(
         problem="User cannot access the email account",
-        possible_root_cause=(
-            "Authentication credentials are invalid"
-        ),
-        evidence=[
-            "Authentication failed with the supplied credentials."
-        ],
+        possible_root_cause=("Authentication credentials are invalid"),
+        evidence=["Authentication failed with the supplied credentials."],
         missing_information=[],
         confidence=0.84,
     )
@@ -68,27 +54,18 @@ def test_diagnosis_separates_problem_from_root_cause():
         result = diagnosis_agent(
             {
                 "ticket_id": 102,
-                "cleaned_ticket": (
-                    "I cannot access my email account."
-                ),
+                "cleaned_ticket": ("I cannot access my email account."),
                 "retrieved_context": (
-                    "Authentication failed with "
-                    "the supplied credentials."
+                    "Authentication failed with " "the supplied credentials."
                 ),
             }
         )
 
-    assert result["diagnosis_problem"] != (
-        result["diagnosis_root_cause"]
-    )
+    assert result["diagnosis_problem"] != (result["diagnosis_root_cause"])
 
-    assert result["diagnosis_problem"] == (
-        "User cannot access the email account"
-    )
+    assert result["diagnosis_problem"] == ("User cannot access the email account")
 
-    assert result["diagnosis_root_cause"] == (
-        "Authentication credentials are invalid"
-    )
+    assert result["diagnosis_root_cause"] == ("Authentication credentials are invalid")
 
 
 def test_diagnosis_preserves_supporting_evidence():
@@ -129,12 +106,8 @@ def test_diagnosis_preserves_missing_information():
 
     mock_result = DiagnosisResult(
         problem="Email authentication failure",
-        possible_root_cause=(
-            "Possibly invalid or outdated credentials"
-        ),
-        evidence=[
-            "The user cannot authenticate to the email service."
-        ],
+        possible_root_cause=("Possibly invalid or outdated credentials"),
+        evidence=["The user cannot authenticate to the email service."],
         missing_information=missing_information,
         confidence=0.61,
     )
@@ -146,32 +119,23 @@ def test_diagnosis_preserves_missing_information():
         result = diagnosis_agent(
             {
                 "ticket_id": 104,
-                "cleaned_ticket": (
-                    "Email authentication is failing."
-                ),
+                "cleaned_ticket": ("Email authentication is failing."),
                 "retrieved_context": (
-                    "The user cannot authenticate "
-                    "to the email service."
+                    "The user cannot authenticate " "to the email service."
                 ),
             }
         )
 
-    assert result["diagnosis_missing_information"] == (
-        missing_information
-    )
+    assert result["diagnosis_missing_information"] == (missing_information)
 
-    assert len(
-        result["diagnosis_missing_information"]
-    ) == 2
+    assert len(result["diagnosis_missing_information"]) == 2
 
 
 def test_diagnosis_confidence_is_preserved():
     mock_result = DiagnosisResult(
         problem="Email authentication failure",
         possible_root_cause="Invalid credentials",
-        evidence=[
-            "Authentication failed."
-        ],
+        evidence=["Authentication failed."],
         missing_information=[],
         confidence=0.73,
     )
@@ -184,9 +148,7 @@ def test_diagnosis_confidence_is_preserved():
             {
                 "ticket_id": 105,
                 "cleaned_ticket": "Cannot authenticate",
-                "retrieved_context": (
-                    "Authentication failed."
-                ),
+                "retrieved_context": ("Authentication failed."),
             }
         )
 
@@ -196,18 +158,13 @@ def test_diagnosis_confidence_is_preserved():
 
 def test_diagnosis_fallback_is_marked():
     mock_result = DiagnosisResult(
-        problem=(
-            "The reported support issue requires "
-            "further investigation."
-        ),
+        problem=("The reported support issue requires " "further investigation."),
         possible_root_cause=(
             "No validated root cause could be "
             "established from the available evidence."
         ),
         evidence=[],
-        missing_information=[
-            "Additional diagnostic information is required."
-        ],
+        missing_information=["Additional diagnostic information is required."],
         confidence=0.0,
     )
 
@@ -232,9 +189,7 @@ def test_diagnosis_preserves_previous_fallback():
     mock_result = DiagnosisResult(
         problem="Email authentication failure",
         possible_root_cause="Invalid credentials",
-        evidence=[
-            "Authentication failed."
-        ],
+        evidence=["Authentication failed."],
         missing_information=[],
         confidence=0.82,
     )
@@ -247,9 +202,7 @@ def test_diagnosis_preserves_previous_fallback():
             {
                 "ticket_id": 107,
                 "cleaned_ticket": "Cannot login",
-                "retrieved_context": (
-                    "Authentication failed."
-                ),
+                "retrieved_context": ("Authentication failed."),
                 "fallback_used": True,
             }
         )

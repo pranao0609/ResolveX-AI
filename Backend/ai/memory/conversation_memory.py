@@ -33,18 +33,14 @@ class ConversationMemory:
             raise ValueError("max_entries must be at least 1.")
 
         if max_entries > self.MAX_ALLOWED_ENTRIES:
-            raise ValueError(
-                f"max_entries cannot exceed {self.MAX_ALLOWED_ENTRIES}."
-            )
+            raise ValueError(f"max_entries cannot exceed {self.MAX_ALLOWED_ENTRIES}.")
 
         self.max_entries = max_entries
         self._history: list[dict[str, Any]] = []
 
         if history:
             self._history = [
-                deepcopy(item)
-                for item in history
-                if isinstance(item, dict)
+                deepcopy(item) for item in history if isinstance(item, dict)
             ][-self.max_entries :]
 
     @property
@@ -122,9 +118,7 @@ class ConversationMemory:
             raise ValueError("Memory event requires content.")
 
         metadata = {
-            key: value
-            for key, value in event.items()
-            if key not in {"role", "content"}
+            key: value for key, value in event.items() if key not in {"role", "content"}
         }
 
         return self.append(

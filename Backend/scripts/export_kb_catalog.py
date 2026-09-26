@@ -19,13 +19,7 @@ from app.core.logger import logger
 from app.database import SessionLocal, init_db
 from app.models.kb_model import KnowledgeBaseEntry
 
-
-OUTPUT_PATH = (
-    BACKEND_ROOT
-    / "data"
-    / "evaluation"
-    / "kb_catalog.json"
-)
+OUTPUT_PATH = BACKEND_ROOT / "data" / "evaluation" / "kb_catalog.json"
 
 
 def export_kb_catalog() -> None:
@@ -36,11 +30,7 @@ def export_kb_catalog() -> None:
     db = SessionLocal()
 
     try:
-        entries = (
-            db.query(KnowledgeBaseEntry)
-            .order_by(KnowledgeBaseEntry.id)
-            .all()
-        )
+        entries = db.query(KnowledgeBaseEntry).order_by(KnowledgeBaseEntry.id).all()
 
         catalog = []
 
