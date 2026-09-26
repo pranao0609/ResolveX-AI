@@ -25,3 +25,6 @@ logs/
 *.p12
 *.pfx
 secrets/
+
+# Local MLflow database
+mlflow.db
